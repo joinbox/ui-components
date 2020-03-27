@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #player1, #player2 {
+                width: 480px;
+                height: 270px;
+                border: 1px solid salmon;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="player1" video-id="m7MtIv9a0A4">Preview here</div>
+        <div id="player2" video-id="m7MtIv9a0A4">Preview here</div>
+    </body>
+    <script type="module">
+        import YouTubePlayer from './YouTubePlayer.js';
+        // That stuff goes into the behaviour!
+        const youTubePlayer1 = new YouTubePlayer();
+        youTubePlayer1.init(document.querySelector('#player1'));
+        // Test 2 players to make sure YouTube library files are only loaded once
+        const youTubePlayer2 = new YouTubePlayer();
+        youTubePlayer2.init(document.querySelector('#player2'));
+    </script>
+</html>
