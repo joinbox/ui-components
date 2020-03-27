@@ -2,7 +2,10 @@
 
 ## YouTubePlayer
 
-- Replaces DOM element with auto-playing YouTube player on click
+- Replaces DOM element with YouTube player on click
+- Auto-plays video when it's ready
+- Takes YouTube video ID from DOM
+- Loads YouTube API only when needed (on click) and only once (looks for window.YT.Player first)
 
 HTML:
 ```html
