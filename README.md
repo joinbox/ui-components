@@ -4,12 +4,19 @@
 
 - Replaces DOM element with YouTube player on click
 - Auto-plays video when it's ready
-- Takes YouTube video ID from DOM
-- Loads YouTube API only when needed (on click) and only once (looks for window.YT.Player first)
+- Reads YouTube video ID from element attribute
+- Reads class name from element attribute and adds it while the player is loading
+- Loads YouTube API only when needed (on click and pre-load on hover) and only once (looks for window.YT or existing script tag first)
 
 HTML:
 ```html
-    <div class="youTubeVideo" video-id="m7MtIv9a0A4">Preview</div>
+    <div
+        class="youTubeVideo"
+        data-video-id="m7MtIv9a0A4"
+        data-loading-class="elementName--loading"
+    >
+        Preview
+    </div>
 ````
 
 JavaScript:

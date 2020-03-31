@@ -7,11 +7,16 @@
                 height: 270px;
                 border: 1px solid salmon;
             }
+            .loading {
+                background-color: deeppink;
+            }
         </style>
     </head>
     <body>
-        <div id="player1" video-id="m7MtIv9a0A4">Preview here</div>
-        <div id="player2" video-id="m7MtIv9a0A4">Preview here</div>
+        <div id="player1" data-video-id="m7MtIv9a0A4" data-loading-class="loading">
+            Preview here
+        </div>
+        <div id="player2" data-video-id="m7MtIv9a0A4">Preview here</div>
     </body>
     <script type="module">
         import YouTubePlayer from './YouTubePlayer.js';
