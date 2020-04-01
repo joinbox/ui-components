@@ -10,8 +10,8 @@
  */
 export default class YouTubePlayer {
 
-    loadingClassAttribute = 'data-loading-class';
-    videoIdAttribute = 'data-video-id';
+    loadingClassAttribute = 'loadingClass';
+    videoIdAttribute = 'videoId';
     youTubeScriptURL = 'https://www.youtube.com/iframe_api';
 
     init(element) {
@@ -82,7 +82,7 @@ export default class YouTubePlayer {
      * @return {string}
      */
     getLoadingClass() {
-        const className = this.element.getAttribute(this.loadingClassAttribute) || '';
+        const className = this.element.dataset[this.loadingClassAttribute] || '';
         if (!className) {
             console.log(`YouTubePlayer: Attribute ${this.loadingClassAttribute} not set on element, cannot add loading class.`);
         }
@@ -91,7 +91,7 @@ export default class YouTubePlayer {
 
 
     displayAndPlayVideo() {
-        const videoId = this.element.getAttribute(this.videoIdAttribute);
+        const videoId = this.element.dataset[this.videoIdAttribute];
         if (!videoId) {
             console.error('YouTubePlayer: video-id attribute not set on DOM element, cannot play video');
         }
