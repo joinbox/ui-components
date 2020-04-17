@@ -4,7 +4,7 @@
   "description": "UI components for the web",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx ava --watch --verbose"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,19 @@
   "bugs": {
     "url": "https://github.com/joinbox/ui-components/issues"
   },
-  "homepage": "https://github.com/joinbox/ui-components#readme"
+  "homepage": "https://github.com/joinbox/ui-components#readme",
+  "devDependencies": {
+    "@joinbox/eslint-config-joinbox": "^1.0.8",
+    "ava": "^3.7.0",
+    "babel-eslint": "^10.1.0",
+    "jsdom": "^16.2.2"
+  },
+  "ava": {
+    "files": [
+      "**/*.unit.mjs"
+    ],
+    "nodeArguments": [
+      "--experimental-modules"
+    ]
+  }
 }
