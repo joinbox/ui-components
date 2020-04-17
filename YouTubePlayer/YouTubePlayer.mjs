@@ -101,7 +101,6 @@ export default class YouTubePlayer {
      */
     addLoadingClass() {
         if (this.getLoadingClass()) {
-
             requestAnimationFrame(() => this.element.classList.add(this.getLoadingClass()));
         }
     }
