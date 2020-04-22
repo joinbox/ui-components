@@ -1,8 +1,8 @@
 {
   "name": "@joinbox/ui-components",
-  "version": "0.1.0",
+  "version": "0.2.2",
   "description": "UI components for the web",
-  "main": "main.js",
+  "main": "main.mjs",
   "scripts": {
     "test": "npx ava --watch --verbose"
   },
@@ -18,7 +18,7 @@
   "homepage": "https://github.com/joinbox/ui-components#readme",
   "devDependencies": {
     "@joinbox/eslint-config-joinbox": "^1.0.8",
-    "ava": "^3.7.0",
+    "ava": "^3.7.1",
     "babel-eslint": "^10.1.0",
     "jsdom": "^16.2.2"
   },
