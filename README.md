@@ -13,6 +13,7 @@ HTML:
     <div
         class="youTubeVideo"
         data-video-id="m7MtIv9a0A4"
+        data-video-parameters='{ "controls": 0, "modestbranding": 1 }'
         data-loading-class="elementName--loading"
     >
         Preview
