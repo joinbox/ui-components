@@ -1,0 +1,58 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>The HTML5 Herald</title>
+        <style>
+            .overlay-background {
+                position: fixed;
+                display: none;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                opacity: 0.6;
+                background-color: black;
+            }
+            .overlay {
+                display: none;
+                width: 40vw;
+                position: fixed;
+                top: 40%;
+                left: 50%;
+                background-color: white;
+                padding: 40px;
+                box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.3);
+                transform: translate3d(-50%, -50%, 0);
+                z-index: 10;
+            }
+            .overlay.visible {
+                display: block;
+            }
+            jb-overlay-button {
+                border: 1px solid gray;
+                padding: 10px;
+                border-radius: 3px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Just …</h1>
+        <p>…some body content</p>
+        <jb-overlay-button data-overlay-name="overlay1" data-button-type="open">
+            Open 1
+        </jb-overlay-button>
+        <jb-overlay data-overlay-name="overlay1" data-background-selector=".overlay-background" class="overlay">
+            <jb-overlay-button data-overlay-name="overlay1" data-button-type="close">
+                ×
+            </jb-overlay-button>
+            <h1>Overlay title</h1>
+            <p>Overlay body copy: Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
+        </jb-overlay>
+        <div class="overlay-background"></div>
+        <script src="OverlayButton.mjs"></script>
+        <script src="Overlay.mjs"></script>
+    </body>
+</html>

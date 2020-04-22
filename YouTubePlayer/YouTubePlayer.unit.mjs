@@ -16,7 +16,8 @@ const setupDOM = (attributes) => {
             <div id="player1" data-video-id="m7MtIv9a0A4" data-loading-class="loading" ${attributes}>
                 Preview here
             </div>
-            <script>document.querySelector('#player1').innerHTML='test';</script>
+            // We need a script tag to insert YT script tag just below it
+            <script></script>
         </body>
     `, {
         runScripts: 'dangerously',
