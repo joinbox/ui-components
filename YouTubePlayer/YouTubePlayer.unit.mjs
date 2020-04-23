@@ -1,6 +1,6 @@
 import test from 'ava';
 import jsdom from 'jsdom';
-import YouTubePlayer from './YouTubePlayer.mjs';
+import YouTubePlayer from './YouTubePlayer.js';
 
 const { JSDOM } = jsdom;
 
