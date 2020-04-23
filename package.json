@@ -2,7 +2,7 @@
   "name": "@joinbox/ui-components",
   "version": "0.2.2",
   "description": "UI components for the web",
-  "main": "main.mjs",
+  "main": "main.js",
   "scripts": {
     "test": "npx ava --watch --verbose"
   },
