@@ -1,6 +1,7 @@
 import { dirname, join } from 'path';
 import test from 'ava';
 import jsdom from 'jsdom';
+// import OverlayButton from './OverlayButton.mjs';
 
 const { JSDOM } = jsdom;
 
@@ -18,8 +19,8 @@ const setupDOM = () => {
     const overlayButtonScript = join(dirname(import.meta.url), 'OverlayButton.mjs');
     const { window } = new JSDOM(`
         <body>
+            <script src="${overlayButtonScript}" type="module"></script>
             <div class="container"></div>
-            <script src="${overlayButtonScript}"></script>
         </body>
     `, {
         resources: 'usable',
@@ -45,11 +46,22 @@ const teardownDOM = () => {
     usedGlobals.forEach((key) => { global[key] = originalGlobals[key]; });
 };
 
-test('throws on missing data-overlay-name attribute', async(t) => {
+
+
+test('test', async(t) => {
+    setupDOM();
+    const { default: OverlayButton } = await import('./OverlayButton.mjs');
+    const a = new OverlayButton();
+    teardownDOM();
+});
+
+/* test.only('throws on missing data-overlay-name attribute', async(t) => {
     const { window, errors, document } = setupDOM();
     const button = setupButton();
     document.querySelector('.container').innerHTML = button;
-    await window.customElements.whenDefined('jb-overlay-button');
+    // await window.customElements.whenDefined('jb-overlay-button');
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    console.log(errors);
     t.is(errors.length, 1);
     t.is(errors[0].message.includes('data-overlay-name'), true);
     teardownDOM();
@@ -84,3 +96,4 @@ test('dispatches expected event on open/close buttons', async(t) => {
 });
 
 
+*/

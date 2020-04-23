@@ -4,7 +4,7 @@
 
 - Replaces DOM element with YouTube player on click
 - Auto-plays video when it's ready
-- Reads YouTube video ID from element attribute
+- Reads YouTube video ID and params from element attribute
 - Reads class name from element attribute and adds it while the player is loading
 - Loads YouTube API only when needed (on click and pre-load on hover) and only once (looks for window.YT or existing script tag first)
 
@@ -14,7 +14,7 @@ HTML:
         class="youTubeVideo"
         data-video-id="m7MtIv9a0A4"
         data-video-parameters='{ "controls": 0, "modestbranding": 1 }'
-        data-loading-class="elementName--loading"
+        data-loading-class="youTubeVideo--loading"
     >
         Preview
     </div>
@@ -22,7 +22,7 @@ HTML:
 
 JavaScript:
 ```
-import YouTubePlayer from './YouTubePlayer.js';
+import { YouTubePlayer } from '@joinbox/ui-components';
 const youTubePlayer = new YouTubePlayer();
 youTubePlayer.init(document.querySelector('.youTubeVideo'));
 ````

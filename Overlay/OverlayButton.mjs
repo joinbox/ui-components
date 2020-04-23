@@ -1,4 +1,8 @@
-import overlayEvents from './overlayEvents.mjs';
+// import overlayEvents from './overlayEvents.mjs';
+const overlayEvents = new Map([
+    ['openOverlay', 'openoverlay'],
+    ['closeOverlay', 'closeoverlay'],
+]);
 
 /**
  * Button that opens or closes an overlay (by emitting an open/closeoverlay event). Requires
@@ -69,3 +73,4 @@ class OverlayButton extends window.HTMLElement {
 
 window.customElements.define('jb-overlay-button', OverlayButton);
 
+export default OverlayButton;

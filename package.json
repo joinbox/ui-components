@@ -24,7 +24,8 @@
   },
   "ava": {
     "files": [
-      "**/*.unit.mjs"
+      "**/*.unit.mjs",
+      "**/*.integration.mjs"
     ],
     "nodeArguments": [
       "--experimental-modules"
