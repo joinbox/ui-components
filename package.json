@@ -20,7 +20,8 @@
     "@joinbox/eslint-config-joinbox": "^1.0.8",
     "ava": "^3.7.1",
     "babel-eslint": "^10.1.0",
-    "jsdom": "^16.2.2"
+    "jsdom": "^16.2.2",
+    "rollup": "^2.7.2"
   },
   "ava": {
     "files": [

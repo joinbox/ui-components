@@ -1,8 +1,5 @@
-// import overlayEvents from './overlayEvents.mjs';
-const overlayEvents = new Map([
-    ['openOverlay', 'openoverlay'],
-    ['closeOverlay', 'closeoverlay'],
-]);
+import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
+import overlayEvents from './overlayEvents.mjs';
 
 /**
  * Button that opens or closes an overlay (by emitting an open/closeoverlay event). Requires
@@ -15,10 +12,6 @@ class OverlayButton extends window.HTMLElement {
 
     constructor() {
         super();
-        // Validate attributes at this stage to be able to catch errors early (and not async on
-        // user interactions).
-        this.getAndValidateOverlayName();
-        this.getAndValidateButtonType();
         this.setupClickListener();
     }
 
@@ -50,27 +43,26 @@ class OverlayButton extends window.HTMLElement {
      * @private
      */
     getAndValidateOverlayName() {
-        const { overlayName } = this.dataset;
-        if (!overlayName) {
-            throw new Error(`OverlayButton: You must provide a HTML attribute called data-overlay-name in order for the OverlayButton to work; it needs to be identical to the data-overlay-name attribute of the corresponding overlay. You passed ${overlayName} instead.`);
-        }
-        return overlayName;
+        return getAndValidateAttribute({
+            name: 'data-overlay-name',
+            validate: value => !!value,
+            errorMessage: 'must be a non-empty string',
+            element: this,
+        });
     }
 
     /**
      * @private
      */
     getAndValidateButtonType() {
-        const { buttonType } = this.dataset;
-        const validTypes = ['open', 'close'];
-        if (!buttonType || !validTypes.includes(buttonType)) {
-            throw new Error(`OverlayButton: You must provide a HTML attribute called data-button-type which is either 'open' or 'close'; you passed ${buttonType} instead.`);
-        }
-        return buttonType;
+        return getAndValidateAttribute({
+            name: 'data-button-type',
+            validate: value => !!value,
+            errorMessage: 'must be a non-empty string',
+            element: this,
+        });
     }
 
 }
 
 window.customElements.define('jb-overlay-button', OverlayButton);
-
-export default OverlayButton;
