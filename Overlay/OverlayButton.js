@@ -1,5 +1,5 @@
 import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
-import overlayEvents from './overlayEvents.mjs';
+import overlayEvents from './overlayEvents.js';
 
 /**
  * Button that opens or closes an overlay (by emitting an open/closeoverlay event). Requires
@@ -7,7 +7,6 @@ import overlayEvents from './overlayEvents.mjs';
  */
 class OverlayButton extends window.HTMLElement {
 
-    /* Use window prefix on all HTML APIs to simplify JSDOM testing */
     /* global window */
 
     constructor() {

@@ -15,6 +15,9 @@
                 opacity: 0.6;
                 background-color: black;
             }
+            .overlay-background.visible {
+                display: block;
+            }
             .overlay {
                 display: none;
                 width: 40vw;
@@ -39,20 +42,57 @@
     </head>
 
     <body>
-        <h1>Just …</h1>
-        <p>…some body content</p>
+
+        <h1>Default</h1>
+        <p>ESC and click outside close it</p>
+
+        <!-- With ESC/click outside -->
         <jb-overlay-button data-overlay-name="overlay1" data-button-type="open">
-            Open 1
+            Open Default
         </jb-overlay-button>
-        <jb-overlay data-overlay-name="overlay1" data-background-selector=".overlay-background" class="overlay">
+
+        <jb-overlay
+            data-overlay-name="overlay1"
+            data-background-selector=".overlay-background"
+            data-background-visible-class-name="visible"
+            data-visible-class-name="visible"
+            class="overlay"
+        >
             <jb-overlay-button data-overlay-name="overlay1" data-button-type="close">
                 ×
             </jb-overlay-button>
             <h1>Overlay title</h1>
             <p>Overlay body copy: Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
         </jb-overlay>
+
+        <h1>Restricted</h1>
+        <p>ESC and click outside do <strong>not</strong> close overlay</p>
+
+        <!-- No ESC/click outside -->
+        <jb-overlay-button data-overlay-name="overlay2" data-button-type="open">
+            Open Restricted
+        </jb-overlay-button>
+
+        <jb-overlay
+            data-overlay-name="overlay2"
+            data-background-selector=".overlay-background"
+            data-background-visible-class-name="visible"
+            data-visible-class-name="visible"
+            class="overlay"
+            data-disable-esc
+            data-disable-click-outside
+        >
+            <jb-overlay-button data-overlay-name="overlay2" data-button-type="close">
+                ×
+            </jb-overlay-button>
+            <h1>Restricted overlay</h1>
+            <p>Overlay body copy: Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
+        </jb-overlay>
+
+
         <div class="overlay-background"></div>
-        <script src="OverlayButton.mjs" type="module"></script>
-        <script src="Overlay.mjs" type="module"></script>
+
+        <script src="OverlayButton.js" type="module"></script>
+        <script src="Overlay.js" type="module"></script>
     </body>
 </html>
