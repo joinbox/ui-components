@@ -31,5 +31,8 @@
     "nodeArguments": [
       "--experimental-modules"
     ]
+  },
+  "dependencies": {
+    "body-scroll-lock": "^3.0.1"
   }
 }

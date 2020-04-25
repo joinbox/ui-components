@@ -9,6 +9,7 @@ const setup = async(hideErrors) => {
 
 const awaitRAF = window => new Promise(resolve => window.requestAnimationFrame(resolve));
 
+
 test('throws if data-overlay-name is missing when an event is fired', async(t) => {
     const { document, errors, window } = await setup(true);
     const overlay = document.createElement('jb-overlay');
@@ -18,6 +19,7 @@ test('throws if data-overlay-name is missing when an event is fired', async(t) =
     t.is(errors.length, 1);
     t.is(errors[0].message.includes('Attribute data-overlay-name'), true);
 });
+
 
 test('exposes open, close and isOpen method, updates DOM', async(t) => {
     const { document, window } = await setup();
@@ -39,7 +41,7 @@ test('exposes open, close and isOpen method, updates DOM', async(t) => {
 });
 
 
-test('opens if overlay is opened', async(t) => {
+test('opens if openoverlay event is fired', async(t) => {
 
     const { document, errors, window } = await setup();
     const overlay = document.createElement('jb-overlay');
@@ -60,7 +62,7 @@ test('opens if overlay is opened', async(t) => {
 });
 
 
-test('closes if overlay is closed', async(t) => {
+test('closes if closeoverlay event is fired', async(t) => {
 
     const { document, errors, window } = await setup();
     const overlay = document.createElement('jb-overlay');
@@ -86,7 +88,6 @@ test('closes on esc if is open', async(t) => {
 
     const { document, errors, window } = await setup();
     const overlay = document.createElement('jb-overlay');
-    overlay.setAttribute('data-overlay-name', 'overlay1');
     overlay.setAttribute('data-visible-class-name', 'is-visible');
     document.body.appendChild(overlay);
     overlay.open();
@@ -113,7 +114,6 @@ test('closes on click outside', async(t) => {
 
     const { document, errors, window } = await setup();
     const overlay = document.createElement('jb-overlay');
-    overlay.setAttribute('data-overlay-name', 'overlay1');
     overlay.setAttribute('data-visible-class-name', 'is-visible');
     document.body.appendChild(overlay);
     overlay.open();
@@ -175,7 +175,6 @@ test('esc and outside click are only added on open', async(t) => {
 
     const { document, errors, window } = await setup();
     const overlay = document.createElement('jb-overlay');
-    overlay.setAttribute('data-overlay-name', 'o');
     overlay.setAttribute('data-visible-class-name', 'is-visible');
     document.body.appendChild(overlay);
     const outside = document.createElement('div');
@@ -209,7 +208,6 @@ test('esc and outside click are only added on open', async(t) => {
 test('displays background if set', async(t) => {
     const { document, errors, window } = await setup();
     const overlay = document.createElement('jb-overlay');
-    overlay.setAttribute('data-overlay-name', 'o');
     overlay.setAttribute('data-visible-class-name', 'is-visible');
     overlay.setAttribute('data-background-selector', '.background');
     overlay.setAttribute('data-background-visible-class-name', 'bg-visible');
@@ -225,6 +223,28 @@ test('displays background if set', async(t) => {
     overlay.close();
     await awaitRAF(window);
     t.is(background.classList.contains('bg-visible'), false);
+    t.is(errors.length, 0);
+
+});
+
+
+test('disables scroll on body', async(t) => {
+    const { document, errors, window } = await setup();
+    const overlay = document.createElement('jb-overlay');
+    overlay.setAttribute('data-visible-class-name', 'is-visible');
+    document.body.appendChild(overlay);
+
+    overlay.open();
+    // Body scroll lock uses a timeout …
+    await awaitRAF(window);
+    await new Promise(resolve => setTimeout(resolve));
+    t.is(window.getComputedStyle(document.body).overflow, 'hidden');
+
+    overlay.close();
+    await awaitRAF(window);
+    await new Promise(resolve => setTimeout(resolve));
+    t.is(window.getComputedStyle(document.body).overflow, '');
+
     t.is(errors.length, 0);
 
 });

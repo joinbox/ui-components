@@ -1,3 +1,4 @@
+import { disableBodyScroll, enableBodyScroll } from '../node_modules/body-scroll-lock/lib/bodyScrollLock.es6.js';
 import overlayEvents from './overlayEvents.js';
 import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
 
@@ -151,6 +152,11 @@ class Overlay extends window.HTMLElement {
         // Update class on background
         if (this.backgroundElement && this.backgroundVisibleClassName) {
             this.backgroundElement.classList[method](this.backgroundVisibleClassName);
+        }
+        if (this.isOpen) {
+            disableBodyScroll(this);
+        } else {
+            enableBodyScroll(this);
         }
     }
 

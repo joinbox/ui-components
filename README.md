@@ -35,6 +35,7 @@ youTubePlayer.init(document.querySelector('.youTubeVideo'));
 - Classes to make overlay and background visible are freely configurable
 - Close through esc and/or clickt outside can be disabled
 - An overlay can be controlled by any number of `jb-overlay-button`
+- Blocks scrolling on body while overlay is open
 
 ### Example
 
