@@ -2,13 +2,13 @@ import { dirname } from 'path';
 import test from 'ava';
 import getDOM from '../testHelpers/getDOM.mjs';
 
-const setup = async() => {
+const setup = async(hideErrors) => {
     const basePath = dirname(import.meta.url);
-    return getDOM({ basePath, scripts: ['OverlayButton.js'] });
+    return getDOM({ basePath, scripts: ['testComponents.js'], hideErrors });
 };
 
 test('throws if attribute data-overlay-name or data-button-type are missing', async(t) => {
-    const { window, document, errors } = await setup();
+    const { window, document, errors } = await setup(true);
 
     const button = document.createElement('jb-overlay-button');
     document.body.appendChild(button);

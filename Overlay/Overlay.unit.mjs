@@ -4,7 +4,7 @@ import getDOM from '../testHelpers/getDOM.mjs';
 
 const setup = async(hideErrors) => {
     const basePath = dirname(import.meta.url);
-    return getDOM({ basePath, scripts: ['Overlay.js'], hideErrors });
+    return getDOM({ basePath, scripts: ['testComponents.js'], hideErrors });
 };
 
 const awaitRAF = window => new Promise(resolve => window.requestAnimationFrame(resolve));

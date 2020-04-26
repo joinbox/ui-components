@@ -5,7 +5,7 @@ import overlayEvents from './overlayEvents.js';
  * Button that opens or closes an overlay (by emitting an open/closeoverlay event). Requires
  * attributes data-button-type (open/close) and data-overlay-name.
  */
-class OverlayButton extends window.HTMLElement {
+export default class OverlayButton extends window.HTMLElement {
 
     /* global window */
 
@@ -63,5 +63,3 @@ class OverlayButton extends window.HTMLElement {
     }
 
 }
-
-window.customElements.define('jb-overlay-button', OverlayButton);

@@ -39,28 +39,40 @@ youTubePlayer.init(document.querySelector('.youTubeVideo'));
 
 ### Example
 
+JavaScript:
+```javascript
+import { Overlay, OverlayButton } from '@joinbox/ui-components';
+
+// Use any element name you like. It needs to contain at least one dash (-). Try to prefix them
+// with a namespace.
+window.customElements.define('jb-overlay-button', OverlayButton);
+window.customElements.define('jb-overlay', Overlay);
+
+
+````
+
 HTML:
 ```html
-    <jb-overlay-button data-overlay-name="mainOverlay" data-button-type="open">
-        Open Overlay
+<jb-overlay-button data-overlay-name="mainOverlay" data-button-type="open">
+    Open Overlay
+</jb-overlay-button>
+
+<jb-overlay
+    data-overlay-name="mainOverlay"
+    data-visible-class-name="overlay--visible"
+    data-background-selector="#overlayBackground"
+    data-background-visible-class-name="overlayBackground--visible"
+    data-disable-esc
+    data-disable-click-outside
+>
+    <jb-overlay-button data-overlay-name="mainOverlay" data-button-type="close">
+        ×
     </jb-overlay-button>
+    <h1>Main Overlay</h1>
+    <p>Overlay body copy</p>
+</jb-overlay>
 
-    <jb-overlay
-        data-overlay-name="mainOverlay"
-        data-visible-class-name="overlay--visible"
-        data-background-selector="#overlayBackground"
-        data-background-visible-class-name="overlayBackground--visible"
-        data-disable-esc
-        data-disable-click-outside
-    >
-        <jb-overlay-button data-overlay-name="mainOverlay" data-button-type="close">
-            ×
-        </jb-overlay-button>
-        <h1>Main Overlay</h1>
-        <p>Overlay body copy</p>
-    </jb-overlay>
-
-    <div id="overlayBackground"></div>
+<div id="overlayBackground"></div>
 ```
 
 ### Overlay
@@ -80,7 +92,7 @@ mouse outside of the overlay
 
 #### Methods
 - `close()`: Closes overlay
-- `open(): Opens overlay
+- `open()`: Opens overlay
 
 #### Events
 - `openoverlay` with `{ detail: { overlayName: 'nameOfOverlay' } }` opens the overlay

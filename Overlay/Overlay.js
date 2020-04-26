@@ -6,7 +6,7 @@ import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
  * Overlay that is opened/closed by open/closeoverlay events. Optionally closes on esc or
  * click outside and always locks background (prevents scrolling).
  */
-class Overlay extends window.HTMLElement {
+export default class Overlay extends window.HTMLElement {
 
     /**
      * Holds open state; should only be accessed through getter isOpen and modified through
@@ -216,6 +216,4 @@ class Overlay extends window.HTMLElement {
     }
 
 }
-
-window.customElements.define('jb-overlay', Overlay);
 
