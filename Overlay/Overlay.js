@@ -116,6 +116,8 @@ export default class Overlay extends window.HTMLElement {
     }
 
     /**
+     * Reads from DOM (this must be done before the animationFrame writes to DOM) and sets
+     * corresponding properties on class.
      * @private
      */
     scheduleDOMUpdate() {
@@ -139,9 +141,11 @@ export default class Overlay extends window.HTMLElement {
     }
 
     /**
-     * @private
      * Updtaes the DOM (after requestAnimationFrame). May only *write* to the DOM, never read
-     * from it.
+     * from it. Reads current state from *instance* and updates accordingly – is never called with
+     * any parameters. Thereby we ensure that quick open/close in succession do not write to the
+     * DOM multiple times.
+     * @private
      */
     updateDOM() {
         // No more DOM update is scheduled: re-set to false
