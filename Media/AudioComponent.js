@@ -4,7 +4,7 @@ import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
 
 /* global HTMLElement, window */
 
-class AudioComponent extends HTMLElement {
+export default class AudioComponent extends HTMLElement {
 
     constructor() {
         super();
@@ -57,4 +57,3 @@ class AudioComponent extends HTMLElement {
 
 }
 
-window.customElements.define('audio-component', AudioComponent);

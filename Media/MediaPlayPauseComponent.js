@@ -7,7 +7,7 @@ import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
 /**
  * Play and pause button for media
  */
-class MediaPlayPauseButton extends HTMLElement {
+export default class MediaPlayPauseButton extends HTMLElement {
 
     constructor() {
         super();
@@ -84,5 +84,3 @@ class MediaPlayPauseButton extends HTMLElement {
 
 }
 
-/* global window */
-window.customElements.define('media-play-pause-component', MediaPlayPauseButton);

@@ -1,7 +1,7 @@
 import canAnnounceElement from '../shared/canAnnounceElement.js';
 import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
 
-/* global window, HTMLElement */
+/* global HTMLElement */
 
 /**
  * Displays time, either current or total
@@ -50,5 +50,3 @@ export default class MediaTime extends HTMLElement {
     }
 
 }
-
-window.customElements.define('media-time-component', MediaTime);

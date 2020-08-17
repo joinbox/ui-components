@@ -16,12 +16,12 @@ All components are independent from one another. It, however, makes sense, to us
     <media-time-component>0:00</media-time-component>
     <media-timeline-component>
         <!-- Timeline component must include an input[type="range"] -->
-        <input type="range" value="0">
+        <input type="range" value="0" />
     </media-timeline-component>
     <media-time-component data-type="total"> -:-- </media-time-component>
     🔉<media-volume-component>
         <!-- Volume component must include an input[type="range"] -->
-        <input type="range" value="100">
+        <input type="range" value="100" />
     </media-volume-component>
 </audio-component>
 

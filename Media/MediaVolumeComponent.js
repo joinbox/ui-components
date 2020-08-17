@@ -61,7 +61,7 @@ export default class MediaVolumeComponent extends HTMLElement {
 
     /**
      * Updates volume (value) on input
-     * @param {number} value 
+     * @param {number} value
      * @private
      */
     updateValue(value) {
@@ -69,5 +69,3 @@ export default class MediaVolumeComponent extends HTMLElement {
     }
 
 }
-
-window.customElements.define('media-volume-component', MediaVolumeComponent);

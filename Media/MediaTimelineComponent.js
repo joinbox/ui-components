@@ -77,6 +77,3 @@ export default class MediaTimelineComponent extends HTMLElement {
     }
 
 }
-
-window.customElements.define('media-timeline-component', MediaTimelineComponent);
-
