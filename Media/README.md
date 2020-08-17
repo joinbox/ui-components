@@ -26,8 +26,7 @@ All components are independent from one another. It, however, makes sense, to us
 </audio-component>
 
 <!-- Import all components you use -->
-<script src="AudioComponent.js"></script>
-<script …>
+<script src="Audio/components.js"></script>
 ````
 
 
@@ -52,10 +51,10 @@ and is ready to be played back.
 
 
 
-### Play Pause Component
+### Media Play Pause Component
 
 #### Exposed Element
-`<play-pause-component></play-pause-component>`
+`<media-play-pause-component></media-play-pause-component>`
 
 #### Attriutes
 - `data-playing-class`: Class name that is added to the element when it is playing.
@@ -66,10 +65,10 @@ and is ready to be played back.
 
 
 
-### Audio Time Component
+### Media Time Component
 
 #### Exposed Element
-`<audio-time-component></audio-time-component>`
+`<media-time-component></media-time-component>`
 
 #### Attriutes
 - `data-type`: either `current` to display the current playback time or `total` to display the
@@ -77,19 +76,19 @@ audio's total duration. Defaults to `current`.
 
 
 
-### Volume Component
+### Media Volume Component
 
 #### Exposed Element
-`<volume-component><input type="range"></volume-component>`
+`<media-volume-component><input type="range"></media-volume-component>`
 
 `input` of `type` `range` is needed and the actual UI element.
 
 
 
-### Timeline Component
+### Media Timeline Component
 
 #### Exposed Element
-`<timeline-component><input type="range"></timeline-component>`
+`<media-timeline-component><input type="range"></media-timeline-component>`
 
 `input` of `type` `range` is needed and the actual UI element.
 
