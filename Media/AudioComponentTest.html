@@ -13,18 +13,16 @@
         audio-component.ready {
             background-color: lightgray;
         }
-        play-pause-component {
-            display: block;
-            height: 40px;
-            width: 40px;
-            border-radius: 100%;
+        media-play-pause-component {
+            display: inline-block;
+            border-radius: 5px;
             padding: 15px;
             background-color: lightgrey;
         }
-        play-pause-component.paused {
+        media-play-pause-component.paused {
             background-color: lightgreen;
         }
-        play-pause-component.playing {
+        media-play-pause-component.playing {
             background-color: crimson;
         }
     </style>
@@ -33,27 +31,26 @@
 <body>
     <h1>Play/Pause</h1>
     <audio-component data-source="file_example_MP3_700KB.mp3" data-ready-class="ready">
-        <play-pause-component
+        <media-play-pause-component
             data-playing-class="playing"
             data-paused-class="paused"
         >
                 ⏯
-        </play-pause-component>
-        <audio-time-component>0:00</audio-time-component>
-        <timeline-component>
+        </media-play-pause-component>
+        <media-time-component>0:00</media-time-component>
+        <media-timeline-component>
             <input type="range" value="0">
-        </timeline-component>
-        <audio-time-component data-type="total"> -:-- </audio-time-component>
-        <br/>
-        🔉<volume-component>
+        </media-timeline-component>
+        <media-time-component data-type="total"> -:-- </media-time-component>
+        🔉<media-volume-component>
             <input type="range" value="100">
-        </volume-component>
+        </media-volume-component>
     </audio-component>
     <script type="module" src="AudioComponent.js"></script>
-    <script type="module" src="PlayPauseButton.js"></script>
-    <script type="module" src="VolumeComponent.js"></script>
-    <script type="module" src="AudioTime.js"></script>
-    <script type="module" src="TimelineComponent.js"></script>
+    <script type="module" src="MediaPlayPauseComponent.js"></script>
+    <script type="module" src="MediaVolumeComponent.js"></script>
+    <script type="module" src="MediaTimeComponent.js"></script>
+    <script type="module" src="MediaTimelineComponent.js"></script>
 </body>
 
 </html>

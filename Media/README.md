@@ -4,18 +4,27 @@ Audio component that consists of diffferent loosely coupled components that can 
 used together.
 
 ## Example
+
+All components are independent from one another. It, however, makes sense, to use at least 
+`<audio-component>` and `<media-play-pause-component>` to get a working component.
+
 ````html
-<audio-component data-source="audio-file.mp3" data-ready-class="ready">
-    <play-pause-component data-playing-class="playing" data-paused-class="paused">
+<audio-component data-source="file_example_MP3_700KB.mp3" data-ready-class="ready">
+    <media-play-pause-component data-playing-class="playing" data-paused-class="paused">
         ⏯
-    </play-pause-component>
-    <audio-time-component data-type="current">0:00</audio-time-component>
-    <audio-timeline-component></audio-timeline-component>
-    <audio-time-component data-type="total"> -:-- </audio-time-component>
-    <volume-component></volume-component>
-    <!-- Volume component must include an input[type="range"] -->
-    🔉 <volume-component><input type="range"></volume-component>
+    </media-play-pause-component>
+    <media-time-component>0:00</media-time-component>
+    <media-timeline-component>
+        <!-- Timeline component must include an input[type="range"] -->
+        <input type="range" value="0">
+    </media-timeline-component>
+    <media-time-component data-type="total"> -:-- </media-time-component>
+    🔉<media-volume-component>
+        <!-- Volume component must include an input[type="range"] -->
+        <input type="range" value="100">
+    </media-volume-component>
 </audio-component>
+
 <!-- Import all components you use -->
 <script src="AudioComponent.js"></script>
 <script …>

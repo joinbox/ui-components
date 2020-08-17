@@ -1,7 +1,12 @@
 import canAnnounceElement from '../shared/canAnnounceElement.js';
 import createListener from '../shared/createListener.js';
 
-export default class VolumeComponent extends HTMLElement {
+/* global HTMLElement, window */
+
+export default class MediaTimelineComponent extends HTMLElement {
+
+    // Only update value on input while user is not seeking
+    isSeeking = false;
 
     constructor() {
         super();
@@ -22,7 +27,7 @@ export default class VolumeComponent extends HTMLElement {
         const selector = 'input[type="range"]';
         const input = this.querySelector(selector);
         if (!input) {
-            throw new Error(`VolumeComponent: Must contain a child that matches ${selector} on initialization.`);
+            throw new Error(`TimelineComponent: Must contain a child that matches ${selector} on initialization.`);
         }
         this.input = input;
     }
@@ -31,17 +36,22 @@ export default class VolumeComponent extends HTMLElement {
      * Listens to input changes on input
      */
     setupInputListeners() {
-        createListener(this.input, 'input', this.updateVolume.bind(this));
+        createListener(this.input, 'change', this.updateTime.bind(this));
+        // Don't update value of input[type="range"] while we're seeking; input wouldn't play
+        // nicely with audio if we did
+        createListener(this.input, 'mousedown', () => { this.isSeeking = true; });
+        createListener(window, 'mouseup', () => { this.isSeeking = false; });
     }
 
     /**
      * Updates volume on audio
      * @private
      */
-    updateVolume() {
+    updateTime() {
         // Audio is not loaded yet
         if (!this.model.loadingState) return;
-        this.model.updateVolume(this.input.value / 100);
+        const time = this.input.value;
+        this.model.setTime(time);
     }
 
     /**
@@ -50,11 +60,9 @@ export default class VolumeComponent extends HTMLElement {
      */
     setupModelListeners() {
         this.model.on('canplaythrough', () => {
-            this.updateValue(this.model.getVolume() * 100);
+            this.input.max = this.model.getDuration();
         });
-        this.model.on('volumechange', (volume) => {
-            this.updateValue(volume * 100);
-        });
+        this.model.on('timeupdate', this.updateValue.bind(this));
     }
 
     /**
@@ -62,10 +70,13 @@ export default class VolumeComponent extends HTMLElement {
      * @param {number} value 
      * @private
      */
-    updateValue(value) {
-        this.input.value = value;
+    updateValue() {
+        if (this.isSeeking) return;
+        const time = this.model.getCurrentTime();
+        this.input.value = time;
     }
 
 }
 
-window.customElements.define('volume-component', VolumeComponent);
+window.customElements.define('media-timeline-component', MediaTimelineComponent);
+

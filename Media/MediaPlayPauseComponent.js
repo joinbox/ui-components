@@ -2,8 +2,12 @@ import canAnnounceElement from '../shared/canAnnounceElement.js';
 import createListener from '../shared/createListener.js';
 import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
 
+/* global HTMLElement, window */
 
-class PlayPauseButton extends HTMLElement {
+/**
+ * Play and pause button for media
+ */
+class MediaPlayPauseButton extends HTMLElement {
 
     constructor() {
         super();
@@ -81,4 +85,4 @@ class PlayPauseButton extends HTMLElement {
 }
 
 /* global window */
-window.customElements.define('play-pause-component', PlayPauseButton);
+window.customElements.define('media-play-pause-component', MediaPlayPauseButton);

@@ -1,10 +1,12 @@
 import canAnnounceElement from '../shared/canAnnounceElement.js';
 import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
 
+/* global window, HTMLElement */
+
 /**
  * Displays time, either current or total
  */
-export default class AudioTime extends HTMLElement {
+export default class MediaTime extends HTMLElement {
 
     constructor() {
         super();
@@ -49,4 +51,4 @@ export default class AudioTime extends HTMLElement {
 
 }
 
-window.customElements.define('audio-time-component', AudioTime);
+window.customElements.define('media-time-component', MediaTime);
