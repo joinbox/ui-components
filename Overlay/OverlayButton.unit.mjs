@@ -1,10 +1,11 @@
 import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import test from 'ava';
 import getDOM from '../testHelpers/getDOM.mjs';
 
 const setup = async(hideErrors) => {
-    const basePath = dirname(import.meta.url);
-    return getDOM({ basePath, scripts: ['testComponents.js'], hideErrors });
+    const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
+    return getDOM({ basePath, scripts: ['overlayComponents.js'], hideErrors });
 };
 
 test('throws if attribute data-overlay-name or data-button-type are missing', async(t) => {

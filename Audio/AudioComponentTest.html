@@ -1,0 +1,59 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Another Experiment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        audio-component {
+            display: block;
+            opacity: 1;
+        }
+        audio-component.ready {
+            background-color: lightgray;
+        }
+        play-pause-component {
+            display: block;
+            height: 40px;
+            width: 40px;
+            border-radius: 100%;
+            padding: 15px;
+            background-color: lightgrey;
+        }
+        play-pause-component.paused {
+            background-color: lightgreen;
+        }
+        play-pause-component.playing {
+            background-color: crimson;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Play/Pause</h1>
+    <audio-component data-source="file_example_MP3_700KB.mp3" data-ready-class="ready">
+        <play-pause-component
+            data-playing-class="playing"
+            data-paused-class="paused"
+        >
+                ⏯
+        </play-pause-component>
+        <audio-time-component>0:00</audio-time-component>
+        <timeline-component>
+            <input type="range" value="0">
+        </timeline-component>
+        <audio-time-component data-type="total"> -:-- </audio-time-component>
+        <br/>
+        🔉<volume-component>
+            <input type="range" value="100">
+        </volume-component>
+    </audio-component>
+    <script type="module" src="AudioComponent.js"></script>
+    <script type="module" src="PlayPauseButton.js"></script>
+    <script type="module" src="VolumeComponent.js"></script>
+    <script type="module" src="AudioTime.js"></script>
+    <script type="module" src="TimelineComponent.js"></script>
+</body>
+
+</html>

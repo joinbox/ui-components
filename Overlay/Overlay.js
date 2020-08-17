@@ -1,6 +1,7 @@
 import { disableBodyScroll, enableBodyScroll } from '../node_modules/body-scroll-lock/lib/bodyScrollLock.es6.js';
 import overlayEvents from './overlayEvents.js';
 import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
+import createListener from '../shared/createListener.mjs';
 
 /**
  * Overlay that is opened/closed by open/closeoverlay events. Optionally closes on esc or
@@ -21,20 +22,26 @@ export default class Overlay extends window.HTMLElement {
         super();
         // Store bound open function; we need the reference to de-register when component is
         // disconnected from dom
-        this.boundHandleOpenEvent = this.handleOpenEvent.bind(this);
-        this.boundHandleCloseEvent = this.handleCloseEvent.bind(this);
         this.boundHandleEscEvent = this.handleEscEvent.bind(this);
         this.boundHandleClickOutsideEvent = this.handleClickOutsideEvent.bind(this);
     }
 
     connectedCallback() {
-        window.addEventListener(overlayEvents.get('openOverlay'), this.boundHandleOpenEvent);
-        window.addEventListener(overlayEvents.get('closeOverlay'), this.boundHandleCloseEvent);
+        this.disconnectHandleOpenEvent = createListener(
+            window,
+            overlayEvents.get('openOverlay'),
+            this.handleOpenEvent.bind(this),
+        );
+        this.disconnectHandleCloseEvent = createListener(
+            window,
+            overlayEvents.get('closeOverlay'),
+            this.handleCloseEvent.bind(this),
+        );
     }
 
     disconnectedCallback() {
-        window.removeEventListener(overlayEvents.get('openOverlay'), this.boundHandleOpenEvent);
-        window.removeEventListener(overlayEvents.get('closeOverlay'), this.boundHandleCloseEvent);
+        this.disconnectHandleOpenEvent();
+        this.disconnectHandleCloseEvent();
     }
 
     /**

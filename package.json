@@ -18,7 +18,7 @@
   "homepage": "https://github.com/joinbox/ui-components#readme",
   "devDependencies": {
     "@joinbox/eslint-config-joinbox": "^1.0.8",
-    "ava": "^3.7.1",
+    "ava": "^3.11.1",
     "babel-eslint": "^10.1.0",
     "jsdom": "^16.2.2",
     "rollup": "^2.7.2"
