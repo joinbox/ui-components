@@ -56,7 +56,7 @@ test('updates model on input change', async(t) => {
     const event = new window.Event('input');
     const model = {
         volume: 0,
-        updateVolume(volume) {
+        setVolume(volume) {
             this.volume = volume;
         },
         loadingState: true,

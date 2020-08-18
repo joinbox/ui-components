@@ -6,9 +6,9 @@ import canEmitEvents from '../shared/canEmitEvents.mjs';
 class AudioModel {
 
     /**
-     * Audio's loading state, either undefined, 'loading' or 'loaded'
+     * Audio's loading state, either null, 'loading' or 'loaded'
      */
-    loadingState = undefined;
+    loadingState = null;
     /**
      * Audio's playing state; separate from loadingState to play audio after it was loaded *if*
      * user has started playing and not paused audio afterwards. Separate from audio's play state
@@ -43,6 +43,11 @@ class AudioModel {
         return this.audio && this.audio.currentTime;
     }
 
+    /**
+     * Maps events from Audio instance to internal EventEmitter events that are listened to by
+     * components
+     * @private
+     */
     setupAudioListeners() {
         this.audio.addEventListener('play', () => {
             this.emit('play');
@@ -78,11 +83,11 @@ class AudioModel {
         this.audio.pause();
     }
 
-    updateVolume(volume) {
+    setVolume(volume) {
         this.audio.volume = volume;
     }
 
-    setTime(time) {
+    setCurrentTime(time) {
         this.audio.currentTime = time;
     }
 

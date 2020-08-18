@@ -43,7 +43,7 @@ export default class MediaVolumeComponent extends HTMLElement {
     updateVolume() {
         // Audio is not loaded yet
         if (!this.model.loadingState) return;
-        this.model.updateVolume(this.input.value / 100);
+        this.model.setVolume(this.input.value / 100);
     }
 
     /**

@@ -51,7 +51,7 @@ export default class MediaTimelineComponent extends HTMLElement {
         // Audio is not loaded yet
         if (!this.model.loadingState) return;
         const time = this.input.value;
-        this.model.setTime(time);
+        this.model.setCurrentTime(time);
     }
 
     /**

@@ -30,23 +30,32 @@
 
 <body>
     <h1>Play/Pause</h1>
+
+
+    <!-- Copy to README.md when changed -->
     <audio-component data-source="file_example_MP3_700KB.mp3" data-ready-class="ready">
-        <media-play-pause-component
-            data-playing-class="playing"
-            data-paused-class="paused"
-        >
+        <media-play-pause-component data-playing-class="playing" data-paused-class="paused">
                 ⏯
         </media-play-pause-component>
         <media-time-component>0:00</media-time-component>
         <media-timeline-component>
+            <!-- Timeline component must include an input[type="range"] -->
             <input type="range" value="0">
         </media-timeline-component>
         <media-time-component data-type="total"> -:-- </media-time-component>
         🔉<media-volume-component>
+            <!-- Volume component must include an input[type="range"] -->
             <input type="range" value="100">
         </media-volume-component>
     </audio-component>
-    <script type="module" src="components.js"></script>
+    <script type="module" src="../AudioComponentElement.js"></script>
+    <script type="module" src="../MediaPlayPauseComponentElement.js"></script>
+    <script type="module" src="../MediaTimeComponentElement.js"></script>
+    <script type="module" src="../MediaTimelineComponentElement.js"></script>
+    <script type="module" src="../MediaVolumeComponentElement.js"></script>
+    <!-- END copy -->
+
 </body>
 
 </html>
+
