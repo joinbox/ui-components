@@ -1,5 +1,5 @@
 import canAnnounceElement from '../shared/canAnnounceElement.js';
-import createListener from '../shared/createListener.js';
+import createListener from '../shared/createListener.mjs';
 import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
 
 /* global HTMLElement, window */

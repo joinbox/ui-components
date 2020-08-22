@@ -1,6 +1,6 @@
 import jsdom from 'jsdom';
 import test from 'ava';
-import createListener from './createListener.js';
+import createListener from './createListener.mjs';
 
 const { JSDOM } = jsdom;
 

@@ -35,7 +35,7 @@
             .overlay.visible {
                 display: block;
             }
-            jb-overlay-button {
+            overlay-button-component {
                 border: 1px solid gray;
                 padding: 10px;
                 border-radius: 3px;
@@ -49,47 +49,47 @@
         <p>ESC and click outside close it</p>
 
         <!-- With ESC/click outside -->
-        <jb-overlay-button data-overlay-name="overlay1" data-button-type="open">
-            Open Default
-        </jb-overlay-button>
+        <overlay-button-component data-overlay-name="overlay1" data-type="toggle">
+            Toggle Default
+        </overlay-button-component>
 
-        <jb-overlay
-            data-overlay-name="overlay1"
+        <overlay-component
+            data-name="overlay1"
             data-background-selector=".overlay-background"
             data-background-visible-class-name="visible"
             data-visible-class-name="visible"
             class="overlay"
         >
-            <jb-overlay-button data-overlay-name="overlay1" data-button-type="close">
+            <overlay-button-component data-overlay-name="overlay1" data-type="close">
                 ×
-            </jb-overlay-button>
+            </overlay-button-component>
             <h1>Overlay title</h1>
             <p>Overlay body copy: Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
-        </jb-overlay>
+        </overlay-component>
 
         <h1>Restricted</h1>
         <p>ESC and click outside do <strong>not</strong> close overlay</p>
 
         <!-- No ESC/click outside -->
-        <jb-overlay-button data-overlay-name="overlay2" data-button-type="open">
+        <overlay-button-component data-overlay-name="overlay2" data-type="open">
             Open Restricted
-        </jb-overlay-button>
+        </overlay-button-component>
 
-        <jb-overlay
-            data-overlay-name="overlay2"
+        <overlay-component
+            data-name="overlay2"
             data-background-selector=".overlay-background"
             data-background-visible-class-name="visible"
             data-visible-class-name="visible"
             class="overlay"
-            data-disable-esc
-            data-disable-click-outside
+            data-disable-esc="true"
+            data-disable-click-outside="true"
         >
-            <jb-overlay-button data-overlay-name="overlay2" data-button-type="close">
+            <overlay-button-component data-overlay-name="overlay2" data-type="close">
                 ×
-            </jb-overlay-button>
+            </overlay-button-component>
             <h1>Restricted overlay</h1>
             <p>Overlay body copy: Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
-        </jb-overlay>
+        </overlay-component>
 
 
         <div class="overlay-background"></div>
@@ -97,6 +97,8 @@
         <!-- Make body scrollable -->
         <div style="height: 200vh"></div>
 
-        <script type="module" src="OverlayTest.js"></script>
+        <script type="module" src="./OverlayElement.js"></script>
+        <script type="module" src="./OverlayButtonElement.js"></script>
+
     </body>
 </html>

@@ -1,64 +1,110 @@
 import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
-import overlayEvents from './overlayEvents.js';
+import canAnnounceElement from '../shared/canAnnounceElement.js';
+import createListener from '../shared/createListener.mjs';
+
+/* global HTMLElement */
 
 /**
- * Button that opens or closes an overlay (by emitting an open/closeoverlay event). Requires
- * attributes data-button-type (open/close) and data-overlay-name.
+ * Button that opens or closes or toggles an overlay. Requires
+ * attributes data-button-type (open/close/toggle) and data-overlay-name.
  */
-export default class OverlayButton extends window.HTMLElement {
-
-    /* global window */
+export default class extends HTMLElement {
 
     constructor() {
         super();
+        this.readAttributes();
+        Object.assign(
+            this,
+            canAnnounceElement({ eventType: 'overlay-button', eventIdentifier: this.name }),
+        );
         this.setupClickListener();
+    }
+
+    async connectedCallback() {
+        await this.announce();
+        this.handleModelChanges();
+        this.updateDOM();
+    }
+
+    readAttributes() {
+        this.name = this.getName();
+        this.type = this.getType();
+        const [openClass, closedClass] = this.getClassNames();
+        this.openClass = openClass;
+        this.closedClass = closedClass;
+    }
+
+    getClassNames() {
+        return [
+            getAndValidateAttribute({
+                element: this,
+                name: 'data-open-class-name',
+            }),
+            getAndValidateAttribute({
+                element: this,
+                name: 'data-closed-class-name',
+            }),
+        ];
+    }
+
+    /**
+     * Reads overlay name from DOM, stores it in this.name
+     * @private
+     */
+    getName() {
+        return getAndValidateAttribute({
+            element: this,
+            name: 'data-overlay-name',
+            validate: value => value && typeof value === 'string',
+        });
+    }
+
+    /**
+     * Reads button type from DOM, stores it in this.type. Defaults to 'toggle'.
+     * @private
+     */
+    getType() {
+        return getAndValidateAttribute({
+            element: this,
+            name: 'data-type',
+            validate: value => !value || ['toggle', 'open', 'close'].includes(value),
+        }) || 'toggle';
     }
 
     /**
      * @private
      */
     setupClickListener() {
-        this.addEventListener('click', this.fireOverlayEvent.bind(this));
-    }
-
-    /**
-     * @private
-     * @fires      openoverlay or closeoverlay (depending on data-button-type) with overlayName
-     *             as detail.
-     */
-    fireOverlayEvent() {
-        const overlayName = this.getAndValidateOverlayName();
-        const buttonType = this.getAndValidateButtonType();
-        const options = {
-            detail: { overlayName },
-            bubbles: true,
-        };
-        const eventName = `${buttonType}Overlay`;
-        const event = new window.CustomEvent(overlayEvents.get(eventName), options);
-        this.dispatchEvent(event);
+        createListener(this, 'click', this.handleClick.bind(this));
     }
 
     /**
      * @private
      */
-    getAndValidateOverlayName() {
-        return getAndValidateAttribute({
-            name: 'data-overlay-name',
-            validate: value => !!value,
-            errorMessage: 'must be a non-empty string',
-            element: this,
-        });
+    handleClick() {
+        this.model[this.type]();
     }
 
     /**
      * @private
      */
-    getAndValidateButtonType() {
-        return getAndValidateAttribute({
-            name: 'data-button-type',
-            validate: value => !!value,
-            errorMessage: 'must be a non-empty string',
-            element: this,
+    handleModelChanges() {
+        this.model.on('change', this.updateDOM.bind(this));
+    }
+
+    /**
+     * @private
+     */
+    updateDOM() {
+        /* global requestAnimationFrame */
+        requestAnimationFrame(() => {
+            if (this.model.isOpen) {
+                this.classList.remove(this.closedClass);
+                this.classList.add(this.openClass);
+            } else {
+                this.classList.remove(this.openClass);
+                this.classList.add(this.closedClass);
+            }
         });
     }
 

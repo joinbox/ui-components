@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            youtube-player-component {
+                display: block;
+                width: 480px;
+                height: 270px;
+                background-color: salmon;
+            }
+            .loading {
+                background-color: deeppink;
+            }
+        </style>
+    </head>
+    <body>
+    
+    
+        <h1>Test for YouTubePlayer</h1>
+        <h2>Without controls, modest branding</h2>
+        <youtube-player-component
+            data-video-id="m7MtIv9a0A4"
+            data-loading-class-name="loading"
+            data-player-variables='{ "controls": 0, "modestbranding": 1 }'
+        >
+            Preview here
+        </youtube-player-component>
+
+
+        <h2>With controls, intense branding</h2>
+        <youtube-player-component data-video-id="m7MtIv9a0A4">Preview here</youtube-player-component>
+    
+    </body>
+    <script type="module" src="./YouTubePlayerElement.js"></script>
+</html>

@@ -5,7 +5,7 @@ import getDOM from '../testHelpers/getDOM.mjs';
 
 const setup = async(hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
-    return getDOM({ basePath, scripts: ['components.js'], hideErrors });
+    return getDOM({ basePath, scripts: ['MediaPlayPauseComponentElement.js'], hideErrors });
 };
 
 const createElement = (document, html) => {

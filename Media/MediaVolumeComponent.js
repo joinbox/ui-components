@@ -1,7 +1,7 @@
 import canAnnounceElement from '../shared/canAnnounceElement.js';
-import createListener from '../shared/createListener.js';
+import createListener from '../shared/createListener.mjs';
 
-/* global HTMLElement, window */
+/* global HTMLElement */
 
 export default class MediaVolumeComponent extends HTMLElement {
 

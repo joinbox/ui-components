@@ -1,5 +1,6 @@
 /**
  * Gets/validates attribute of a HTML element.
+ * OUTDATED - use canReadAttributes instead.
  * @param {HTMLElement} options.element
  * @param {name} options.name               Name of the attribute
  * @param {function} options.validate       Validate function; return true if attribute is valid

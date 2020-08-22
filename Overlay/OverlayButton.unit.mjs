@@ -5,50 +5,99 @@ import getDOM from '../testHelpers/getDOM.mjs';
 
 const setup = async(hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
-    return getDOM({ basePath, scripts: ['overlayComponents.js'], hideErrors });
+    return getDOM({ basePath, scripts: ['OverlayButtonElement.js'], hideErrors });
 };
 
-test('throws if attribute data-overlay-name or data-button-type are missing', async(t) => {
-    const { window, document, errors } = await setup(true);
+const createElement = (document, html) => {
+    const container = document.createElement('div');
+    container.innerHTML = html;
+    return container.firstChild;
+};
 
-    const button = document.createElement('jb-overlay-button');
-    document.body.appendChild(button);
-    button.dispatchEvent(new window.MouseEvent('click'));
+test('throws if required attributes are missing', async(t) => {
+    const { document, errors } = await setup(true);
+    document.createElement('overlay-button-component');
     t.is(errors.length, 1);
     t.is(errors[0].message.includes('Attribute data-overlay-name'), true);
+});
 
-    button.setAttribute('data-overlay-name', 'overlay1');
-    button.dispatchEvent(new window.MouseEvent('click'));
-    t.is(errors.length, 2);
-    t.is(errors[1].message.includes('Attribute data-button-type'), true);
+test('updates model', async(t) => {
+    const { window, document, errors } = await setup(true);
+    const createModel = () => ({
+        isOpen: false,
+        toggle() { this.isOpen = !this.isOpen },
+        open() { this.isOpen = true; },
+        close() { this.isOpen = false; },
+    });
 
+    // Defaults to toggle button
+    const toggleButton = createElement(
+        document,
+        '<overlay-button-component data-overlay-name="test"></overlay-button-component>',
+    );
+    const toggleModel = createModel();
+    toggleButton.setModel(toggleModel);
+    toggleButton.dispatchEvent(new window.Event('click'));
+    await new Promise(resolve => setTimeout(resolve));
+    t.is(toggleModel.isOpen, true);
+    toggleButton.dispatchEvent(new window.Event('click'));
+    await new Promise(resolve => setTimeout(resolve));
+    t.is(toggleModel.isOpen, false);
+
+    // Open
+    const openButton = createElement(
+        document,
+        '<overlay-button-component data-overlay-name="test" data-type="open"></overlay-button-component>',
+    );
+    const openModel = createModel();
+    openButton.setModel(openModel);
+    openButton.dispatchEvent(new window.Event('click'));
+    // Check if it's not a toggle button (would re-close overlay)
+    openButton.dispatchEvent(new window.Event('click'));
+    t.is(openModel.isOpen, true);
+
+    // Close
+    const closeButton = createElement(
+        document,
+        '<overlay-button-component data-overlay-name="test" data-type="close"></overlay-button-component>',
+    );
+    const closeModel = createModel();
+    closeModel.isOpen = true;
+    closeButton.setModel(closeModel);
+    closeButton.dispatchEvent(new window.Event('click'));
+    // Check if it's not a toggle button (would re-open overlay)
+    closeButton.dispatchEvent(new window.Event('click'));
+    await new Promise(resolve => setTimeout(resolve));
+    t.is(closeModel.isOpen, false);
+
+    t.is(errors.length, 0);
 });
 
 
-test('dispatches correct events on click', async(t) => {
+test('updates DOM', async(t) => {
+    const { window, document, errors } = await setup(true);
+    window.requestAnimationFrame = cb => cb();
 
-    const { window, document, errors } = await setup();
+    // Defaults to toggle button
+    const button = createElement(
+        document,
+        '<overlay-button-component data-overlay-name="test" data-open-class-name="is-open" data-closed-class-name="is-closed"></overlay-button-component>',
+    );
+    const model = {
+        isOpen: false,
+        handlers: {},
+        on(type, handler) { this.handlers[type] = handler; },
+    };
+    button.setModel(model);
+    await button.connectedCallback();
 
-    const button = document.createElement('jb-overlay-button');
-    button.setAttribute('data-overlay-name', 'overlay1');
-    button.setAttribute('data-button-type', 'open');
-    document.body.appendChild(button);
+    t.is(button.classList.contains('is-closed'), true);
 
-    const events = [];
-    window.addEventListener('openoverlay', ev => events.push(ev));
-    window.addEventListener('closeoverlay', ev => events.push(ev));
+    model.isOpen = true;
+    model.handlers.change();
 
-    button.dispatchEvent(new window.MouseEvent('click'));
-    t.is(events.length, 1);
-    t.is(events[0].type, 'openoverlay');
-    t.deepEqual(events[0].detail, { overlayName: 'overlay1' });
-
-    button.setAttribute('data-button-type', 'close');
-    button.dispatchEvent(new window.MouseEvent('click'));
-    t.is(events.length, 2);
-    t.is(events[1].type, 'closeoverlay');
-    t.deepEqual(events[1].detail, { overlayName: 'overlay1' });
+    t.is(button.classList.contains('is-open'), true);
+    t.is(button.classList.contains('is-closed'), false);
 
     t.is(errors.length, 0);
-
 });

@@ -22,7 +22,10 @@ export default async({ basePath, scripts, hideErrors } = {}) => {
     const { window } = new JSDOM('', {
         runScripts: 'dangerously',
         virtualConsole,
-        // add requestAnimationFrame support
+        // Load external resources (e.g. scripts), needed for YouTube player that depends on YouTube
+        // API
+        resources: 'usable',
+        // Add requestAnimationFrame support
         pretendToBeVisual: true,
     });
     const { document } = window;

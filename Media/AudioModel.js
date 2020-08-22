@@ -17,7 +17,7 @@ class AudioModel {
     playing = false;
 
     constructor() {
-        Object.assign(this, canEmitEvents);
+        Object.assign(this, canEmitEvents());
     }
 
     setURL(url) {

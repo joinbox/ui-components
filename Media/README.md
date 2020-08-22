@@ -3,6 +3,11 @@
 Audio component that consists of diffferent loosely coupled components that can (but must not) be
 used together.
 
+## Important
+
+Load `<audio-component>` before all others, as the others will need a valid audio-component 
+to set their models.
+
 ## Example
 
 All components are independent from one another. It, however, makes sense, to use at least 
@@ -26,7 +31,8 @@ All components are independent from one another. It, however, makes sense, to us
 </audio-component>
 
 <!-- Import all components you use -->
-<script src="Audio/components.js"></script>
+<script src="Media/AudioComponentElement.js"></script>
+<script src="….js"></script>
 ````
 
 
