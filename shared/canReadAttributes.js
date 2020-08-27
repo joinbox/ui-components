@@ -30,13 +30,15 @@ export default (config) => {
                     property,
                     transform,
                 } = attributeConfig;
+                // Use getAttribute instead of dataset, as attribute is not guaranteed to start
+                // with data-
                 const value = this.getAttribute(name);
                 if (typeof validate === 'function' && !validate(value)) {
                     throw new Error(`canWatchAttribute: Attribute ${name} does not match validation rules`);
                 }
                 const transformFunction = transform || (initialValue => initialValue);
                 const propertyName = property || name;
-                this[propertyName] = transformFunction(value);    
+                this[propertyName] = transformFunction(value);
             });
         },
     };
