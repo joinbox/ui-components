@@ -1,165 +1,121 @@
+import canReadAttributes from '../shared/canReadAttributes.js';
+import loadYouTubeAPI from './loadYouTubeAPI.js';
+import createListener from '../shared/createListener.mjs';
+
+/* global HTMLElement, window, document */
+
 /**
- * YouTubePlayer that replaces preview image with the YouTube player (iFrame API) that autoplays
- * the video. Use:
- * <div class="youTubeVideo" video-id="m7MtIv9a0A4">Preview</div>
- * <script type="module">
- *    import YouTubePlayer from './YouTubePlayer.js';
- *    const youTubePlayer = new YouTubePlayer();
- *    youTubePlayer.init(document.querySelector('.youTubeVideo'));
- * </script>
+ * Replaces content on click with YouTube movie that auto-plays.
  */
-export default class YouTubePlayer {
-
-    /* global requestAnimationFrame, window, document, HTMLElement */
+export default class YouTubePlayer extends HTMLElement {
 
     /**
-     * @private
+     * Player instance or, if not ready, promise
      */
-    attributes = new Map([
-        ['videoId', 'videoId'],
-        ['videoParameters', 'videoParameters'],
-        ['loadingClass', 'loadingClass'],
-    ]);
+    player = undefined;
 
     /**
-     * @private
+     * Player's current status. Either null, 'loading' or 'ready';
      */
-    youTubeScriptURL = 'https://www.youtube.com/iframe_api';
+    status = null;
 
-
-    /**
-     * Initializes YouTube video
-     * @param  {HTMLElement} element    Element that will be replaced with YouTube video as soon
-     *                                  as it is clicked
-     */
-    init(element) {
-        if (!element || !(element instanceof HTMLElement)) {
-            throw new Error(`YouTubePlayer: Argument provided for init function must be a HTMLElement, is ${element} instead.`);
-        }
-        this.element = element;
-        this.setupClickListener();
-        this.setupHoverListener();
-    }
-
-    /**
-     * To minimize delay, pre-load YouTube script as soon as user hovers the video preview
-     * @private
-     */
-    setupHoverListener() {
-        this.element.addEventListener('mouseenter', this.loadYouTubeAPI.bind(this));
+    constructor() {
+        super();
+        Object.assign(
+            this,
+            canReadAttributes([{
+                name: 'data-video-id',
+                validate: value => !!value,
+                property: 'videoID',
+            }, {
+                name: 'data-player-variables',
+                property: 'playerVars',
+                transform: value => JSON.parse(value),
+            }, {
+                name: 'data-loading-class-name',
+                property: 'loadingClass',
+            }]),
+        );
+        this.readAttributes();
     }
 
     /**
      * @private
      */
-    setupClickListener() {
-        this.boundClickHandler = this.clickHandler.bind(this);
-        this.element.addEventListener('click', this.boundClickHandler);
+    connectedCallback() {
+        this.disconnectMouseEnter = createListener(
+            this,
+            'mouseenter',
+            this.handleMouseEnter.bind(this),
+        );
+        this.disconnectClick = createListener(
+            this,
+            'click',
+            this.handleClick.bind(this),
+        );
     }
 
     /**
      * @private
      */
-    removeClickHandler() {
-        this.element.removeEventListener('click', this.boundClickHandler);
+    disconnectedCallback() {
+        this.disconnectMouseEnter();
+    }
+
+    /**
+     * Preload YouTube API when mouse enters player
+     * @private
+     */
+    handleMouseEnter() {
+        this.player = loadYouTubeAPI();
     }
 
     /**
      * @private
      */
-    async clickHandler() {
-        // Click handler is only needed once; remove it as soon as it's been used
-        this.removeClickHandler();
-        this.addLoadingClass();
-        await this.loadYouTubeAPI();
-        this.displayAndPlayVideo();
+    async handleClick() {
+        if (!this.player) this.player = loadYouTubeAPI();
+        this.status = 'loading';
+        this.updateDOM();
+        this.play();
     }
 
     /**
+     * Wait for YouTube player to be ready, create player and add it to a newly created child
+     * div.
      * @private
      */
-    async loadYouTubeAPI() {
-        // YouTube script was already loaded, Player is ready
-        if (window.YT && window.YT.Player && typeof window.YT.Player === 'function') return;
-        // Check if there is already a YouTube script: If there is, just wait until it's done
-        const existingTag = document.querySelector(`script[src="${this.youTubeScriptURL}"]`);
-        // There is no script tag: Create and add it to the DOM
-        if (!existingTag) {
-            const tag = document.createElement('script');
-            tag.setAttribute('src', this.youTubeScriptURL);
-            // There must be a script somewhere as this code itself is a script
-            const firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        }
-        await new Promise((resolve) => {
-            window.onYouTubeIframeAPIReady = resolve;
+    async play() {
+        const Player = await this.player;
+        this.status = 'ready';
+        await this.updateDOM();
+        // Don't replace current element, add the video as a child
+        const player = new Player(this.querySelector('div'), {
+            playerVars: this.playerVars,
+            videoId: this.videoID,
+            events: {
+                onReady: ev => ev.target.playVideo(),
+            },
         });
     }
 
     /**
+     * Updates DOM; returns a promise that resolves as soon as the update was executed. Needed as
+     * we can only initialize the YouTube player with an element that is part of the document.
      * @private
      */
-    addLoadingClass() {
-        if (this.getLoadingClass()) {
-            requestAnimationFrame(() => this.element.classList.add(this.getLoadingClass()));
-        }
-    }
-
-    /**
-     * @private
-     */
-    removeLoadingClass() {
-        if (this.getLoadingClass()) {
-            requestAnimationFrame(() => this.element.classList.remove(this.getLoadingClass()));
-        }
-    }
-
-    /**
-     * Get name of class that should be added to element from element's attributes
-     * @return {string}
-     */
-    getLoadingClass() {
-        const className = this.element.dataset[this.attributes.get('loadingClass')] || '';
-        if (!className) {
-            console.log(`YouTubePlayer: Attribute ${this.attributes.get('loadingClass')} not set on element, cannot add loading class.`);
-        }
-        return className;
-    }
-
-    /**
-     * Reads player parameters from DOM (JSON), parses and returns them. Fails gracefully if
-     * parameters cannot be parsed, but displays error.
-     * @private
-     */
-    getVideoParameters() {
-        const json = this.element.dataset[this.attributes.get('videoParameters')];
-        if (!json) return {};
-        let parameters;
-        try {
-            parameters = JSON.parse(json);
-        } catch (err) {
-            parameters = {};
-            console.error(`YouTubePlayer: Parameters ${json} could not be parsed, JSON is not valid: ${err.message}`);
-        }
-        return parameters;
-    }
-
-
-    /**
-     * @private
-     */
-    displayAndPlayVideo() {
-        const videoId = this.element.dataset[this.attributes.get('videoId')];
-        if (!videoId) {
-            console.error(`YouTubePlayer: attribute ${this.attributes.get('videoId')} not set on DOM element, cannot play video`);
-        }
-        this.removeLoadingClass();
-        new window.YT.Player(this.element, {
-            playerVars: this.getVideoParameters(),
-            videoId,
-            events: {
-                onReady: ev => ev.target.playVideo(),
-            },
+    updateDOM() {
+        return new Promise((resolve) => {
+            window.requestAnimationFrame(() => {
+                if (this.status === 'loading') {
+                    this.classList.add(this.loadingClass);
+                } else if (this.status === 'ready') {
+                    // Remove content (preview image and play button)
+                    this.innerHTML = '<div></div>';
+                    this.classList.remove(this.loadingClass);
+                }
+                resolve();
+            });
         });
     }
 
