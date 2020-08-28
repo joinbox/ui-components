@@ -10,6 +10,7 @@ for old browsers. Only the custom element polyfill is needed.
 - [YouTube Player](./YouTubePlayer/README.md)
 - [Overlay and Buttons](./Overlay/README.md)
 - [Audio Player](./Media/README.md)
+- [Table of Contents](./TableOfContents/README.md)
 
 ## Tests
 `npm i && npm test`
