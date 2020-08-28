@@ -1,12 +1,7 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import test from 'ava';
-<<<<<<< HEAD
-import jsdom from 'jsdom';
-import YouTubePlayer from './YouTubePlayer.js';
-=======
 import getDOM from '../testHelpers/getDOM.mjs';
->>>>>>> feat/overlay
 
 const setup = async(hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
