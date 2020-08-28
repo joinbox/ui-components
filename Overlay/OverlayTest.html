@@ -1,0 +1,104 @@
+<!doctype html>
+
+<html lang="en">
+    <!-- Start server (e.g. python -m http.server 8000) on root folder of component and navigate
+         to localhost:8000/Overlay/OverlayTest.html -->
+    <head>
+        <meta charset="utf-8">
+        <title>The HTML5 Herald</title>
+        <style>
+            .overlay-background {
+                position: fixed;
+                display: none;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                opacity: 0.6;
+                background-color: black;
+            }
+            .overlay-background.visible {
+                display: block;
+            }
+            .overlay {
+                display: none;
+                width: 40vw;
+                position: fixed;
+                top: 40%;
+                left: 50%;
+                background-color: white;
+                padding: 40px;
+                box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.3);
+                transform: translate3d(-50%, -50%, 0);
+                z-index: 10;
+            }
+            .overlay.visible {
+                display: block;
+            }
+            overlay-button-component {
+                border: 1px solid gray;
+                padding: 10px;
+                border-radius: 3px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <h1>Default</h1>
+        <p>ESC and click outside close it</p>
+
+        <!-- With ESC/click outside -->
+        <overlay-button-component data-overlay-name="overlay1" data-type="toggle">
+            Toggle Default
+        </overlay-button-component>
+
+        <overlay-component
+            data-name="overlay1"
+            data-background-selector=".overlay-background"
+            data-background-visible-class-name="visible"
+            data-visible-class-name="visible"
+            class="overlay"
+        >
+            <overlay-button-component data-overlay-name="overlay1" data-type="close">
+                ×
+            </overlay-button-component>
+            <h1>Overlay title</h1>
+            <p>Overlay body copy: Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
+        </overlay-component>
+
+        <h1>Restricted</h1>
+        <p>ESC and click outside do <strong>not</strong> close overlay</p>
+
+        <!-- No ESC/click outside -->
+        <overlay-button-component data-overlay-name="overlay2" data-type="open">
+            Open Restricted
+        </overlay-button-component>
+
+        <overlay-component
+            data-name="overlay2"
+            data-background-selector=".overlay-background"
+            data-background-visible-class-name="visible"
+            data-visible-class-name="visible"
+            class="overlay"
+            data-disable-esc="true"
+            data-disable-click-outside="true"
+        >
+            <overlay-button-component data-overlay-name="overlay2" data-type="close">
+                ×
+            </overlay-button-component>
+            <h1>Restricted overlay</h1>
+            <p>Overlay body copy: Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
+        </overlay-component>
+
+
+        <div class="overlay-background"></div>
+
+        <!-- Make body scrollable -->
+        <div style="height: 200vh"></div>
+
+        <script type="module" src="./OverlayElement.js"></script>
+        <script type="module" src="./OverlayButtonElement.js"></script>
+
+    </body>
+</html>

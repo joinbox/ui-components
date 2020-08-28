@@ -1,30 +1,16 @@
 # Re-usable UI Components for and from Joinbox
 
-## YouTubePlayer
+## Use
+- All components are [custom elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements). 
+- Make sure to use the appropriate [polyfill](https://github.com/webcomponents/polyfills/tree/master/packages/custom-elements)
+for old browsers. Only the custom element polyfill is needed.
+- Embed the JavaScript file that ends with `Element`; it defines the custom element on `window`.
 
-- Replaces DOM element with YouTube player on click
-- Auto-plays video when it's ready
-- Reads YouTube video ID from element attribute
-- Reads class name from element attribute and adds it while the player is loading
-- Loads YouTube API only when needed (on click and pre-load on hover) and only once (looks for window.YT or existing script tag first)
+## Components
+- [YouTube Player](./YouTubePlayer/README.md)
+- [Overlay and Buttons](./Overlay/README.md)
+- [Audio Player](./Media/README.md)
+- [Table of Contents](./TableOfContents/README.md)
 
-HTML:
-```html
-    <div
-        class="youTubeVideo"
-        data-video-id="m7MtIv9a0A4"
-        data-video-parameters='{ "controls": 0, "modestbranding": 1 }'
-        data-loading-class="elementName--loading"
-    >
-        Preview
-    </div>
-````
-
-JavaScript:
-```
-import YouTubePlayer from './YouTubePlayer.js';
-const youTubePlayer = new YouTubePlayer();
-youTubePlayer.init(document.querySelector('.youTubeVideo'));
-````
-
-## …
+## Tests
+`npm i && npm test`

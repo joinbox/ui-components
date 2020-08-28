@@ -1,0 +1,47 @@
+<!doctype html>
+
+<html lang="en">
+    <!-- Start server (e.g. python -m http.server 8000) on root folder of component and navigate
+         to localhost:8000/Overlay/OverlayTest.html -->
+    <head>
+        <meta charset="utf-8">
+        <title>The HTML5 Herald</title>
+        <style>
+            h1, h2 {
+                margin-top: 30vh;
+            }
+            .toc {
+                margin-top: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <h1 class="toc">Table of Contents</h1>
+        <table-of-contents-component
+            data-chapters-selector="h1:not(.toc)"
+            data-template-selector="template"
+            data-template-content-selector=".text"
+        >
+            <ul>
+                <template>
+                    <li>
+                        <span>–</span>
+                        <span class="text"></span>
+                    </li>
+                </template>
+            </ul>
+        </table-of-contents-component>'
+
+        <h1>Main-1</h1>
+        <h2>Sub-1-1</h2>
+        <h2>Sub-1-2</h2>
+        <h1>Main-2</h1>
+        <h2>Sub-2-2</h2>
+        <h1>Main-3</h1>
+
+        <script type="module" src="./TableOfContentsElement.js"></script>
+
+    </body>
+</html>
