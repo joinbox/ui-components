@@ -1,0 +1,61 @@
+<!doctype html>
+
+<html lang="en">
+    <!-- Start server (e.g. python -m http.server 8000) on root folder of component and navigate
+         to localhost:8000/Overlay/OverlayTest.html -->
+    <head>
+        <meta charset="utf-8">
+        <title>The HTML5 Herald</title>
+        <style>
+            .container {
+                width: 300px;
+                border: 1px solid seagreen;
+                overflow: auto;
+                white-space: nowrap;
+                display: block;
+                float: left;
+            }
+            .element, .back, .forward {
+                padding: 10px 40px;
+                margin: 4px;
+                border: 1px solid salmon;
+                display: inline-block;
+            }
+            .back, .forward {
+                display: block;
+                float: left;
+                transition: opacity 1s ease-in-out;
+            }
+            .active {
+                border-color: crimson;
+                background-color: salmon;
+            }
+            .disabled {
+                opacity: 0.2;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="back">←</div>
+        <slider-component
+            class="container"
+            data-previous-button-selector=".back"
+            data-next-button-selector=".forward"
+            data-disabled-button-class-name="disabled"
+            data-active-content-selector=".active"
+        >
+            <div class="element">Test</div>
+            <div class="element">Test</div>
+            <div class="element">Test</div>
+            <div class="element active">Test</div>
+            <div class="element">Test</div>
+        </slider-component>
+        <div class="forward">→</div>
+
+
+        <script type="module" src="./SliderElement.js"></script>
+
+    </body>
+</html>
