@@ -1,68 +1,47 @@
 # Slider
 
-Simple slider for scrollable panes. Supports
-- scroll buttons (left/right)
-- displays buttons only when needed
-- makes sure active element is visible on load
+Simple slider for scrollable panes. Does
+- support scroll buttons (previous/next) anywhere in the DOM
+- update scroll button visibility depending on scroll position
+- make sure that an active element is visible on initialization
 
 
 ## Example
 
 ````html
-<overlay-button-component data-overlay-name="myOverlay" data-type="open">
-    Open Restricted
-</overlay-button-component>
-
-<overlay-component
-    data-name="myOverlay"
-    data-background-selector=".overlay-background"
-    data-background-visible-class-name="visible"
-    data-visible-class-name="visible"
-    data-disable-esc="true"
-    data-disable-click-outside="true"
+<div class="back">←</div>
+<slider-component
+    data-previous-button-selector=".back"
+    data-next-button-selector=".forward"
+    data-disabled-button-class-name="disabled"
+    data-active-content-selector=".active"
 >
-    <overlay-button-component data-overlay-name="myOverlay" data-type="close">
-        ×
-    </overlay-button-component>
-</overlay-component>
+    <div class="element">Test</div>
+    <div class="element">Test</div>
+    <div class="element">Test</div>
+    <div class="element active">Test</div>
+    <div class="element">Test</div>
+</slider-component>
+<div class="forward">→</div>
 
-<!-- Import all components you use -->
-<script src="Overlay/OverlayElement.js"></script>
-<script src="Overlay/OverlayButtonElement"></script>
+<script type="module" src="Slider/SliderElement.js"></script>
 ````
 
 ## Components
 
-### Overlay
+### Slider Component
 
 #### Exposed Element
-`<overlay-component></overlay-component>`
+`<slider-component></slider-component>`
 
 #### Attributes
-- `data-name`: Names the overlay; the name must exactly match attribute `data-overlay-name` on
-`overlay-button-component` to be opened/closed by it.
-- `data-visible-class-name`: Contains the class name that will be added to the overlay when it is
-opened and removed when it is closed.
-- `data-background-selector`: Takes any CSS selector and defines the element that will receive
-`data-background-visible-class-name` when the overlay opens.
-- `data-background-visible-class-name`. Defines the class that will be added to the background
-element when the overlay is opened and removed when the overlay is closed.
-- `data-disable-esc`: Prevents the overlay from being closed when users press the ESC key. Defaults
-to false.
-- `data-disable-click-outside`: Prevents the overlay from being closed when users click with their
-mouse outside of the overlay. Defaults to false.
-
-
-
-### Overlay Button
-
-#### Exposed Element
-`<overlay-button-component></overlay-button-component>`
-
-#### Attributes
-- `data-overlay-name`: Contains the name of the overlay that should be opened or closed. Make sure
-it exactly matches the attribute `data-name` on `overlay-component`.
-- `data-type` is either `close`, if the button shall only close the overlay, `open` if the button
-shall only open the overlay or `toggle` if the button shall toggle the overlay. Defaults to
-`toggle`.
+- `data-previous-button-selector` (optional): CSS selector for the button that scrolls to the
+previous view. The button may be placed anywhere in the DOM.
+- `data-next-button-selector` (optional): See `data-previous-button-selector`, but for the next
+view.
+- `data-disabled-button-class-name` (optional): Class name that should be added to buttons that are
+disabled (depending on the scroll position; if the scroll position is 0, this class will be added to
+the *previous* button, as user cannot scroll any more towards the previous view).
+- `data-active-content-selector` (optional): CSS selector for the active element; the element must
+be a child of `<slider-component>` and will be scrolled into view on initialization.
 

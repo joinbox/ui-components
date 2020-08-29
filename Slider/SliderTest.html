@@ -12,6 +12,8 @@
                 border: 1px solid seagreen;
                 overflow: auto;
                 white-space: nowrap;
+                display: block;
+                float: left;
             }
             .element, .back, .forward {
                 padding: 10px 40px;
@@ -19,12 +21,17 @@
                 border: 1px solid salmon;
                 display: inline-block;
             }
-            .active {
-                border-color: crimson;
-            }
-            .container, .back, .forward {
+            .back, .forward {
                 display: block;
                 float: left;
+                transition: opacity 1s ease-in-out;
+            }
+            .active {
+                border-color: crimson;
+                background-color: salmon;
+            }
+            .disabled {
+                opacity: 0.2;
             }
         </style>
     </head>
@@ -36,6 +43,7 @@
             class="container"
             data-previous-button-selector=".back"
             data-next-button-selector=".forward"
+            data-disabled-button-class-name="disabled"
             data-active-content-selector=".active"
         >
             <div class="element">Test</div>
