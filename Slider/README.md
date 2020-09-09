@@ -5,6 +5,10 @@ Simple slider for scrollable panes. Does
 - update scroll button visibility depending on scroll position
 - make sure that an active element is visible on initialization
 
+## Polyfills
+- Use a [scrollIntoView and scrollBy polyfill](https://github.com/iamdustan/smoothscroll)
+[if needed](https://caniuse.com/#feat=scrollintoview)
+
 
 ## Example
 
