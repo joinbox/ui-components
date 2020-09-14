@@ -11,9 +11,16 @@ const { JSDOM } = jsdom;
  * @param {boolean} options.hideErrors        If true, jsdomError will only be added to errors but
  *                                            not displayed (good to test if exceptions are thrown
  *                                            as console is not cluttered)
+ * @param {object} jsdomOptions               Additional JSDOM options, e.g. to test an URL (if
+ *                                            using history.pushState)
  * @return {object}
  */
-export default async({ basePath, scripts, hideErrors } = {}) => {
+export default async({
+    basePath,
+    scripts,
+    hideErrors,
+    jsdomOptions,
+} = {}) => {
 
     const errors = [];
     const virtualConsole = new jsdom.VirtualConsole();
@@ -27,6 +34,7 @@ export default async({ basePath, scripts, hideErrors } = {}) => {
         resources: 'usable',
         // Add requestAnimationFrame support
         pretendToBeVisual: true,
+        ...jsdomOptions,
     });
     const { document } = window;
 
