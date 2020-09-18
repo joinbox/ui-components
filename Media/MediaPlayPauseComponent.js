@@ -14,7 +14,6 @@ export default class MediaPlayPauseButton extends HTMLElement {
         // Make element play nicely together with AudioComponent
         Object.assign(this, canAnnounceElement());
         this.setupClickListener();
-        this.getClasses();
     }
 
     /**
@@ -22,7 +21,6 @@ export default class MediaPlayPauseButton extends HTMLElement {
      */
     async connectedCallback() {
         await this.announce();
-        this.setupModelListeners();
     }
 
     /**
@@ -39,47 +37,14 @@ export default class MediaPlayPauseButton extends HTMLElement {
      */
     toggle() {
         // Only load audio data when data is not yet ready and user starts playing
-        if (!this.model.loadingState && !this.model.playing) this.model.load();
+        if (!this.model.loadingState && !this.model.playing) {
+            this.model.load();
+            // Try to start playing. Will fire 'play' event when file is ready.
+            this.model.play();
+            return;
+        }
         if (this.model.playing) this.model.pause();
         else this.model.play();
-    }
-
-    /**
-     * Sets up listeners on model
-     * @private
-     */
-    setupModelListeners() {
-        this.model.on('play', this.updateDOM.bind(this));
-        this.model.on('pause', this.updateDOM.bind(this));
-    }
-
-    /**
-     * Reads class attributes from element and stores/caches them
-     * @private
-     */
-    getClasses() {
-        this.playingClass = getAndValidateAttribute({
-            element: this,
-            name: 'data-playing-class',
-        });
-        this.pausedClass = getAndValidateAttribute({
-            element: this,
-            name: 'data-paused-class',
-        });
-    }
-
-    /**
-     * Updates the dom
-     * @private
-     */
-    updateDOM() {
-        if (this.model.playing) {
-            this.classList.add(this.playingClass);
-            this.classList.remove(this.pausedClass);
-        } else {
-            this.classList.add(this.pausedClass);
-            this.classList.remove(this.playingClass);
-        }
     }
 
 }

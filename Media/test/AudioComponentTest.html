@@ -10,20 +10,22 @@
             display: block;
             opacity: 1;
         }
-        audio-component.ready {
+        audio-component[data-state="initialized"] media-play-pause-component {
             background-color: lightgray;
+        }
+        audio-component[data-state="loading"] media-play-pause-component {
+            background-color: salmon;
+        }
+        audio-component[data-state="playing"] media-play-pause-component {
+            background-color: skyblue;
+        }
+        audio-component[data-state="paused"] media-play-pause-component {
+            background-color: khaki;
         }
         media-play-pause-component {
             display: inline-block;
             border-radius: 5px;
             padding: 15px;
-            background-color: lightgrey;
-        }
-        media-play-pause-component.paused {
-            background-color: lightgreen;
-        }
-        media-play-pause-component.playing {
-            background-color: crimson;
         }
     </style>
 </head>
@@ -33,9 +35,9 @@
 
 
     <!-- Copy to README.md when changed -->
-    <audio-component data-source="file_example_MP3_700KB.mp3" data-ready-class="ready">
-        <media-play-pause-component data-playing-class="playing" data-paused-class="paused">
-                ⏯
+    <audio-component data-source="file_example_MP3_700KB.mp3">
+        <media-play-pause-component>
+            ⏯
         </media-play-pause-component>
         <media-time-component>0:00</media-time-component>
         <media-timeline-component>
