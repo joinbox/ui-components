@@ -14,31 +14,33 @@ All components are independent from one another. It, however, makes sense, to us
 `<audio-component>` and `<media-play-pause-component>` to get a working component.
 
 ````html
-<audio-component data-source="file_example_MP3_700KB.mp3" data-ready-class="ready">
-    <media-play-pause-component data-playing-class="playing" data-paused-class="paused">
-        ⏯
-    </media-play-pause-component>
-    <media-time-component>0:00</media-time-component>
-    <media-timeline-component>
-        <!-- Timeline component must include an input[type="range"] -->
-        <input type="range" value="0" />
-    </media-timeline-component>
-    <media-time-component data-type="total"> -:-- </media-time-component>
-    🔉<media-volume-component>
-        <!-- Volume component must include an input[type="range"] -->
-        <input type="range" value="100" />
-    </media-volume-component>
-</audio-component>
+    <audio-component data-source="file_example_MP3_700KB.mp3">
+        <media-play-pause-component>
+            ⏯
+        </media-play-pause-component>
+        <media-time-component>0:00</media-time-component>
+        <media-timeline-component>
+            <!-- Timeline component must include an input[type="range"] -->
+            <input type="range" value="0">
+        </media-timeline-component>
+        <media-time-component data-type="total"> -:-- </media-time-component>
+        🔉<media-volume-component>
+            <!-- Volume component must include an input[type="range"] -->
+            <input type="range" value="100">
+        </media-volume-component>
+    </audio-component>
 
 <!-- Import all components you use -->
-<script src="Media/AudioComponentElement.js"></script>
-<script src="….js"></script>
+    <script type="module" src="@joinbox/ui-components/Media/AudioComponentElement.js"></script>
+    <script type="module" src="@joinbox/ui-components/Media/MediaPlayPauseComponentElement.js"></script>
+    <script type="module" src="@joinbox/ui-components/Media/MediaTimeComponentElement.js"></script>
+    <script type="module" src="@joinbox/ui-components/Media/MediaTimelineComponentElement.js"></script>
+    <script type="module" src="@joinbox/ui-components/Media/MediaVolumeComponentElement.js"></script>
 ````
 
 
 
 ## Components
-
 
 
 ### Audio Component
@@ -49,22 +51,23 @@ All components are independent from one another. It, however, makes sense, to us
 #### Attriutes
 - `data-source`: Path to the audio source file. It is only loaded when the user starts to play. 
 Attribute must be set when the element is created as it is consumed by the element's constructor.
-- `data-ready-class`: Class name that will be added to the element as soon as audio file was loaded
-and is ready to be played back.
 
 #### Properties
 - `audio` instance of HTMLAudioElement that is used to play the audio.
 
+#### Styling
+- The `audio-component` element has an attribute `data-state` that is automatically updated
+when the state changes. The following values are used to reflect the component's current state:
+    - `initialized`
+    - `loading`
+    - `playing`
+    - `paused`
 
 
 ### Media Play Pause Component
 
 #### Exposed Element
 `<media-play-pause-component></media-play-pause-component>`
-
-#### Attriutes
-- `data-playing-class`: Class name that is added to the element when it is playing.
-- `data-paused-class`: Class name that is added to the element when it is paused.
 
 #### Methods
 - `toggle()` toggles between play and pause.

@@ -18,35 +18,30 @@ const createElement = (document, html) => {
 test('starts playing', async(t) => {
     const { window, document, errors } = await setup();
     const model = {
-        handlers: {},
         playing: false,
-        load() {},
+        load() {
+            this.loadingState = 'loaded';
+        },
         play() {
-            setTimeout(() => {
-                this.loadingState = 'loaded';
-                this.playing = true;
-                this.handlers.play();
-            });
+            this.playing = true;
         },
         pause() {
             this.playing = false;
-            this.handlers.pause();
         },
         loadingState: undefined,
-        on(name, cb) { this.handlers[name] = cb; },
     };
     const html = '<media-play-pause-component data-playing-class="play" data-paused-class="pause"></media-play-pause-component>';
     const play = createElement(document, html);
     play.setModel(model);
+    // Fake addition to document
     await play.connectedCallback();
     // Trigger play event
     play.dispatchEvent(new window.Event('click'));
-    await new Promise(resolve => setTimeout(resolve));
-    t.is(play.classList.contains('play'), true);
+    t.is(model.playing, true);
+    t.is(model.loadingState, 'loaded');
+    // Trigger pause event
     play.dispatchEvent(new window.Event('click'));
-    await new Promise(resolve => setTimeout(resolve));
-    t.is(play.classList.contains('play'), false);
-    t.is(play.classList.contains('pause'), true);
+    t.is(model.playing, false);
     t.is(errors.length, 0);
 });
 
