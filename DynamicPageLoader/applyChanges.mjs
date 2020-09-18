@@ -45,6 +45,11 @@ export default ({
         // Try not to place link at a different position; removing from and adding it to DOM will
         // cause a flicker
         // TODO: Use a proper solution (only use appendChild if sort order changed)
+        // Algorithm: Go through DOM children of original; if index does not match preservedElement
+        // at the same index, take the expected element and append it to the current loop's element.
+        // Afterwards, go through all new elements; append to an element that is stored while
+        // looping and corresponds to the just-previous element. First child must be inserted
+        // as insertBefore.
         if (element.tagName.toLowerCase() === 'link' && preservedMapping.has(element)) {
             return;
         }
