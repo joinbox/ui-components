@@ -5,7 +5,7 @@ import createListener from '../shared/createListener.mjs';
 
 export default class MediaTimelineComponent extends HTMLElement {
 
-    // Only update value on input while user is not seeking
+    // Only update value on input when user is not seeking
     isSeeking = false;
 
     constructor() {
@@ -48,7 +48,7 @@ export default class MediaTimelineComponent extends HTMLElement {
      * @private
      */
     updateTime() {
-        // Audio is not loaded yet
+        // Audio is not loaded yet: Prevent user from interacting with the timeline
         if (!this.model.loadingState) return;
         const time = this.input.value;
         this.model.setCurrentTime(time);
@@ -71,6 +71,8 @@ export default class MediaTimelineComponent extends HTMLElement {
      * @private
      */
     updateValue() {
+        // Don't update value (that will trigger change event) while the user is changing
+        // the current time.
         if (this.isSeeking) return;
         const time = this.model.getCurrentTime();
         this.input.value = time;

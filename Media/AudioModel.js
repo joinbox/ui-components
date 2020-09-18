@@ -26,6 +26,7 @@ class AudioModel {
 
     load() {
         this.loadingState = 'loading';
+        this.emit('load');
         /* global Audio */
         this.audio = new Audio(this.url);
         this.setupAudioListeners();
@@ -63,7 +64,10 @@ class AudioModel {
         this.audio.addEventListener('volumechange', (ev) => {
             this.emit('volumechange', this.getVolume());
         });
-        this.audio.addEventListener('canplaythrough', () => {
+        this.audio.addEventListener('canplaythrough', async() => {
+            // Timeout is needed to test loading state on AudioComponent; loads too fast to see
+            // data-state="loading" in the DOM without the Timeout
+            // await new Promise(resolve => setTimeout(resolve, 1000));
             this.emit('canplaythrough');
             this.loadingState = 'loaded';
             // If user clicked play to load audio and did not pause afterwards, play audio
