@@ -5,23 +5,18 @@
     <meta charset="utf-8">
     <title>About</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .header {
-            height: 50px;
-            background-color: salmon;
-            transition: background-color 2s ease-in-out;
-        }
-        .header.about {
-            background-color: deeppink;
-        }
-    </style>
+    <link rel="stylesheet" href="dynamicPageLoader.test.css">
 </head>
 
 <body>
     <h1>Here we go: About</h1>
+    <div class="changeOrder" data-preserve-id="changeOrder">Changes order</div>
     <div class="header about" data-preserve-id="header"></div>
     <a href="dynamicPageLoader.index.html">Go to Index</a>
     <a href="https://joinbox.com">Ignore me</a>
+
+    <div class="animation" data-preserve-id="animation"></div>
+
     <script src="dynamicPageLoader.test.js"></script>
 </body>
 

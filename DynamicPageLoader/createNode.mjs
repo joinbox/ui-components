@@ -12,5 +12,6 @@ export default (document, originalNode) => {
     for (const attribute of originalNode.attributes) {
         newNode.setAttribute(attribute.name, attribute.value);
     }
+    newNode.textContent = originalNode.textContent;
     return newNode;
 };

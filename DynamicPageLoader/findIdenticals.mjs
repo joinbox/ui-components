@@ -7,7 +7,7 @@ const findIdentical = (element, children, isIdentical) => (
 );
 
 /**
- * Returns identical elements of two nodes in the order they appear in newNode.
+ * Returns identical elements of two nodes in the order they appear in *newNode*.
  * Uses two functions to determine identity:
  * - canBeIdentical (for performance optimization)
  * - findIdentical
@@ -34,6 +34,7 @@ export default ({
     const originalChildren = originalNode.children;
     const identicals = possibleNewNodeIdenticals
         .map(element => [element, findIdentical(element, originalChildren, isIdentical)])
+        // Remove all entries that do not contain an identical element
         .filter(row => !!row[1]);
     return identicals;
 };

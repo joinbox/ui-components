@@ -31,6 +31,8 @@ import {
     handlePopState,
     loadFile,
     createNode,
+    canBeIdentical,
+    isIdentical,
 } from '@joinbox/ui-components/DynamicPageLoader';
 
 // Get all links 
@@ -58,8 +60,8 @@ window.addEventListener(
         applyChanges({
             originalNode: document.querySelector('body'),
             newNode: dom.querySelector('body'),
-            canBeIdentical: element => element.hasAttribute('data-preserve-id'),
-            isIdentical: (a, b) => a.dataset.preserveId === b.dataset.preserveId,
+            canBeIdentical,
+            isIdentical,
             updateNode,
         });
 
@@ -148,3 +150,24 @@ elements are considere identical.
 - `updateNode` (optional): function that takes a single parameter (`HTMLElement`) and is expected
 to return a modified HTMLElement, if you wish to change the HTMLElement before it is added to the
 DOM.
+
+
+### canBeIdentical
+
+Takes a single `HTMLElement` and returns true if it **might** be identical with another element,
+e.g. if it has a parameter `data-preserve-id`. If you like, you can use your own function instead,
+e.g.
+
+```javascript
+const canBeIdentical = element => element.hasAttribute('data-preserve-id'),
+```
+
+
+### isIdentical
+
+Takes two `HTMLElements` and returns true if they are considered identical. You can use your own
+function to check if two elements are identical, e.g.
+
+```javascript
+const isIdentical = (a, b) => a.dataset.preserveId === b.dataset.preserveId,
+```

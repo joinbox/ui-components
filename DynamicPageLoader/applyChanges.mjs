@@ -32,30 +32,43 @@ export default ({
         if (!originalIdenticals.includes(child)) originalNode.removeChild(child);
     });
 
-    // Insert updated nodes in their order one by one into the DOM. When an element is preserved,
-    // use the original instead of the updated element.
-    const preservedMapping = new Map(identicals);
-    Array.from(newNode.children).forEach((element) => {
-        const elementToAppend = preservedMapping.get(element) || element;
+    // Update order of *preserved* elements, but only if needed. Changing the order of e.g.
+    // link elements (with style definitions) causes flickering.
+    // identicals has the sort order of the elements in newNode; check if the elements are at the
+    // expected position in originalNode and update position only if needed.
+    identicals.forEach(([, originalIdentical], index) => {
+        if (originalNode.children[index] !== originalIdentical) {
+            if (index === 0) originalNode.prepend(originalIdentical);
+        }
+    });
 
-        // Hook to modify node; only called if element is not preserved
-        const updatedElementToAppend = !preservedMapping.has(element) ?
-            updateNode(elementToAppend) : elementToAppend;
 
-        // Try not to place link at a different position; removing from and adding it to DOM will
-        // cause a flicker
-        // TODO: Use a proper solution (only use appendChild if sort order changed)
-        // Algorithm: Go through DOM children of original; if index does not match preservedElement
-        // at the same index, take the expected element and append it to the current loop's element.
-        // Afterwards, go through all new elements; append to an element that is stored while
-        // looping and corresponds to the just-previous element. First child must be inserted
-        // as insertBefore.
-        if (element.tagName.toLowerCase() === 'link' && preservedMapping.has(element)) {
-            return;
+    // Go through children of newNode from back (as there is no insertAfter, just insertBefore).
+    // Add children where appropriate.
+    const identicalsMap = new Map(identicals);
+    const newChildren = Array.from(newNode.children);
+    for (let index = newChildren.length - 1; index >= 0; index--) {
+
+        const newChild = newChildren[index];
+        // Get element just before the current element
+        const nextSibling = newChildren[index + 1];
+
+        // Check if element is a preserved element – if it is, just return. It's already in
+        // originalNode and has the correct order
+        const isPreservedElement = identicalsMap.has(newChild);
+        if (isPreservedElement) {
+            continue;
         }
 
-        originalNode.append(updatedElementToAppend);
+        // Check if next sibling is a preserved element
+        const preservedNextSibling = identicalsMap.get(nextSibling);
 
-    });
+        // If next sibling is preserved: Insert before *original* element (instead of new element)
+        // If next sibling is not preserved: Insert before next sibling
+        // If next sibling is undefined: Inserts element at the very end (see insertBefore spec)
+        const updatedChild = updateNode(newChild);
+        originalNode.insertBefore(updatedChild, preservedNextSibling || nextSibling);
+
+    }
 
 };
