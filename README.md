@@ -16,5 +16,9 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 - [Table of Contents](./TableOfContents/README.md)
 - [Slider](./Slider/README.md)
 
+## Tools
+- [Dynamic Page Loader](./DynamicPageLoader/README.md)
+- [once](./shared/once.mjs)
+
 ## Tests
 `npm i && npm test`
