@@ -1,4 +1,6 @@
 import TableOfContents from './TableOfContents.js';
 
 /* global window */
-window.customElements.define('table-of-contents-component', TableOfContents);
+if (!window.customElements.get('table-of-contents-component')) {
+    window.customElements.define('table-of-contents-component', TableOfContents);
+}

@@ -1,3 +1,6 @@
 import YouTubePlayer from './YouTubePlayer.js';
 
-window.customElements.define('youtube-player-component', YouTubePlayer);
+/* global window */
+if (!window.customElements.get('youtube-player-component')) {
+    window.customElements.define('youtube-player-component', YouTubePlayer);
+}
