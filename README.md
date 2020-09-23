@@ -12,5 +12,9 @@ for old browsers. Only the custom element polyfill is needed.
 - [Audio Player](./Media/README.md)
 - [Table of Contents](./TableOfContents/README.md)
 
+## Tools
+- [Dynamic Page Loader](./DynamicPageLoader/README.md)
+- [once](./shared/once.mjs)
+
 ## Tests
 `npm i && npm test`
