@@ -38,7 +38,10 @@ export default ({
     // expected position in originalNode and update position only if needed.
     identicals.forEach(([, originalIdentical], index) => {
         if (originalNode.children[index] !== originalIdentical) {
-            if (index === 0) originalNode.prepend(originalIdentical);
+            // Get node before which we will insert the current node. insertBefore(x, null) will
+            // insert x at the end.
+            const referenceNode = originalNode.children[index + 1] || null;
+            originalNode.insertBefore(originalIdentical, referenceNode);
         }
     });
 
@@ -47,27 +50,37 @@ export default ({
     // Add children where appropriate.
     const identicalsMap = new Map(identicals);
     const newChildren = Array.from(newNode.children);
+
+    // nextSibling is the element below the current element in the DOM. Use the node from the
+    // *previous loop* (and not just newChildren[index + 1]) as the child may be created
+    // by updateNode (and will not be in newChildren)
+    let nextSibling = null;
+
     for (let index = newChildren.length - 1; index >= 0; index--) {
 
         const newChild = newChildren[index];
-        // Get element just before the current element
-        const nextSibling = newChildren[index + 1];
 
         // Check if element is a preserved element – if it is, just return. It's already in
         // originalNode and has the correct order
         const isPreservedElement = identicalsMap.has(newChild);
         if (isPreservedElement) {
+            nextSibling = identicalsMap.get(newChild);
             continue;
         }
 
         // Check if next sibling is a preserved element
         const preservedNextSibling = identicalsMap.get(nextSibling);
 
+
         // If next sibling is preserved: Insert before *original* element (instead of new element)
         // If next sibling is not preserved: Insert before next sibling
-        // If next sibling is undefined: Inserts element at the very end (see insertBefore spec)
+        // If next sibling is null: Inserts element at the very end (see insertBefore spec)
         const updatedChild = updateNode(newChild);
-        originalNode.insertBefore(updatedChild, preservedNextSibling || nextSibling);
+
+        const referenceNode = preservedNextSibling || nextSibling;
+        originalNode.insertBefore(updatedChild, referenceNode);
+
+        nextSibling = updatedChild;
 
     }
 

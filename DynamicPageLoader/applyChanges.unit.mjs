@@ -20,13 +20,13 @@ test('updates dom as expected', async(t) => {
     const originalNode = createElement(document, `
         <div>
             <div class="to-be-deleted"></div>
-            <div class="to-be-preserved" data-preserve-id="div">test</div>
+            <div data-preserve-id="div" class="to-be-preserved">test</div>
         </div>
     `);
     const newNode = createElement(document, `
         <div>
             <!-- Class name of this element will not be applied, as original is preserved -->
-            <div class="ignored-class-name" data-preserve-id="div">test</div>
+            <div data-preserve-id="div" class="ignored-class-name">test</div>
             <div class="newly-added"></div>
         </div>
     `);
@@ -54,16 +54,19 @@ test('updates dom as expected', async(t) => {
 
 
 
-
-test('calls updateNode if passed', async(t) => {
+test('works with new nodes from updateNode', async(t) => {
     const { document, errors } = await setup(true);
     const originalNode = createElement(document, `
         <div>
+            <!-- Add some empty DIVs to see if everything works as expected -->
+            <div></div>
         </div>
     `);
     const newNode = createElement(document, `
         <div>
+            <div></div>
             <span class="to-be-modified"></span>
+            <div></div>
         </div>
     `);
     applyChanges({
@@ -72,8 +75,14 @@ test('calls updateNode if passed', async(t) => {
         canBeIdentical: () => false,
         isIdentical: () => false,
         updateNode: (node) => {
+            // If we do not update an existing element, but return a new one, things used to fail,
+            // as the original element could not be referenced any more.Check this case
+            // explicitly.
             if (node.classList.contains('to-be-modified')) {
-                node.classList.add('added-class');
+                const clonedNode = document.createElement('div');
+                clonedNode.classList.add('added-class');
+                clonedNode.classList.add('to-be-modified');
+                return clonedNode;
             }
             return node;
         },
@@ -85,7 +94,32 @@ test('calls updateNode if passed', async(t) => {
 
 
 
-test('does not re-order elements if not needed', async(t) => {
+test('adds preserved elements if they did not exist before', async(t) => {
+    const { document, errors } = await setup(true);
+    const originalNode = createElement(document, `
+        <div>
+            <div></div>
+        </div>
+    `);
+    const newNode = createElement(document, `
+        <div>
+            <div></div>
+            <span data-preserve-id="yes"></span>
+        </div>
+    `);
+    applyChanges({
+        originalNode,
+        newNode,
+        canBeIdentical: element => element.hasAttribute('data-preserve-id'),
+        isIdentical: (a, b) => a.dataset.preserveId === b.dataset.preserveId,
+    });
+    const preserved = originalNode.querySelectorAll('[data-preserve-id="yes"]');
+    t.is(preserved.length, 1);
+    t.is(errors.length, 0);
+});
+
+
+/* test('does not re-order elements if not needed', async(t) => {
     const { window, document, errors } = await setup(true);
 
     // Create a custom element to detect changes in the DOM (via disconnectedCallback)
@@ -131,36 +165,25 @@ test('does not re-order elements if not needed', async(t) => {
     t.is(window.disconnectedCounter, undefined);
     t.is(errors.length, 0);
 
-});
+}); */
 
 
 
 test('updates order of elements if needed', async(t) => {
     const { window, document, errors } = await setup(true);
 
-    // Create a custom element to detect changes in the DOM (via disconnectedCallback)
-    const script = document.createElement('script');
-    script.textContent = `
-        class ChangeLogger extends window.HTMLElement {
-            disconnectedCallback() {
-                if (!window.disconnectedCounter) window.disconnectedCounter = 0;
-                window.disconnectedCounter++;
-            }
-        }
-        window.customElements.define('change-logger', ChangeLogger);
-    `;
-    document.body.appendChild(script);
-
     const originalNode = createElement(document, `
         <div>
-            <change-logger data-preserve-id="first"></change-logger>
-            <change-logger data-preserve-id="second"></change-logger>
+            <div data-preserve-id="first"></div>
+            <div data-preserve-id="second"></div>
+            <div data-preserve-id="third"></div>
         </div>
     `);
     const newNode = createElement(document, `
         <div>
-            <change-logger data-preserve-id="second"></change-logger>
-            <change-logger data-preserve-id="first"></change-logger>
+            <div data-preserve-id="second"></div>
+            <div data-preserve-id="third"></div>
+            <div data-preserve-id="first"></div>
         </div>
     `);
     applyChanges({
@@ -172,6 +195,8 @@ test('updates order of elements if needed', async(t) => {
 
     // Check if order was changed
     t.is(originalNode.children[0].getAttribute('data-preserve-id'), 'second');
+    t.is(originalNode.children[1].getAttribute('data-preserve-id'), 'third');
+    t.is(originalNode.children.length, 3);
     // disconnectedCounter was defined and executed
     // insertBefore does not seem to trigger disconnectedCallback
     // t.is(window.disconnectedCounter, 1);

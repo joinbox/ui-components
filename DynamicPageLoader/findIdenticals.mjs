@@ -18,7 +18,7 @@ const findIdentical = (element, children, isIdentical) => (
  * @param {function} isIdentical         Function that takes two HTMLElements and returns true
  *                                       if they are considered identical
  * @returns Array.<HTMLElement, HTMLElement>[]  Array with one entry per identical; entry consists
- *                                              of an array with update and original element
+ *                                              of an array with [new element, original element]
  */
 export default ({
     originalNode,
