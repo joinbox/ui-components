@@ -8,6 +8,9 @@ Loads content of a page dynamically when the user navigates to a different URL. 
 - Only adds dynamic click handler to elements once (to not fire url change multiple times for
 elements that are preserved over a page change)
 
+## Attention!
+- For now only modifies HTMLElements – and no other node types (text, comments, etc.)
+
 ## Important
 
 There are certain limitations concerning the use of JavaScript, as the global scope is preserved
@@ -50,6 +53,8 @@ window.addEventListener(
     async(ev) => {
         const { url } = ev.detail;
         const dom = await loadFile(url);
+
+        // If you like, add some nice animations here.
 
         // <script> tags must be created through document.createElement and appended to DOM in order
         // to be executed; we generally use innerHTML to change DOM, which does not execute script
