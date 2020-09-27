@@ -15,18 +15,20 @@ const createElement = (document, html) => {
     return container.firstChild;
 };
 
+
 test('updates dom as expected', async(t) => {
     const { document, errors } = await setup(true);
     const originalNode = createElement(document, `
         <div>
             <div class="to-be-deleted"></div>
-            <div data-preserve-id="div" class="to-be-preserved">test</div>
+            <div data-preserve-id="div" class="original">test</div>
         </div>
     `);
+    const originalPreserved = originalNode.querySelector('[data-preserve-id]');
     const newNode = createElement(document, `
         <div>
             <!-- Class name of this element will not be applied, as original is preserved -->
-            <div data-preserve-id="div" class="ignored-class-name">test</div>
+            <div data-preserve-id="div" class="new">test</div>
             <div class="newly-added"></div>
         </div>
     `);
@@ -40,15 +42,78 @@ test('updates dom as expected', async(t) => {
     // .to-be-deleted is removed
     t.is(originalNode.querySelector('.to-be-deleted'), null);
 
-    // .to-be-preserved is kept; class is not added
-    const preserve = originalNode.querySelectorAll('.to-be-preserved');
+    // .to-be-preserved is kept
+    const preserve = originalNode.querySelectorAll('[data-preserve-id="div"]');
     t.is(preserve.length, 1);
-    t.is(preserve[0].classList.contains('ignored-class-name'), false);
+    // Attributes are not updated by default
+    t.is(preserve[0].getAttribute('class'), 'original');
+    // Check that original preserved element is re-used (instead of new element)
+    t.is(originalNode.querySelector('[data-preserve-id]'), originalPreserved);
 
     // .newly-added is added
     t.is(originalNode.querySelectorAll('.newly-added').length, 1);
 
     t.is(originalNode.children.length, 2);
+    t.is(errors.length, 0);
+});
+
+
+test('works without preserved elements', async(t) => {
+    const { document, errors } = await setup(true);
+    const originalNode = createElement(document, `
+        <div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    `);
+    const newNode = createElement(document, `
+        <div>
+            <p></p>
+            <p></p>
+            <p></p>
+        </div>
+    `);
+    applyChanges({
+        originalNode,
+        newNode,
+        canBeIdentical: () => false,
+        isIdentical: () => false,
+    });
+
+    t.is(originalNode.children.length, 3);
+    // All children are <p>s
+    t.is(Array.from(originalNode.children).every(child => child.tagName === 'P'), true);
+    t.is(errors.length, 0);
+});
+
+
+test('updates attributes on preserved element if passed', async(t) => {
+    const { document, errors } = await setup(true);
+    const originalNode = createElement(document, `
+        <div>
+            <div data-preserve-id="div" data-to-remove data-to-update="originalValue">test</div>
+        </div>
+    `);
+    const newNode = createElement(document, `
+        <div>
+            <div data-preserve-id="div" data-to-update="newValue">test</div>
+        </div>
+    `);
+    applyChanges({
+        originalNode,
+        newNode,
+        canBeIdentical: element => element.hasAttribute('data-preserve-id'),
+        isIdentical: (a, b) => a.dataset.preserveId === b.dataset.preserveId,
+        updateAttributes: (origin, target) => {
+            target.removeAttribute('data-to-remove');
+            target.setAttribute('data-to-update', origin.getAttribute('data-to-update'));
+        },
+    });
+
+    const preserve = originalNode.querySelector('[data-preserve-id]');
+    t.is(preserve.hasAttribute('data-to-remove'), false);
+    t.is(preserve.getAttribute('data-to-update'), 'newValue');
     t.is(errors.length, 0);
 });
 
