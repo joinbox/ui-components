@@ -36,6 +36,7 @@ import {
     createNode,
     canBeIdentical,
     isIdentical,
+    applyAttributes,
 } from '@joinbox/ui-components/DynamicPageLoader';
 
 // Get all links 
@@ -68,15 +69,17 @@ window.addEventListener(
             canBeIdentical,
             isIdentical,
             updateNode,
+            updateAttributes: applyAttributes,
         });
 
         // Update head
         applyChanges({
             originalNode: document.querySelector('head'),
             newNode: dom.querySelector('head'),
-            canBeIdentical: element => element.hasAttribute('data-preserve-id'),
-            isIdentical: (a, b) => a.dataset.preserveId === b.dataset.preserveId,
+            canBeIdentical,
+            isIdentical,
             updateNode,
+            updateAttributes: applyAttributes,
         });
 
         // To update a preserved DOM element, use a minimal timeOut; if we add the class while
@@ -149,30 +152,34 @@ Takes two DOM nodes and applies the changes from `newNode` to `originalNode`.
 - `originalNode`: HTMLElement that will be patched with the changes in newNode
 - `newNode`: HTMLElement whose contents will be added to/removed from `originalNode`
 - `canBeIdentical`: function that thakes a single parameter element (`HTMLElement`); return true if
-the element might be preserved (if `isIdentical` returns true). Only needed to improve speed.
+the element **might** be preserved (`isIdentical` might return true). Only needed to improve speed.
 - `isIdentical`: function that takes two parameters (both `HTMLElement`s) and returns true if both
-elements are considere identical.
+elements are **considered** identical. The original element will be preserved in the DOM, the new
+element will be ignored.
 - `updateNode` (optional): function that takes a single parameter (`HTMLElement`) and is expected
 to return a modified HTMLElement, if you wish to change the HTMLElement before it is added to the
-DOM.
+DOM. Needed to e.g. create a `<script>` element from scratch to make sure it is executed.
+- `updateAttributes` (optional): function that takes two parameters (`newElement, originalelement`,
+both `HTMLElement`s) and copies attributes from preserved `newElement` to `originalElement`. By
+default, `applyChanges` does not update attributes on preserved elements.
 
 
 ### canBeIdentical
 
-Takes a single `HTMLElement` and returns true if it **might** be identical with another element,
-e.g. if it has a parameter `data-preserve-id`. If you like, you can use your own function instead,
-e.g.
-
-```javascript
-const canBeIdentical = element => element.hasAttribute('data-preserve-id'),
-```
+A default function for the `canBeIdentical` argument of `applyChanges`. Returns true if
+- both elements are `link` or `meta` elements
+- element has an attribute `data-preserve-id`.
 
 
 ### isIdentical
 
-Takes two `HTMLElements` and returns true if they are considered identical. You can use your own
-function to check if two elements are identical, e.g.
+A default function for the `isIdentical` argument of `applyChanges`. Returns true if
+- both elements are `link` or `meta` elements and have exactly the same attributes
+- both elements have a `data-preserve-id` attribute that is identical.
 
-```javascript
-const isIdentical = (a, b) => a.dataset.preserveId === b.dataset.preserveId,
-```
+
+### applyAttributes
+
+A default function for the `updateAttributes` argument of `applyChanges`. Copies all **changed or
+new** attributes from `origin` to `target` and removes the ones from `target` that are not present
+on `origin`.
