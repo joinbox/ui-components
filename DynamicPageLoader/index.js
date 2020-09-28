@@ -5,6 +5,7 @@ import loadFile from './loadFile.js';
 import createNode from './createNode.mjs';
 import canBeIdentical from './canBeIdentical.mjs';
 import isIdentical from './isIdentical.mjs';
+import applyAttributes from './applyAttributes.mjs';
 
 export {
     applyChanges,
@@ -14,4 +15,5 @@ export {
     createNode,
     canBeIdentical,
     isIdentical,
+    applyAttributes,
 };
