@@ -72,7 +72,7 @@ export default class FormClone extends HTMLElement {
 
             // Clone label
             if (inputConfig.label && !cloneLabel) {
-                console.warn('FormSync: Label in clone missing for %o; use attribute data-label to mark the label element.', inputConfig)                
+                console.warn('FormSync: Label in clone missing for %o; use attribute data-label to mark the label element.', inputConfig.label.outerHTML);
             } else if (inputConfig.label && cloneLabel) {
             // We cannot clone label's innerHTML (even though that would be nice to preserve
             // formatting) as doing so would also clone inputs nested within a label.
@@ -89,7 +89,7 @@ export default class FormClone extends HTMLElement {
 
             // Setup input
             if (!cloneInput) {
-                console.warn('FormSync: Input in clone missing for %o; use attribute data-input to mark the input element.', inputConfig)
+                console.warn('FormSync: Input in clone missing for %o; use attribute data-input to mark the input element.', inputConfig.input.outerHTML);
             } else {
                 const sync = new InputSync();
                 sync.setup({
