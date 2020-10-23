@@ -5,12 +5,18 @@
             .selected {
                 color: darkred;
             }
+            button {
+                opacity: 0.2;
+            }
+            form-submit-button.active button {
+                opacity: 1;
+            }
         </style>
     </head>
     <body>
     
         <h1>Original</h1>
-        <form>
+        <form id="originalForm">
             <label for="firstName">Your First Name:</label>
             <input type="text" id="firstName" />
             <div id="checkboxes">
@@ -28,7 +34,8 @@
         
         <hr/>
         <h1>Clone</h1>
-        <div>
+
+        <div id="clonedForm">
             <form-sync data-form-elements-selector="#firstName">
                 <template>
                     <!-- Template needs exactly one child -->
@@ -64,9 +71,20 @@
                     </div>
                 </template>
             </form-sync>
+
+            <!-- Will submit #originalForm; gets class .active when #cloned is changed for the
+            first time-->
+            <form-submit-button
+                data-form-selector="#originalForm"
+                data-change-selector="#clonedForm"
+                data-changed-class-name="active"
+            >
+                <button>Submit</button>
+            </form-submit-button>
         </div>
         
         
     </body>
     <script type="module" src="./FormSyncElement.js"></script>
+    <script type="module" src="./FormSubmitButtonElement.js"></script>
 </html>

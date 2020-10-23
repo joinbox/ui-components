@@ -18,7 +18,7 @@ Features:
 ## Example
 
 ````html
-<form>
+<form id="originalForm">
     <label for="firstName">Your First Name:</label>
     <input type="text" id="firstName" />
     <div id="checkboxes">
@@ -35,7 +35,7 @@ Features:
 
 
 <!-- The cloned form -->
-<div>
+<div id="clonedForm">
     <form-sync data-form-elements-selector="#firstName">
         <template>
             <!-- Template needs exactly one child -->
@@ -71,21 +71,33 @@ Features:
             </div>
         </template>
     </form-sync>
+
+    <!-- Will submit #originalForm; gets class .active when #cloned is changed for the
+    first time-->
+    <form-submit-button
+        data-form-selector="#originalForm"
+        data-change-selector="#clonedForm"
+        data-changed-class-name="active"
+    >
+        <button>Submit</button>
+    </form-submit-button>
+
 </div>
 
 
 <script type="module" src="@joinbox/ui-components/FormSync/FormSyncElement.js"></script>
+<script type="module" src="@joinbox/ui-components/FormSync/FormSubmitButtonElement.js"></script>
 ````
 
 ## Components
 
-### TableOfContentsElement
+### FormSync
 
 #### Exposed Element
 `<form-sync></form-sync>`
 
 #### Attributes
-- `data-auto-submit`: Set to `"true"` if changing one of the input's value should auto-submit the
+- `data-auto-submit` (optional): Set to `"true"` if changing one of the input's value should auto-submit the
 original form. Defaults to `false`.
 - data-form-elements-selector: CSS selector for all input elements that should be cloned and synced
 between the original and the cloned input.
@@ -99,6 +111,27 @@ between the original and the cloned input.
       element's `textContent` will be set to the original label's `textContent`.
     - You must provide an element with a `data-input` attribute within the template tag. This
       element's `changed` or `value` property will be synced with the original element.
+
+
+
+### FormSubmitButton
+
+#### Exposed Element
+`<form-submit-button></form-submit-button>`
+
+#### Attributes
+- `data-form-selector` (mandatory): CSS selector for the form element that should be submitted
+when the current element is clicked.
+- `data-change-selector` (optional): CSS selector for a HTML element that should be watched for
+`change` and `input` events; if any of those happens, `data-changed-class-name` will be added to
+the current `form-submit-button`.
+- `data-changed-class-name` (optional): Class name that will be added to the current 
+`data-submit-button` when the element that matches `data-change-element` is changed.
+
+
+
+
+
 
 ## Libraries/Classes
 
