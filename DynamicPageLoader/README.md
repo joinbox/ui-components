@@ -1,6 +1,10 @@
 # Dynamic Page Loader
 
-Loads content of a page dynamically when the user navigates to a different URL. Supports:
+Loads content of a web page dynamically when the user navigates to a different URL. It thereby
+enables seamless page transitions between two different static web pages, similar to the ones
+provided by Next.js or Gatsby.
+
+. Supports:
 - Elements that are preserved in the DOM when the page changes (`data-preserve-id`)
 - Hook to test if the given URL should be loaded dynamically
 - Hook to execute a script before the page content is changed (e.g. for animations)
@@ -39,16 +43,23 @@ import {
     applyAttributes,
 } from '@joinbox/ui-components/DynamicPageLoader';
 
-// Get all links 
-const links = document.querySelectorAll('a');
-
+// Prevents loading of a new page when a link is clicked. Uses pushState to update the URL 
+// displayed by the browser instead and emits 'urlchange' event that will be handled later.
 handleLinkClicks({
-    linkElements: links,
-    // Ignore all links that contain 'joinbox.com'
-    checkLink: link => !link.includes('joinbox.com'),
+    // In this case, we hijack all clicks on regular links
+    linkElements: document.querySelectorAll('a'),
+    // Limit the links that are hijacked; in this case, only use dynamic page loader for absolute
+    // links (on current domain)
+    checkLink: link => link.startsWith('/'),
 });
+
+// Handles navigation through the back button and emits 'urlchange' event if the previous page
+// was loaded dynamically.
 handlePopState();
 
+
+// Add event listener to 'urlchange' event that was fired above. Handle URL change with a smooth
+// transition instead of a hard page load.
 window.addEventListener(
     'urlchange',
     async(ev) => {

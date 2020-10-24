@@ -15,9 +15,10 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 - [Audio Player](./Media/README.md)
 - [Table of Contents](./TableOfContents/README.md)
 - [Slider](./Slider/README.md)
+- [FormSync](./FormSync/README.md)
 
 ## Tools
-- [Dynamic Page Loader](./DynamicPageLoader/README.md)
+- [Dynamic Page Loader](./DynamicPageLoader/README.md) – maybe prefer [barba.js](https://barba.js.org/)
 - [once](./shared/once.mjs)
 
 ## Tests
