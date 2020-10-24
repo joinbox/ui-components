@@ -8,6 +8,8 @@ Features:
 - clones any number of inputs from the original form to a new container
 - synchronizes original and cloned form elements
 - supports auto submit on cloned form elements
+- clones placeholder from original to cloned inputs (if not already set on cloned input)
+- sets for attribute on label and id attribute on input (if not already set on cloned input)
 
 
 ## Polyfills
