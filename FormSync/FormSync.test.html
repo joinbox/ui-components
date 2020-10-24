@@ -18,7 +18,7 @@
         <h1>Original</h1>
         <form id="originalForm">
             <label for="firstName">Your First Name:</label>
-            <input type="text" id="firstName" />
+            <input type="text" id="firstName" placeholder="Mathilda"/>
             <div id="checkboxes">
                 <label for="fish"><input type="checkbox" id="fish" checked> Fish</label>
                 <label for="chicken"><input type="checkbox" id="chicken"> Chicken</label>
@@ -43,8 +43,9 @@
                         <!-- Original label's textContent is copied to textContent of element with
                         attribute data-label -->
                         <label data-label></label>
-                        <!-- Original's element's value is copied to element with attribute data-input -->
-                        <input type="text" data-input/>
+                        <!-- Original's element's value will be copied to element with attribute 
+                        data-input. Placeholder will be cloned if not set on data-input. -->
+                        <input type="text" data-input />
                     </div>
                 </template>
             </form-sync>

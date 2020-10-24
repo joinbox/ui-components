@@ -2,7 +2,7 @@ import canReadAttributes from '../shared/canReadAttributes.js';
 import InputSync from './InputSync.js';
 
 /* global HTMLElement, document, requestAnimationFrame */
-export default class FormClone extends HTMLElement {
+export default class FormSync extends HTMLElement {
 
     constructor() {
         super();
@@ -70,35 +70,11 @@ export default class FormClone extends HTMLElement {
             const cloneInput = clone.querySelector('[data-input]');
             const cloneLabel = clone.querySelector('[data-label]');
 
-            // Clone label
-            if (inputConfig.label && !cloneLabel) {
-                console.warn('FormSync: Label in clone missing for %o; use attribute data-label to mark the label element.', inputConfig.label.outerHTML);
-            } else if (inputConfig.label && cloneLabel) {
-            // We cannot clone label's innerHTML (even though that would be nice to preserve
-            // formatting) as doing so would also clone inputs nested within a label.
-                cloneLabel.textContent = inputConfig.label.textContent;
-            }
-
-            // Duplicate Options (for <select>)
-            if (inputConfig.input.tagName === 'SELECT') {
-                if (!cloneInput || cloneInput.tagName !== 'SELECT') {
-                    throw new Error(`FormSync: If original element is a select, you must provide a template that contains a select with a data-input attribute; you privded ${cloneInput} instead.`);
-                }
-                cloneInput.innerHTML = inputConfig.input.innerHTML;
-            }
-
-            // Setup input
-            if (!cloneInput) {
-                console.warn('FormSync: Input in clone missing for %o; use attribute data-input to mark the input element.', inputConfig.input.outerHTML);
-            } else {
-                const sync = new InputSync();
-                sync.setup({
-                    originalElement: inputConfig.input,
-                    clonedElement: cloneInput,
-                    autoSubmit: !!this.autoSubmit || false,
-                    property: this.getInputProperty(inputConfig.input),
-                });
-            }
+            this.copyLabel(inputConfig.label, cloneLabel);
+            this.copySelectOptions(inputConfig.input, cloneInput);
+            this.syncInputs(inputConfig.input, cloneInput);
+            this.copyPlaceholder(inputConfig.input, cloneInput);
+            this.connectLabelToInput(cloneLabel, cloneInput);
 
             fragment.appendChild(clone);
         });
@@ -109,6 +85,92 @@ export default class FormClone extends HTMLElement {
             template.parentNode.appendChild(fragment);
         });
 
+    }
+
+    /**
+     * Connects a label to an input through for and id attributes. Does not modify pre-existing
+     * values.
+     * @param {HTMLElement} label
+     * @param {HTMLElement} input
+     */
+    connectLabelToInput(label, input) {
+        if (!label || !input) return;
+        // Don't modify existing for attribute
+        if (label.hasAttribute('for')) return;
+        // Create id on input and for on label. We may not clone inputConfig.input's id
+        // as an ID must be unique per document. Use id of cloneInput if present.
+        const inputId = input.getAttribute('id') ||
+            `input-id-${Math.random().toString().replace('.', '')}`;
+        // Replace id with new or pre-existing id to simplify things
+        input.setAttribute('id', inputId);
+        label.setAttribute('for', inputId);
+    }
+
+    /**
+     * Copies textContent of original to cloned label
+     * @param {HTMLElement} originalLabel
+     * @param {HTMLElement} clonedLabel
+     */
+    copyLabel(originalLabel, clonedLabel) {
+        if (originalLabel && !clonedLabel) {
+            console.warn('FormSync: Label in clone missing for %o; use attribute data-label to mark the label element.', originalLabel.outerHTML);
+        } else if (originalLabel && clonedLabel) {
+            // We cannot clone label's innerHTML (even though that would be nice to preserve
+            // formatting) as doing so would also clone inputs nested within a label.
+            clonedLabel.textContent = originalLabel.textContent;
+        }
+    }
+
+    /**
+     * Clones placeholder attribute from original to cloned input if needed
+     * @param {HTMLElement} originalInput
+     * @param {HTMLElement} clonedInput
+     */
+    copyPlaceholder(originalInput, clonedInput) {
+        if (
+            originalInput &&
+            clonedInput &&
+            originalInput.hasAttribute('placeholder') &&
+            !clonedInput.hasAttribute('placeholder')
+        ) {
+            clonedInput.setAttribute(
+                'placeholder',
+                originalInput.getAttribute('placeholder'),
+            );
+        }
+    }
+
+    /**
+     * Copies options of original to cloned select input
+     * @param {HTMLElement} originalInput
+     * @param {HTMLElement} clonedInput
+     */
+    copySelectOptions(originalInput, clonedInput) {
+        if (originalInput.tagName === 'SELECT') {
+            if (!clonedInput || clonedInput.tagName !== 'SELECT') {
+                throw new Error(`FormSync: If original element is a select, you must provide a template that contains a select with a data-input attribute; you privded ${clonedInput.outerHTML} instead.`);
+            }
+            clonedInput.innerHTML = originalInput.innerHTML;
+        }
+    }
+
+    /**
+     * Sets up InputSync for input elements
+     * @param {HTMLElement} originalInput
+     * @param {HTMLElement} clonedInput
+     */
+    syncInputs(originalInput, clonedInput) {
+        if (!clonedInput) {
+            console.warn('FormSync: Input in clone missing for %o; use attribute data-input to mark the input element.', originalInput.outerHTML);
+            return;
+        }
+        const sync = new InputSync();
+        sync.setup({
+            originalElement: originalInput,
+            clonedElement: clonedInput,
+            autoSubmit: !!this.autoSubmit || false,
+            property: this.getInputProperty(originalInput),
+        });
     }
 
 }

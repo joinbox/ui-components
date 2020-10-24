@@ -135,3 +135,117 @@ test('works with auto-submit attribute', async(t) => {
 
     t.is(errors.length, 0);
 });
+
+
+test('clones placeholder', async(t) => {
+    const { document, errors, window } = await setup(true);
+    const original = createElement(
+        document,
+        '<input type="text" id="originalText" placeholder="Mathilda" />',
+    );
+    document.body.appendChild(original);
+    const clone = createElement(
+        document,
+        `<form-sync data-form-elements-selector="#originalText">
+            <template>
+                <div>
+                    <input type="text" id="cloneText" data-input>
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(clone);
+
+    // Don't overwrite existing placeholder
+    const withPlaceholder = createElement(
+        document,
+        `<form-sync data-form-elements-selector="#originalText">
+            <template>
+                <div>
+                    <input type="text" id="inputWithPlaceholder" data-input placeholder="Original">
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(withPlaceholder);
+
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+
+    t.is(document.querySelector('#cloneText').getAttribute('placeholder'), 'Mathilda');
+    t.is(document.querySelector('#inputWithPlaceholder').getAttribute('placeholder'), 'Original');
+
+    t.is(errors.length, 0);
+});
+
+
+test('connects label to input via for and id attributes', async(t) => {
+    const { document, errors, window } = await setup(true);
+    const original = createElement(
+        document,
+        `<div>
+            <input type="text" id="originalInput" />
+        </div>`,
+    );
+    document.body.appendChild(original);
+
+    // Don't modify existing for attribute on label
+    const withFor = createElement(
+        document,
+        `<form-sync data-form-elements-selector="#originalInput">
+            <template>
+                <div>
+                    <label data-label id="labelWithFor" for="notModified"></label>
+                    <input data-input />
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(withFor);
+
+    // Don't modify existing for attribute on label
+    const withoutFor = createElement(
+        document,
+        `<form-sync data-form-elements-selector="#originalInput">
+            <template>
+                <div>
+                    <label data-label id="labelWithoutFor"></label>
+                    <input data-input class="inputForLabelWithoutFor"/>
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(withoutFor);
+
+    // Use ID of input if it exists
+    const withId = createElement(
+        document,
+        `<form-sync data-form-elements-selector="#originalInput">
+            <template>
+                <div>
+                    <label data-label id="labelWithPreexistingId"></label>
+                    <input data-input id="inputWithPreexistingId" />
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(withId);
+
+
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+
+    // Existing for attribute is preserved
+    t.is(document.querySelector('#labelWithFor').getAttribute('for'), 'notModified');
+
+    // New attribute is set and identical to id of input
+    const forAttribute = document.querySelector('#labelWithoutFor').getAttribute('for');
+    t.not(forAttribute, null);
+    t.is(forAttribute, document.querySelector('.inputForLabelWithoutFor').getAttribute('id'));
+
+    // Use existing id
+    t.is(
+        document.querySelector('#labelWithPreexistingId').getAttribute('for'),
+        'inputWithPreexistingId',
+    );
+
+    t.is(errors.length, 0);
+});
