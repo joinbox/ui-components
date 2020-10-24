@@ -19,11 +19,9 @@ export default (origin, target) => {
     // Add/update attributes on target
     for (const [name, value] of originAttributes) {
         if (!targetAttributes.has(name)) {
-            console.log('add', name, value);
             target.setAttribute(name, value);
         }
         else if (targetAttributes.get(name) !== value) {
-            console.log('update', name, targetAttributes.get(name), value);
             target.setAttribute(name, value);
         }
     }
