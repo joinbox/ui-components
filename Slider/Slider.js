@@ -1,7 +1,7 @@
 import canReadAttributes from '../shared/canReadAttributes.js';
 import createListener from '../shared/createListener.mjs';
 
-/* global HTMLElement, requestAnimationFrame, document */
+/* global HTMLElement, requestAnimationFrame, document, MutationObserver, window */
 
 /**
  * Simple (horizontal) slider for wide elements that need (horizontal) scrolling
@@ -40,6 +40,8 @@ export default class extends HTMLElement {
         this.updateDOM();
         this.setupClickListener();
         this.showActive();
+        this.setupMutationListeners();
+        this.setupResizeListeners();
     }
 
     /**
@@ -110,6 +112,29 @@ export default class extends HTMLElement {
         });
     }
 
+    /**
+     * Setup MutationObserver that updates button visibility if content of the Slider component
+     * changes. Needed if DOM is e.g. modified by JS.
+     */
+    setupMutationListeners() {
+        const config = { childList: true, subtree: true };
+        const observer = new MutationObserver((list, obs) => {
+            this.calculateButtonVisibility();
+            this.updateDOM();
+        });
+        observer.observe(this, config);
+    }
+
+    /**
+     * Resizing the window may change the visibility of buttons.
+     */
+    setupResizeListeners() {
+        window.addEventListener('resize', () => {
+            this.calculateButtonVisibility();
+            this.updateDOM();
+        });
+    }
+
     showActive() {
         if (!this.activeContentSelector) return;
         const activeContent = this.querySelector(this.activeContentSelector);
@@ -131,7 +156,7 @@ export default class extends HTMLElement {
             const prevMethod = this.isPreviousButtonVisible ? 'remove' : 'add';
             const nextMethod = this.isNextButtonVisible ? 'remove' : 'add';
             if (!this.disabledButtonClassName && (this.previousButton || this.nextButton)) {
-                console.warn('Slider: Tried to update visible class name on buttons, but class name is not set');
+                console.warn('Slider: Tried to update visible class name on buttons, but disabled button class name is not set');
             }
             // Only update buttons if they exist; they're not mandatory arguments
             if (this.previousButton) {

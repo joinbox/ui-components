@@ -39,17 +39,27 @@ test('submits form', async(t) => {
         `<div>
             <form id="originalForm">
             </form>
-            <form-submit-button data-form-selector="#originalForm">
-                <button>Submit</button>
-            </form-submit-button>
+            <form id="clonedForm">
+                <form-submit-button data-form-selector="#originalForm">
+                    <input type="submit" id="submitButton">Submit</input>
+                </form-submit-button>
+            </form>
         </div>`,
     );
     document.body.appendChild(content);
 
-    let submitted = 0;
-    document.querySelector('form').submit = () => { submitted++; };
-    document.querySelector('button').dispatchEvent(new window.Event('click', { bubbles: true }));
-    t.is(submitted, 1);
+    let originalSubmitted = 0;
+    let clonedSubmited = 0;
+    document.querySelector('#originalForm').submit = () => { originalSubmitted++; };
+    document.querySelector('#clonedForm').submit = () => { clonedSubmited++; };
+
+    const button = document.querySelector('#submitButton');
+    button.dispatchEvent(new window.Event('click', { bubbles: true }));
+
+    t.is(originalSubmitted, 1);
+    // Make sure event is prevented on cloned form or two forms will be sumbitted at the same time
+    // which leads to a race condition.
+    t.is(clonedSubmited, 0);
 
     t.is(errors.length, 0);
 });
@@ -79,5 +89,3 @@ test('changed class is added on change', async(t) => {
 
     t.is(errors.length, 0);
 });
-
-

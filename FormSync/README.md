@@ -8,6 +8,8 @@ Features:
 - clones any number of inputs from the original form to a new container
 - synchronizes original and cloned form elements
 - supports auto submit on cloned form elements
+- clones placeholder from original to cloned inputs (if not already set on cloned input)
+- sets for attribute on label and id attribute on input (if not already set on cloned input)
 
 
 ## Polyfills
@@ -125,8 +127,10 @@ when the current element is clicked.
 - `data-change-selector` (optional): CSS selector for a HTML element that should be watched for
 `change` and `input` events; if any of those happens, `data-changed-class-name` will be added to
 the current `form-submit-button`.
-- `data-changed-class-name` (optional): Class name that will be added to the current 
-`data-submit-button` when the element that matches `data-change-element` is changed.
+- data-changed-class-name (optional): Class name that will be added to the current data-submit-button
+when the element that matches data-change-element is changed. Use class (instead of disabled
+attribute) as watching for input/change may not be completely fail-safe.
+
 
 
 
