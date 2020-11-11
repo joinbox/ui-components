@@ -58,6 +58,32 @@ test('disables buttons if content is narrower than container', async(t) => {
     t.is(errors.length, 0);
 });
 
+test('enables buttons if necessary after DOM is mutated or window is resized', async(t) => {
+    const { document, errors, window } = await setup(true);
+    // https://github.com/jsdom/jsdom/issues/2342; JSDOM does not know layout
+    Object.defineProperty(window.HTMLElement.prototype, 'clientWidth', { value: 50 });
+    Object.defineProperty(window.HTMLElement.prototype, 'scrollWidth', { value: 40, writable: true });
+    const slider = createElement(document, '<div><div class="prev"></div><slider-component data-next-button-selector=".next" data-previous-button-selector=".prev" data-disabled-button-class-name="disabled"></slider-component><div class="next"></div></div>');
+    document.body.appendChild(slider);
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+    t.is(slider.querySelector('.next').classList.contains('disabled'), true);
+
+    // Fake wider width after DOM update
+    window.HTMLElement.prototype.scrollWidth = 150;
+    slider.querySelector('slider-component').innerHTML += '<span>New</span>';
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+    t.is(slider.querySelector('.next').classList.contains('disabled'), false);
+
+    // Fake narrower width after window resize
+    window.HTMLElement.prototype.scrollWidth = 40;
+    window.dispatchEvent(new window.Event('resize'));
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+    t.is(slider.querySelector('.next').classList.contains('disabled'), true);
+
+    t.is(errors.length, 0);
+});
+
+
 test('updates button visibility on scroll', async(t) => {
     const { document, errors, window } = await setup(true);
     window.requestAnimationFrame = cb => cb();

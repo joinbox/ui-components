@@ -118,7 +118,7 @@ export default class extends HTMLElement {
      */
     setupMutationListeners() {
         const config = { childList: true, subtree: true };
-        const observer = new MutationObserver(() => {
+        const observer = new MutationObserver((list, obs) => {
             this.calculateButtonVisibility();
             this.updateDOM();
         });
