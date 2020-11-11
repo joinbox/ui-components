@@ -4,6 +4,11 @@ import InputSync from './InputSync.js';
 /* global HTMLElement, document, requestAnimationFrame */
 export default class FormSync extends HTMLElement {
 
+    /**
+     * @type {{input: HTMLElement, label: HTMLElement}[]}
+     */
+    inputs = [];
+
     constructor() {
         super();
         Object.assign(
@@ -23,6 +28,7 @@ export default class FormSync extends HTMLElement {
     connectedCallback() {
         this.getInputs();
         this.renderInputs();
+        this.setupInputSync();
     }
 
     /**
@@ -72,7 +78,7 @@ export default class FormSync extends HTMLElement {
 
             this.copyLabel(inputConfig.label, cloneLabel);
             this.copySelectOptions(inputConfig.input, cloneInput);
-            this.syncInputs(inputConfig.input, cloneInput);
+            this.syncInput(inputConfig.input, cloneInput);
             this.copyPlaceholder(inputConfig.input, cloneInput);
             this.connectLabelToInput(cloneLabel, cloneInput);
 
@@ -141,7 +147,7 @@ export default class FormSync extends HTMLElement {
     }
 
     /**
-     * Copies options of original to cloned select input
+     * Copies options of original to cloned <select> input
      * @param {HTMLElement} originalInput
      * @param {HTMLElement} clonedInput
      */
@@ -155,11 +161,42 @@ export default class FormSync extends HTMLElement {
     }
 
     /**
+     * Multiple original radio button sets might be linked to one single cloned radio button set.
+     * When **one** cloned radio button is changed, we might therefore have to change multiple
+     * original radio inputs. Do so by syncing the whole form. 
+     * TODO: Find a better solution.
+     */
+    setupInputSync() {
+        // As this workaround is only relevant for radio buttons, we need only to listen to the
+        // change event on radio inputs.
+        this.addEventListener('change', (ev) => {
+            if (!ev.target.matches('input[type="radio"]')) return;
+            this.syncSimilarRadIonputs(ev.target);
+        });
+    }
+
+    syncSimilarRadIonputs(radioInput) {
+        // Get all radio inputs with the same name attribute
+        const name = radioInput.getAttribute('name');
+        const similarClonedInputs = this.querySelectorAll(`input[type="radio"][name="${name}"]`);
+        // Call
+        Array.from(similarClonedInputs).forEach((input) => {
+            const sync = input.inputSync;
+            if (!sync) {
+                console.warn('FormSync: Could not find InputSync instance on radio input %o', radioInput);
+                return;
+            }
+            input.inputSync.syncClonedElementToOriginal();
+        });
+
+    }
+
+    /**
      * Sets up InputSync for input elements
      * @param {HTMLElement} originalInput
      * @param {HTMLElement} clonedInput
      */
-    syncInputs(originalInput, clonedInput) {
+    syncInput(originalInput, clonedInput) {
         if (!clonedInput) {
             console.warn('FormSync: Input in clone missing for %o; use attribute data-input to mark the input element.', originalInput.outerHTML);
             return;
@@ -171,6 +208,8 @@ export default class FormSync extends HTMLElement {
             autoSubmit: !!this.autoSubmit || false,
             property: this.getInputProperty(originalInput),
         });
+        // Store sync instance on element to update it later (see radio workaround above)
+        clonedInput.inputSync = sync;
     }
 
 }

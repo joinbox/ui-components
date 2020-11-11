@@ -23,6 +23,9 @@
                 <label for="fish"><input type="checkbox" id="fish" checked> Fish</label>
                 <label for="chicken"><input type="checkbox" id="chicken"> Chicken</label>
             </div>
+            <div id="more-checkboxes">
+                <label for="beef"><input type="checkbox" id="beef" checked> Horse</label>
+            </div>
             <!-- Without label -->
             <select id="dropdown">
                 <option>1</option>
@@ -49,21 +52,21 @@
                     </div>
                 </template>
             </form-sync>
-            <form-sync data-form-elements-selector="#checkboxes input" data-auto-submit="true">
+            <h3>Radios that sync with checkboxes</h3>
+            <form-sync data-form-elements-selector="#checkboxes input, #more-checkboxes input">
                 <div>
-                    <h3>Checkboxes</h3>
                     <!-- One template will be cloned for every input in #checkboxes -->
                     <template>
                         <div>
                             <label>
                                 <span data-label></span>
-                                <input type="checkbox" data-input/>
+                                <input type="radio" name="cloned-animals" data-input/>
                             </label>
                         </div>
                     </template>
                 </div>
             </form-sync>
-            <form-sync data-form-elements-selector="#dropdown">
+            <form-sync data-form-elements-selector="#dropdown" data-auto-submit="true">
                 <template>
                     <div>
                         <!-- Options will be cloned from original <select> -->
