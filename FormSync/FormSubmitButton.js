@@ -1,4 +1,5 @@
 import canReadAttributes from '../shared/canReadAttributes.js';
+import createListener from '../shared/createListener.mjs';
 
 /**
  * Lets a button that is placed outside of a form submit a form.
@@ -6,8 +7,6 @@ import canReadAttributes from '../shared/canReadAttributes.js';
 
 /* global HTMLElement, document, requestAnimationFrame */
 export default class FormSubmitButton extends HTMLElement {
-
-    wasChanged = false;
 
     constructor() {
         super();
@@ -21,8 +20,8 @@ export default class FormSubmitButton extends HTMLElement {
                 name: 'data-change-selector',
                 property: 'changeSelector',
             }, {
-                name: 'data-remove-disabled-on-change',
-                property: 'removeDisabledOnChange',
+                name: 'data-changed-class-name',
+                property: 'changedClassName',
             }]),
         );
         this.readAttributes();
@@ -60,25 +59,32 @@ export default class FormSubmitButton extends HTMLElement {
      */
     setupChangeListeners() {
         if (!this.changeSelector) return;
-        if (!this.removeDisabledOnChange) return;
+        if (!this.changedClassName) return;
         const changeElement = document.querySelector(this.changeSelector);
         if (!changeElement) {
             console.warn('FormSubmitButton: Element with selector %o that should be watched for changes does not exist.', this.changeSelector);
             return;
         }
-        changeElement.addEventListener('input', this.handleChangeElementChange.bind(this));
-        changeElement.addEventListener('change', this.handleChangeElementChange.bind(this));
+        this.removeInputListener = createListener(
+            changeElement,
+            'input',
+            this.handleChangeElementChange.bind(this),
+        );
+        this.removeChangeListener = createListener(
+            changeElement,
+            'change',
+            this.handleChangeElementChange.bind(this),
+        );
     }
 
     /**
      * Adds class this.changedClassName to this element when this.changeSelector is changed
      */
     handleChangeElementChange() {
-        // Only modify DOM when needed; as soon as changeClassName was added, there is no need
-        // to add it any more
-        if (this.wasChanged) return;
-        this.wasChanged = true;
-        requestAnimationFrame(() => this.removeAttribute('disabled'));
+        // Remove listeners as soon as possible
+        this.removeChangeListener();
+        this.removeInputListener();
+        requestAnimationFrame(() => this.classList.add(this.changedClassName));
     }
 
 }
