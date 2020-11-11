@@ -37,11 +37,24 @@ test('scrolls on button click', async(t) => {
     // https://github.com/jsdom/jsdom/issues/2342; JSDOM does not know layout
     Object.defineProperty(window.HTMLElement.prototype, 'clientWidth', { value: 50 });
     window.HTMLElement.prototype.scrollBy = function(params) { scrolls.push(params.left) };
-    const slider = createElement(document, '<div><div class="prev"></div><slider-component data-next-button-selector=".next" data-previous-button-selector=".prev"></slider-component><div class="next"></div></div>');
+    const slider = createElement(document, '<div><div class="prev"></div><slider-component data-next-button-selector=".next" data-previous-button-selector=".prev" data-disabled-button-class-name="disabled"></slider-component><div class="next"></div></div>');
     document.body.appendChild(slider);
     slider.querySelector('.next').click();
     slider.querySelector('.prev').click();
     t.deepEqual(scrolls, [50, -50]);
+    t.is(errors.length, 0);
+});
+
+test('disables buttons if content is narrower than container', async(t) => {
+    const { document, errors, window } = await setup(true);
+    // https://github.com/jsdom/jsdom/issues/2342; JSDOM does not know layout
+    Object.defineProperty(window.HTMLElement.prototype, 'clientWidth', { value: 50 });
+    Object.defineProperty(window.HTMLElement.prototype, 'scrollWidth', { value: 40 });
+    const slider = createElement(document, '<div><div class="prev"></div><slider-component data-next-button-selector=".next" data-previous-button-selector=".prev" data-disabled-button-class-name="disabled"></slider-component><div class="next"></div></div>');
+    document.body.appendChild(slider);
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+    t.is(slider.querySelector('.next').classList.contains('disabled'), true);
+    t.is(slider.querySelector('.prev').classList.contains('disabled'), true);
     t.is(errors.length, 0);
 });
 

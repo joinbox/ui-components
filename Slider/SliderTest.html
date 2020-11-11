@@ -33,27 +33,70 @@
             .disabled {
                 opacity: 0.2;
             }
+            h1 {
+                clear:left;
+                padding-top: 50px;
+            }
         </style>
     </head>
 
     <body>
 
-        <div class="back">←</div>
-        <slider-component
-            class="container"
-            data-previous-button-selector=".back"
-            data-next-button-selector=".forward"
-            data-disabled-button-class-name="disabled"
-            data-active-content-selector=".active"
-        >
-            <div class="element">Test</div>
-            <div class="element">Test</div>
-            <div class="element">Test</div>
-            <div class="element active">Test</div>
-            <div class="element">Test</div>
-        </slider-component>
-        <div class="forward">→</div>
+        <h1>Regular Slider</h1>
+        <div class="regular-slider">
+            <div class="back">←</div>
+            <slider-component
+                class="container"
+                data-previous-button-selector=".regular-slider .back"
+                data-next-button-selector=".regular-slider .forward"
+                data-disabled-button-class-name="disabled"
+                data-active-content-selector=".active"
+            >
+                <div class="element">Test</div>
+                <div class="element">Test</div>
+                <div class="element">Test</div>
+                <div class="element active">Test</div>
+                <div class="element">Test</div>
+            </slider-component>
+            <div class="forward">→</div>
+        </div>
+    
+        <h1>Narrow Slider (No Buttons)</h1>
+        <div class="narrow-slider">
+            <div class="back">←</div>
+            <slider-component
+                class="container"
+                data-previous-button-selector=".narrow-slider .back"
+                data-next-button-selector=".narrow-slider .forward"
+                data-disabled-button-class-name="disabled"
+            >
+                <div class="element">Test</div>
+            </slider-component>
+            <div class="forward">→</div>
+        </div>
 
+        <h1>Dynamic DOM Updates (Buttons After Update)</h1>
+        <button id="add-content-to-dom-changing-slider">Add</button>
+        <div class="dom-changing-slider">
+            <div class="back">←</div>
+            <slider-component
+                class="container"
+                data-previous-button-selector=".dom-changing-slider .back"
+                data-next-button-selector=".dom-changing-slider .forward"
+                data-disabled-button-class-name="disabled"
+            >
+                <div class="element">Test</div>
+            </slider-component>
+            <div class="forward">→</div>
+        </div>
+        <script>
+            const slider = document.querySelector('.dom-changing-slider slider-component');
+            const addButton = document.querySelector('#add-content-to-dom-changing-slider');
+            addButton.addEventListener('click', () => {
+                slider.innerHTML += '<div class="element">Test</div>';
+            });
+        </script>
+        
 
         <script type="module" src="./SliderElement.js"></script>
 
