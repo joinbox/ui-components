@@ -43,11 +43,15 @@ export default class FormSubmitButton extends HTMLElement {
     /**
      * Submits original form (defined by this.formSelector)
      */
-    submitForm() {
+    submitForm(ev) {
         const form = document.querySelector(this.formSelector);
         if (!form) {
             throw new Error(`FormSubmitButton: Form with selector ${this.formSelector} does not exist in document, cannot be submitted.`);
         }
+        // If the FormSubmitButton is part of a form, this form should not be submitted, only the
+        // original one.
+        ev.preventDefault();
+        ev.stopPropagation();
         form.submit();
     }
 
