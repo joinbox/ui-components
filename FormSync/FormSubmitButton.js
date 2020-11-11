@@ -21,8 +21,8 @@ export default class FormSubmitButton extends HTMLElement {
                 name: 'data-change-selector',
                 property: 'changeSelector',
             }, {
-                name: 'data-changed-class-name',
-                property: 'changedClassName',
+                name: 'data-remove-disabled-on-change',
+                property: 'removeDisabledOnChange',
             }]),
         );
         this.readAttributes();
@@ -60,6 +60,7 @@ export default class FormSubmitButton extends HTMLElement {
      */
     setupChangeListeners() {
         if (!this.changeSelector) return;
+        if (!this.removeDisabledOnChange) return;
         const changeElement = document.querySelector(this.changeSelector);
         if (!changeElement) {
             console.warn('FormSubmitButton: Element with selector %o that should be watched for changes does not exist.', this.changeSelector);
@@ -77,7 +78,7 @@ export default class FormSubmitButton extends HTMLElement {
         // to add it any more
         if (this.wasChanged) return;
         this.wasChanged = true;
-        requestAnimationFrame(() => this.classList.add(this.changedClassName));
+        requestAnimationFrame(() => this.removeAttribute('disabled'));
     }
 
 }

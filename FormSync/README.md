@@ -127,8 +127,9 @@ when the current element is clicked.
 - `data-change-selector` (optional): CSS selector for a HTML element that should be watched for
 `change` and `input` events; if any of those happens, `data-changed-class-name` will be added to
 the current `form-submit-button`.
-- `data-changed-class-name` (optional): Class name that will be added to the current 
-`data-submit-button` when the element that matches `data-change-element` is changed.
+- `data-remove-disabled-on-change` (optional): If set and contains a truthy value, disabled
+attribute on `<form-submit-button>` will be removed whenever a change or input event happens on 
+the HTML element that matches `data-change-selector`.
 
 
 

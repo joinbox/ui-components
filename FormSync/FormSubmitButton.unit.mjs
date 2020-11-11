@@ -65,7 +65,7 @@ test('submits form', async(t) => {
 });
 
 
-test('changed class is added on change', async(t) => {
+test('disabled is removed on change', async(t) => {
     const { document, errors, window } = await setup(true);
     const content = createElement(
         document,
@@ -73,8 +73,9 @@ test('changed class is added on change', async(t) => {
             <form id="originalForm">
             </form>
             <form-submit-button
+                disabled
                 data-form-selector="#originalForm"
-                data-changed-class-name="active"
+                data-remove-disabled-on-change="true"
                 data-change-selector="#originalForm"
             >
                 <button>Submit</button>
@@ -85,7 +86,7 @@ test('changed class is added on change', async(t) => {
 
     document.querySelector('form').dispatchEvent(new window.Event('change'));
     await new Promise(resolve => window.requestAnimationFrame(resolve));
-    t.is(document.querySelector('form-submit-button').classList.contains('active'), true);
+    t.is(document.querySelector('form-submit-button').hasAttribute('disabled'), false);
 
     t.is(errors.length, 0);
 });
