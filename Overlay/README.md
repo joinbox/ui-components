@@ -15,6 +15,16 @@ Load `<overlay-component>` before `<overlay-button-component>` as the button nee
 to exist before it is setup (setModel will not be called if `<overlay-component>` does not
 exist).
 
+If you want to disable scroll when the overlay is open, use 
+[Body Scroll Lock](https://www.npmjs.com/package/body-scroll-lock):
+
+```javascript
+import { disableBodyScroll, enableBodyScroll } from '/body-scroll-lock/lib/bodyScrollLock.es6.js';
+const overlay = document.querySelector('#my-overlay-identifier');
+overlay.addEventListener('open', disableBodyScroll);
+overlay.addEventListener('close', enableBodyScroll);
+```
+
 ## Example
 
 ````html

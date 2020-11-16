@@ -61,17 +61,18 @@ test('closes on esc', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('disables scroll on body', async(t) => {
+test('dispatch open and close events', async(t) => {
     const { window, document, errors } = await setup(true);
     window.requestAnimationFrame = cb => cb();
     const overlay = createElement(document, '<overlay-component data-visible-class-name="visible" data-name="test"></overlay-component>');
     document.body.appendChild(overlay);
+    const events = [];
+    overlay.addEventListener('open', () => events.push('o'));
+    overlay.addEventListener('close', () => events.push('c'));
     overlay.model.open();
-    await new Promise(resolve => setTimeout(resolve));
-    t.is(window.getComputedStyle(document.body).overflow, 'hidden');
     overlay.model.close();
-    await new Promise(resolve => setTimeout(resolve));
-    t.is(window.getComputedStyle(document.body).overflow, '');
+    overlay.model.open();
+    t.deepEqual(events, ['o', 'c', 'o']);
     t.is(errors.length, 0);
 });
 

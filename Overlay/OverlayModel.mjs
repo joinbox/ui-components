@@ -2,7 +2,7 @@ import canEmitEvents from '../shared/canEmitEvents.mjs';
 
 export default class {
 
-    #isOpen = false;
+    isOverlayOpen = false;
 
     constructor() {
         Object.assign(this, canEmitEvents());
@@ -10,26 +10,26 @@ export default class {
 
     open() {
         // Prevent unnecessarily emitted event
-        if (this.#isOpen) return;
-        this.#isOpen = true;
+        if (this.isOverlayOpen) return;
+        this.isOverlayOpen = true;
         this.emit('change');
     }
 
     close() {
         // Prevent unnecessarily emitted event
-        if (!this.#isOpen) return;
-        this.#isOpen = false;
+        if (!this.isOverlayOpen) return;
+        this.isOverlayOpen = false;
         this.emit('change');
     }
 
     toggle() {
-        this.#isOpen = !this.#isOpen;
+        this.isOverlayOpen = !this.isOverlayOpen;
         this.emit('change');
     }
 
 
     get isOpen() {
-        return this.#isOpen;
+        return this.isOverlayOpen;
     }
 
 }
