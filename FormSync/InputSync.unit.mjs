@@ -148,7 +148,6 @@ test('Auto-submits original form', async(t) => {
     sourceForm.setAttribute('name', 'someForm');
     let submitted = 0;
     sourceForm.submit = () => { 
-        console.log('SS');
         submitted += 1;
     };
     sourceForm.appendChild(source);

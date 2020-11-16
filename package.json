@@ -33,6 +33,5 @@
     ]
   },
   "dependencies": {
-    "body-scroll-lock": "^3.0.3"
   }
 }

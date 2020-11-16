@@ -1,10 +1,11 @@
-import { disableBodyScroll, enableBodyScroll } from '../node_modules/body-scroll-lock/lib/bodyScrollLock.es6.js';
 import canReadAttributes from '../shared/canReadAttributes.js';
 import createListener from '../shared/createListener.mjs';
 import canRegisterElements from '../shared/canRegisterElements.js';
 import OverlayModel from './OverlayModel.mjs';
 
-/* global HTMLElement, window, document */
+/* global HTMLElement, window, document, CustomEvent */
+
+
 
 /**
  * Overlay that is opened/closed by open/closeoverlay events. Optionally closes on esc or
@@ -92,14 +93,13 @@ export default class Overlay extends HTMLElement {
                 if (this.background && this.backgroundVisibleClassName) {
                     this.background.classList.add(this.backgroundVisibleClassName);
                 }
-                disableBodyScroll(this);
-            }
-            else {
+                this.dispatchEvent(new CustomEvent('open'));
+            } else {
                 this.classList.remove(this.visibleClassName);
                 if (this.background && this.backgroundVisibleClassName) {
                     this.background.classList.remove(this.backgroundVisibleClassName);
                 }
-                enableBodyScroll(this);
+                this.dispatchEvent(new CustomEvent('close'));
             }
         });
 
