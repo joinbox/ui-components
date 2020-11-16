@@ -84,4 +84,6 @@ it exactly matches the attribute `data-name` on `overlay-component`.
 - `data-type` is either `close`, if the button shall only close the overlay, `open` if the button
 shall only open the overlay or `toggle` if the button shall toggle the overlay. Defaults to
 `toggle`.
+- `data-open-class-name`: Class name that will be added to the button when the overlay is opened.
+- `data-closed-class-name`: Class name that will be added to the button when the overlay is closed.
 
