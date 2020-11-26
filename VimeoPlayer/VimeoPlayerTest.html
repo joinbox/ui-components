@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .vimeo {
+                height: 400px;
+                width: 700px;
+                background-color: darkorange;
+            }
+        </style>
+    </head>
+    <body>
+    
+    
+        <h1>Test for VimeoPlayer</h1>
+
+        <div class="vimeo">
+        </div>
+
+        <script>
+            const container = document.querySelector('.vimeo');
+            const iframe = '<iframe src="https://player.vimeo.com/video/483035084?autoplay=1" allow="autoplay; fullscreen" width="700" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+            container.addEventListener('click', (ev) => {
+                container.innerHTML = iframe;
+            });
+
+        </script>
+
+
+    </body>
+</html>
