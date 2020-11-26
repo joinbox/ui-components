@@ -1,0 +1,59 @@
+<!doctype html>
+
+<html lang="en">
+    <!-- Start server (e.g. python -m http.server 8000) on root folder of component and navigate
+         to localhost:8000/Overlay/OverlayTest.html -->
+    <head>
+        <meta charset="utf-8">
+        <title>The HTML5 Herald</title>
+        <style>
+            .content {
+                font-size: 72px;
+                max-width: 500px;
+                transition: all 2s ease-in-out;
+                background-color: lightcoral;
+                /*padding: 30px;*/
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+            .content.closed {
+                opacity: 0.2;
+                height: 0px;
+            }
+            .content.open {
+                opacity: 1;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <button class="toggle">Open/Close</button>
+
+        <div class="content closed">
+            Dies ist ein Text, der über mehrere Zeilen
+        </div>
+
+
+        <script type="module" src="./fixDimension.export.js"></script>
+        <script type="module" src="./adjustDimension.export.js"></script>
+
+        <script>
+            const content = document.querySelector('.content');
+            const button = document.querySelector('.toggle');
+            let isOpen = false;
+
+            button.addEventListener('click', () => {
+                fixDimension(content);
+                content.classList.add(isOpen ? 'closed' : 'open');
+                content.classList.remove(isOpen ? 'open' : 'closed');
+                const newHeight = isOpen ? 0 : undefined;
+                console.log(newHeight);
+                adjustDimension(content, 'height', newHeight);
+                isOpen = !isOpen;
+            });
+
+        </script>
+
+    </body>
+</html>
