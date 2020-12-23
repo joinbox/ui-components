@@ -57,3 +57,6 @@ click event listener will be added to).
 - `data-template-content-selector`: CSS selector for an element within the element that matches
 `data-template-selector`. Is `textContent` will be replaced with the `textContent` of a content
 element (see `data-chapters-selector`).
+- `data-offset-selector`: CSS selector for an element whose height will be used as scroll offset.
+Helpful if there is e.g. a sticky menu at the top of the screen to prevent elements from scrolling
+behind it.
