@@ -1,0 +1,89 @@
+<!doctype html>
+
+<html lang="en">
+    <!-- Start server (e.g. python -m http.server 8000) on root folder of component and navigate
+         to localhost:8000/Overlay/OverlayTest.html -->
+    <head>
+        <meta charset="utf-8">
+        <title>The HTML5 Herald</title>
+        <style>
+            .container {
+                font-size: 72px;
+                line-height: 96px;
+                width: 400px;
+                margin-bottom: 80px;
+            }
+            .container[data-split-all-no-resize] {
+                /* Needs a flexible container for resize to have an effect */
+                width: 50%; 
+            }
+            .word {
+                outline: 4px solid lawngreen;
+            }
+            .letter {
+                outline: 1px solid orangered;
+            }
+            .line {
+                background-color: lightcyan;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="container" data-split-all>
+            This is a text – it splits words, letters and lines.
+        </div>
+
+        <div class="container" data-split-words>
+            This is a text – it splits words.
+        </div>
+
+        <div class="container" data-split-letters>
+            This is a text – it splits letters. Only.
+        </div>
+
+        <div class="container" data-split-lines>
+            This is a text – it splits lines. Not. Because letters are not split.
+        </div>
+
+        <div class="container" data-split-letters-lines>
+            This is a text – it splits lines. Because it splits letters!
+        </div>
+
+        <div class="container" data-split-all-no-resize>
+            This is a text – it splits words, letters and lines.
+        </div>
+
+        <script type="module">
+            import splitText from './splitText.js';
+            splitText({
+                element: document.querySelector('[data-split-all]'),
+            });
+            splitText({
+                element: document.querySelector('[data-split-words]'),
+                wrapLetter: false,
+                wrapLine: false,
+            });
+            splitText({
+                element: document.querySelector('[data-split-letters]'),
+                wrapWord: false,
+                wrapLine: false,
+            });
+            splitText({
+                element: document.querySelector('[data-split-lines]'),
+                wrapLetter: false,
+                wrapWord: false,
+            });
+            splitText({
+                element: document.querySelector('[data-split-letters-lines]'),
+                wrapWord: false,
+            });
+            splitText({
+                element: document.querySelector('[data-split-all-no-resize]'),
+                updateOnResize: false,
+            });
+        </script>
+        
+    </body>
+</html>

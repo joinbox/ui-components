@@ -19,7 +19,8 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 
 ## Tools
 - [Dynamic Page Loader](./DynamicPageLoader/README.md) – maybe prefer [barba.js](https://barba.js.org/)
-- [once](./shared/once.mjs)
+- [once](./shared/once.mjs), import as `import { once } from '@joinbox/ui-components'`
+- [createDebounce](./shared/createDebounce.mjs), import as `import { createDebounce } from '@joinbox/ui-components'`
 
 ## Tests
 `npm i && npm test`
