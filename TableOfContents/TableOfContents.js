@@ -46,7 +46,7 @@ export default class Overlay extends HTMLElement {
         if (!this.offsetSelector) return 0;
         const offsetElement = document.querySelector(this.offsetSelector);
         if (!offsetElement) {
-            console.warn(`TableOfContents: Element to read offsetHeight from with selector ${this.offsetSelector} could not be found in DOM. Use 0 as offset.`);
+            console.warn(`TableOfContents: Element to read offsetHeight from with selector ${this.offsetSelector} could not be found in DOM. Using 0 as default offset.`);
             return 0;
         }
         return offsetElement.getBoundingClientRect().height;
