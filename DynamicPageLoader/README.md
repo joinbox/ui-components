@@ -4,7 +4,7 @@ Loads content of a web page dynamically when the user navigates to a different U
 enables seamless page transitions between two different static web pages, similar to the ones
 provided by Next.js or Gatsby.
 
-. Supports:
+Supports:
 - Elements that are preserved in the DOM when the page changes (`data-preserve-id`)
 - Hook to test if the given URL should be loaded dynamically
 - Hook to execute a script before the page content is changed (e.g. for animations)
