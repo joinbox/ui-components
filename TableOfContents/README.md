@@ -4,6 +4,7 @@ Table of contents component that
 - displays any elements that match an arbitrary selector
 - supports templating
 - scrolls smoothly
+- adds anchor links if desired
 
 ## Polyfills
 - Use a [template polyfill](https://github.com/webcomponents/polyfills/tree/master/packages/template)
@@ -20,12 +21,15 @@ Table of contents component that
     data-chapters-selector="h1:not(.toc)"
     data-template-selector="template"
     data-template-content-selector=".text"
+    data-template-link-selector="a"
 >
     <ul>
         <template>
             <li>
-                <span>Go to</span>
-                <span class="text"></span>
+                <a href="#">
+                    <span>Go to</span>
+                    <span class="text"></span>
+                </a>
             </li>
         </template>
     </ul>
@@ -55,8 +59,12 @@ tag that is not visible in the browser. All contents will be **appended** to the
 element. It is important, that this element only contains **one direct descendant** (where the
 click event listener will be added to).
 - `data-template-content-selector`: CSS selector for an element within the element that matches
-`data-template-selector`. Is `textContent` will be replaced with the `textContent` of a content
+`data-template-selector`. Its `textContent` will be replaced with the `textContent` of a content
 element (see `data-chapters-selector`).
+- `data-template-link-selector` (optional): CSS selector for an element within the element that
+matches `data-template-selector`. If provided, an id will be added to the corresponding content
+element (if it does not already exist) and a matching href (anchor link) will be added to the
+table of contents entry.
 - `data-offset-selector`: CSS selector for an element whose height will be used as scroll offset.
 Helpful if there is e.g. a sticky menu at the top of the screen to prevent elements from scrolling
 behind it.

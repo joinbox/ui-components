@@ -58,8 +58,8 @@ test('scrolls to element, respects offset', async(t) => {
         height: 20,
     });
     window.requestAnimationFrame = content => content();
-    const toc = createElement(document, '<table-of-contents-component data-offset-selector=".stickyMenu" data-chapters-selector="h1" data-template-selector="template" data-template-content-selector=".text"><ul><template><li><span class="text"></span></li></template></ul></table-of-contents-component>');
     const title1 = createElement(document, '<h1>test1</h1>');
+    const toc = createElement(document, '<table-of-contents-component data-offset-selector=".stickyMenu" data-chapters-selector="h1" data-template-selector="template" data-template-content-selector=".text"><ul><template><li><span class="text"></span></li></template></ul></table-of-contents-component>');
     const offsetElement = createElement(document, '<div class="stickyMenu"></div>');
     document.body.appendChild(title1);
     document.body.appendChild(toc);
@@ -68,5 +68,31 @@ test('scrolls to element, respects offset', async(t) => {
     await new Promise(resolve => setTimeout(resolve, 200));
     // Scroll top equals top of h1 minus height of offsetElement
     t.is(scrollOptions.top, 30);
+    t.is(errors.length, 0);
+});
+
+test('adds anchor navigation', async(t) => {
+    const { window, document, errors } = await setup(true);
+    window.requestAnimationFrame = content => content();
+    const h2 = createElement(document, '<h2>test  with ! and space.</h2>');
+    const toc = createElement(document, '<table-of-contents-component data-template-link-selector="a" data-chapters-selector="h2" data-template-selector="template" data-template-content-selector=".text"><ul><template><li><a><span class="text"></span></a></li></template></ul></table-of-contents-component>');
+    document.body.appendChild(h2);
+    document.body.appendChild(toc);
+    const id = 'test-with-and-space';
+    t.is(h2.getAttribute('id'), id);
+    t.is(toc.querySelectorAll(`[href="#${id}"]`).length, 1);
+    t.is(errors.length, 0);
+});
+
+test('does not modify existing ids on titles', async(t) => {
+    const { window, document, errors } = await setup(true);
+    window.requestAnimationFrame = content => content();
+    const h2 = createElement(document, '<h2 id="existing"></h2>');
+    const toc = createElement(document, '<table-of-contents-component data-template-link-selector="a" data-chapters-selector="h2" data-template-selector="template" data-template-content-selector=".text"><ul><template><li><a><span class="text"></span></a></li></template></ul></table-of-contents-component>');
+    document.body.appendChild(h2);
+    document.body.appendChild(toc);
+    const id = 'existing';
+    t.is(h2.getAttribute('id'), id);
+    t.is(toc.querySelectorAll(`[href="#${id}"]`).length, 1);
     t.is(errors.length, 0);
 });

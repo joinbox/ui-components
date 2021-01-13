@@ -1,4 +1,6 @@
 import FormSync from './FormSync.js';
 
 /* global window */
-window.customElements.define('form-sync', FormSync);
+if (!window.customElements.get('form-sync')) {
+    window.customElements.define('form-sync', FormSync);
+}
