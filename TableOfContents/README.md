@@ -65,4 +65,6 @@ element (see `data-chapters-selector`).
 matches `data-template-selector`. If provided, an id will be added to the corresponding content
 element (if it does not already exist) and a matching href (anchor link) will be added to the
 table of contents entry.
-
+- `data-offset-selector`: CSS selector for an element whose height will be used as scroll offset.
+Helpful if there is e.g. a sticky menu at the top of the screen to prevent elements from scrolling
+behind it.

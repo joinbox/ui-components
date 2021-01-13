@@ -1,6 +1,6 @@
 import canReadAttributes from '../shared/canReadAttributes.js';
 
-/* global HTMLElement, requestAnimationFrame, document */
+/* global HTMLElement, requestAnimationFrame, document, window */
 
 /**
  * Overlay that is opened/closed by open/closeoverlay events. Optionally closes on esc or
@@ -29,6 +29,9 @@ export default class Overlay extends HTMLElement {
             }, {
                 name: 'data-template-link-selector',
                 property: 'templateLinkSelector',
+            }, {
+                name: 'data-offset-selector',
+                property: 'offsetSelector',
             }]),
         );
         this.readAttributes();
@@ -37,6 +40,19 @@ export default class Overlay extends HTMLElement {
     connectedCallback() {
         this.getChapters();
         this.updateDOM();
+    }
+
+    /**
+     * Returns height of a given element that should be used to offset scroll
+     */
+    getScrollOffset() {
+        if (!this.offsetSelector) return 0;
+        const offsetElement = document.querySelector(this.offsetSelector);
+        if (!offsetElement) {
+            console.warn(`TableOfContents: Element to read offsetHeight from with selector ${this.offsetSelector} could not be found in DOM. Using 0 as default offset.`);
+            return 0;
+        }
+        return offsetElement.getBoundingClientRect().height;
     }
 
     /**
@@ -70,7 +86,9 @@ export default class Overlay extends HTMLElement {
             console.warn('Original element to scroll to not found for %o', tocElement);
             return;
         }
-        originalTitle.scrollIntoView({
+        const scrollDifference = originalTitle.getBoundingClientRect().top;
+        window.scrollBy({
+            top: scrollDifference - this.getScrollOffset(),
             behavior: 'smooth',
         });
     }
