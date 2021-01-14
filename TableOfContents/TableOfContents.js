@@ -32,6 +32,11 @@ export default class Overlay extends HTMLElement {
             }, {
                 name: 'data-offset-selector',
                 property: 'offsetSelector',
+            }, {
+                name: 'data-offset-value',
+                property: 'offsetValue',
+                validate: value => !value || !Number.isNaN(parseInt(value, 10)),
+                transform: value => parseInt(value, 10),
             }]),
         );
         this.readAttributes();
@@ -46,6 +51,7 @@ export default class Overlay extends HTMLElement {
      * Returns height of a given element that should be used to offset scroll
      */
     getScrollOffset() {
+        if (this.offsetValue) return this.offsetValue;
         if (!this.offsetSelector) return 0;
         const offsetElement = document.querySelector(this.offsetSelector);
         if (!offsetElement) {
