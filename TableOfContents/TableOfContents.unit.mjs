@@ -46,7 +46,7 @@ test('creates table of contents', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('scrolls to element, respects offset', async(t) => {
+test('scrolls to element, respects offset element', async(t) => {
     const { window, document, errors } = await setup(true);
     // Fake implementation of scrollIntoView that is missing in JSDom
     let scrollOptions = 0;
@@ -65,11 +65,30 @@ test('scrolls to element, respects offset', async(t) => {
     document.body.appendChild(toc);
     document.body.appendChild(offsetElement);
     toc.querySelector('span.text').click();
-    await new Promise(resolve => setTimeout(resolve, 200));
     // Scroll top equals top of h1 minus height of offsetElement
     t.is(scrollOptions.top, 30);
     t.is(errors.length, 0);
 });
+
+test('uses offset value', async(t) => {
+    const { window, document, errors } = await setup(true);
+    // Fake implementation of scrollIntoView that is missing in JSDom
+    let scrollOptions = 0;
+    window.scrollBy = (options) => {
+        scrollOptions = options;
+    };
+    window.requestAnimationFrame = content => content();
+    const title1 = createElement(document, '<h1>test1</h1>');
+    const toc = createElement(document, '<table-of-contents-component data-offset-value="50" data-chapters-selector="h1" data-template-selector="template" data-template-content-selector=".text"><ul><template><li><span class="text"></span></li></template></ul></table-of-contents-component>');
+    document.body.appendChild(title1);
+    document.body.appendChild(toc);
+    toc.querySelector('span.text').click();
+    // scrollTop is height of title (0) minus the offset – in other words, we must scroll to -50
+    // in order for a title starting at 0 to have an offset of 50
+    t.is(scrollOptions.top, -50);
+    t.is(errors.length, 0);
+});
+
 
 test('adds anchor navigation', async(t) => {
     const { window, document, errors } = await setup(true);
