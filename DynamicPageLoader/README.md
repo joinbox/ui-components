@@ -1,5 +1,7 @@
 # Dynamic Page Loader
 
+**IMPORTANT**: Use [barba.js](https://barba.js.org/) instead!
+
 Loads content of a web page dynamically when the user navigates to a different URL. It thereby
 enables seamless page transitions between two different static web pages, similar to the ones
 provided by Next.js or Gatsby.
