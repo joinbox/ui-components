@@ -38,6 +38,7 @@ test('submits form', async(t) => {
         document,
         `<div>
             <form id="originalForm">
+                <input type="submit" id="originalSubmitButton">Submit</input>
             </form>
             <form id="clonedForm">
                 <form-submit-button data-form-selector="#originalForm">
@@ -50,8 +51,12 @@ test('submits form', async(t) => {
 
     let originalSubmitted = 0;
     let clonedSubmited = 0;
-    document.querySelector('#originalForm').submit = () => { originalSubmitted++; };
-    document.querySelector('#clonedForm').submit = () => { clonedSubmited++; };
+    document.querySelector('#originalSubmitButton').addEventListener('click', () => {
+        originalSubmitted++;
+    });
+    document.querySelector('#clonedForm').addEventListener('submit', () => {
+        clonedSubmited++;
+    });
 
     const button = document.querySelector('#submitButton');
     button.dispatchEvent(new window.Event('click', { bubbles: true }));
