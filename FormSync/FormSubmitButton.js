@@ -60,10 +60,8 @@ export default class FormSubmitButton extends HTMLElement {
         // original one.
         ev.preventDefault();
         ev.stopPropagation();
-        // Drupal forms do not work with dispatchEvent(new Event('click', { bubbles: true }))
-        // if they are submitted using AJAX. Only .click() works with Drupal forms (with and
-        // without AJAX), but does not work with JSDOM.
-        submitButton.click();
+        // JSDOM does not know .click() – use regular bubbling event instead
+        submitButton.dispatchEvent(new Event('click', { bubbles: true }));
     }
 
     /**
