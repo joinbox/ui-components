@@ -51,9 +51,9 @@ test('submits form', async(t) => {
 
     let originalSubmitted = 0;
     let clonedSubmited = 0;
-    document.querySelector('#originalSubmitButton').addEventListener('click', () => {
+    document.querySelector('#originalSubmitButton').click = () => {
         originalSubmitted++;
-    });
+    };
     document.querySelector('#clonedForm').addEventListener('submit', () => {
         clonedSubmited++;
     });
