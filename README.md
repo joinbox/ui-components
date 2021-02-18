@@ -19,6 +19,7 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 
 ## Tools
 - [Dynamic Page Loader](./DynamicPageLoader/README.md) – maybe prefer [barba.js](https://barba.js.org/)
+- [slide](./slide/README.md)
 - [once](./shared/once.mjs)
 
 ## Tests
