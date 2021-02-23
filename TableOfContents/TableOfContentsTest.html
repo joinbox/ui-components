@@ -11,24 +11,41 @@
                 margin-top: 30vh;
             }
             .toc {
-                margin-top: 0;
+                margin-top: 100px;
+            }
+            .menu {
+                height: 80px;
+                background-color: darksalmon;
+                position: fixed;
+                top: 0; 
+                left: 0;
+                right: 0;
+            }
+            body {
+                margin-bottom: 100vh;
             }
         </style>
     </head>
 
     <body>
 
-        <h1 class="toc">Table of Contents</h1>
+        <div class="menu"></div>
+
+        <h1 class="toc">Table of Contents (not in TOC)</h1>
         <table-of-contents-component
-            data-chapters-selector="h1:not(.toc)"
+            data-chapters-selector="h1:not(.toc):not(.second)"
             data-template-selector="template"
             data-template-content-selector=".text"
+            data-template-link-selector="a"
+            data-offset-selector=".menu"
         >
             <ul>
                 <template>
                     <li>
-                        <span>–</span>
-                        <span class="text"></span>
+                        <a>
+                            <span>–</span>
+                            <span class="text"></span>
+                        </a>
                     </li>
                 </template>
             </ul>
@@ -40,6 +57,27 @@
         <h1>Main-2</h1>
         <h2>Sub-2-2</h2>
         <h1>Main-3</h1>
+
+        <hr/>
+
+        <h1 class="toc">Table of Contents (with fixed offset)</h1>
+        <table-of-contents-component
+            data-chapters-selector="h1.second"
+            data-template-selector="template"
+            data-template-content-selector=".text"
+            data-offset-value="200"
+        >
+            <ul>
+                <template>
+                    <li>
+                        <a class="text">
+                        </a>
+                    </li>
+                </template>
+            </ul>
+        </table-of-contents-component>'
+
+        <h1 class="second">Test with Offset 200px</h1>
 
         <script type="module" src="./TableOfContentsElement.js"></script>
 

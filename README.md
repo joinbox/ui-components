@@ -18,9 +18,11 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 - [FormSync](./FormSync/README.md)
 
 ## Tools
-- [Dynamic Page Loader](./DynamicPageLoader/README.md) – maybe prefer [barba.js](https://barba.js.org/)
-- [slide](./slide/README.md)
-- [once](./shared/once.mjs)
+- [Split Text](./splitText/README.md)
+- [Dynamic Page Loader](./DynamicPageLoader/README.md) – use [barba.js](https://barba.js.org/) instead!
+- [once](./shared/once.mjs), import as `import { once } from '@joinbox/ui-components'`
+- [slide](./slide/README.md), import as `import { slide } from '@joinbox/ui-components'`
+- [createDebounce](./shared/createDebounce.mjs), import as `import { createDebounce } from '@joinbox/ui-components'`
 
 ## Tests
 `npm i && npm test`

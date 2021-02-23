@@ -1,6 +1,6 @@
 import canReadAttributes from '../shared/canReadAttributes.js';
 
-/* global HTMLElement, requestAnimationFrame, document */
+/* global HTMLElement, requestAnimationFrame, document, window */
 
 /**
  * Overlay that is opened/closed by open/closeoverlay events. Optionally closes on esc or
@@ -26,6 +26,17 @@ export default class Overlay extends HTMLElement {
                 name: 'data-template-content-selector',
                 property: 'templateContentSelector',
                 validate: value => !!value,
+            }, {
+                name: 'data-template-link-selector',
+                property: 'templateLinkSelector',
+            }, {
+                name: 'data-offset-selector',
+                property: 'offsetSelector',
+            }, {
+                name: 'data-offset-value',
+                property: 'offsetValue',
+                validate: value => !value || !Number.isNaN(parseInt(value, 10)),
+                transform: value => parseInt(value, 10),
             }]),
         );
         this.readAttributes();
@@ -34,6 +45,20 @@ export default class Overlay extends HTMLElement {
     connectedCallback() {
         this.getChapters();
         this.updateDOM();
+    }
+
+    /**
+     * Returns height of a given element that should be used to offset scroll
+     */
+    getScrollOffset() {
+        if (this.offsetValue) return this.offsetValue;
+        if (!this.offsetSelector) return 0;
+        const offsetElement = document.querySelector(this.offsetSelector);
+        if (!offsetElement) {
+            console.warn(`TableOfContents: Element to read offsetHeight from with selector ${this.offsetSelector} could not be found in DOM. Using 0 as default offset.`);
+            return 0;
+        }
+        return offsetElement.getBoundingClientRect().height;
     }
 
     /**
@@ -57,6 +82,9 @@ export default class Overlay extends HTMLElement {
      * Handles click on a single title in the table of contents
      */
     handleTitleClick(ev) {
+        // If we added an anchor link (to improve accessibility) prevent default to enable smooth
+        // scroll and not propagate hashtag to URL.
+        ev.preventDefault();
         const tocElement = ev.currentTarget;
         // Original element was stored as a property on the title in the toc
         const originalTitle = tocElement.element;
@@ -64,7 +92,9 @@ export default class Overlay extends HTMLElement {
             console.warn('Original element to scroll to not found for %o', tocElement);
             return;
         }
-        originalTitle.scrollIntoView({
+        const scrollDifference = originalTitle.getBoundingClientRect().top;
+        window.scrollBy({
+            top: scrollDifference - this.getScrollOffset(),
             behavior: 'smooth',
         });
     }
@@ -78,6 +108,30 @@ export default class Overlay extends HTMLElement {
             throw new Error(`TableOfContents: Template element with selector ${this.templateSelector} not found in ${this.outerHTML}`);
         }
         return template;
+    }
+
+    /**
+     * Adds anchor links: href="#idValue" to link element and id="idValue" to title element. Is
+     * required for accessible websites (WCAG 2.1 AA)
+     * @param {HTMLElement} chapter     Chapter/title that will be linked
+     * @param {HTMLElement} element     Current item in TOC
+     */
+    addAnchorLink(chapter, element) {
+        if (!this.templateLinkSelector) return;
+        const link = (element.matches(this.templateLinkSelector) && element) ||
+            element.querySelector(this.templateLinkSelector);
+        if (!link) {
+            console.warn('TableOfContents: data-template-link-selector was set and is %s, but corresponding HTML element could not be found in template', this.templateLinkSelector);
+            return;
+        }
+        // Use normalized content of title as id and therefore as href attribute
+        const idValue = chapter.getAttribute('id') || chapter.textContent
+            .replace(/[^a-zA-Z0-9]+/g, '-')
+            // Remove - from start and end
+            .replace(/(^-|-$)/g, '')
+            .toLowerCase();
+        link.setAttribute('href', `#${idValue}`);
+        chapter.setAttribute('id', idValue);
     }
 
     updateDOM() {
@@ -101,6 +155,7 @@ export default class Overlay extends HTMLElement {
             clone.element = chapter.element;
             // Listen to click event
             clone.addEventListener('click', this.handleTitleClick.bind(this));
+            this.addAnchorLink(chapter.element, clone);
             // Only append content of div, not temporary div itself
             fragment.appendChild(clone);
         });
