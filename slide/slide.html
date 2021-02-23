@@ -1,0 +1,60 @@
+<!doctype html>
+
+<html lang="en">
+    <!-- Start server (e.g. python -m http.server 8000) on root folder of component and navigate
+         to localhost:8000/Overlay/OverlayTest.html -->
+    <head>
+        <meta charset="utf-8">
+        <title>The HTML5 Herald</title>
+        <style>
+            .content {
+                font-size: 72px;
+                max-width: 500px;
+                transition: all 2s ease-in-out;
+                background-color: lightcoral;
+                /*padding: 30px;*/
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+            .content.closed {
+                opacity: 0.1;
+            }
+            .content.open {
+                opacity: 1;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <button class="toggle">Open/Close</button>
+
+        <div class="content closed" style="height: 0">
+            Dies ist ein Text, der über mehrere Zeilen
+        </div>
+
+        <div class="content closed" style="width: 0">
+            Dies ist ein Text, der über mehrere Zeilen
+        </div>
+
+
+        <script type="module" src="./slide.export.js"></script>
+
+        <script>
+            const content = Array.from(document.querySelectorAll('.content'));
+            const button = document.querySelector('.toggle');
+            let isOpen = false;
+
+            button.addEventListener('click', () => {
+                const targetSize = isOpen ? 0 : undefined;
+                const method = isOpen ? 'add' : 'remove';
+                requestAnimationFrame(() => content.forEach(el => el.classList[method]('closed')));
+                slide({ element: content[0], targetSize })
+                slide({ element: content[1], targetSize, dimension: 'x' });
+                isOpen = !isOpen;
+            });
+
+        </script>
+
+    </body>
+</html>
