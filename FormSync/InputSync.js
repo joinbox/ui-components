@@ -46,7 +46,10 @@ export default class {
             console.warn(`InputSync: autoSubmit is true, but original element ${this.originalElement} does not have a parent that is a form.`);
             return;
         }
-        form.submit();
+        // If we used form.submit(), Drupal would hard reload the form (even if AJAX was chosen
+        // as the method of submitting the form). Only if we use submitButton.click() auto-submit
+        // works correctly for AJAX and non-AJAX forms.
+        form.querySelector('input[type="submit"]').click();
     }
 
     setupOriginalWatcher() {

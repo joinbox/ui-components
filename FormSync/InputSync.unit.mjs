@@ -146,11 +146,14 @@ test('Auto-submits original form', async(t) => {
 
     const sourceForm = document.createElement('form');
     sourceForm.setAttribute('name', 'someForm');
+
+    const sourceSubmitButton = document.createElement('input');
+    sourceSubmitButton.setAttribute('type', 'submit');
     let submitted = 0;
-    sourceForm.submit = () => { 
-        submitted += 1;
-    };
+    sourceSubmitButton.click = () => submitted++;
+
     sourceForm.appendChild(source);
+    sourceForm.appendChild(sourceSubmitButton);
     document.body.appendChild(sourceForm);
 
     // Create target
