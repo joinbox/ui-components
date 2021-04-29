@@ -107,6 +107,7 @@ test('works with auto-submit attribute', async(t) => {
         document,
         `<form>
             <input type="text" id="originalText" />
+            <input type="submit" id="originalSubmit" />
         </form>`,
     );
     document.body.appendChild(original);
@@ -125,7 +126,7 @@ test('works with auto-submit attribute', async(t) => {
     await new Promise(resolve => window.requestAnimationFrame(resolve));
 
     let submitted = 0;
-    document.querySelector('form').submit = () => { submitted += 1; };
+    document.querySelector('#originalSubmit').click = () => { submitted += 1; };
 
     // Change is synced
     const input = document.querySelector('#cloneText');
