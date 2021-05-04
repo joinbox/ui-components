@@ -49,7 +49,12 @@ export default class {
         // If we used form.submit(), Drupal would hard reload the form (even if AJAX was chosen
         // as the method of submitting the form). Only if we use submitButton.click() auto-submit
         // works correctly for AJAX and non-AJAX forms.
-        form.querySelector('input[type="submit"]').click();
+        const submitButton = form.querySelector('input[type="submit"]');
+        if (!submitButton) {
+            console.warn('InputSync: autoSubmit is true, but original form does not contain a submit button; button is required to submit the original form.');
+        } else {
+            submitButton.click();
+        }
     }
 
     setupOriginalWatcher() {

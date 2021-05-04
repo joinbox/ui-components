@@ -52,7 +52,7 @@
                     </div>
                 </template>
             </form-sync>
-            <h3>Radios that sync with checkboxes</h3>
+            <h4>Radios that sync with checkboxes</h4>
             <form-sync data-form-elements-selector="#checkboxes input, #more-checkboxes input">
                 <div>
                     <!-- One template will be cloned for every input in #checkboxes -->
@@ -66,6 +66,7 @@
                     </template>
                 </div>
             </form-sync>
+            <h4>Dropdown with autoSubmit</h4>
             <form-sync data-form-elements-selector="#dropdown" data-auto-submit="true">
                 <template>
                     <div>
@@ -78,6 +79,7 @@
 
             <!-- Will submit #originalForm; gets class .active when #cloned is changed for the
             first time-->
+            <h4>Submit button that should be opaque after changes</h4>
             <form-submit-button
                 data-form-selector="#originalForm"
                 data-change-selector="#clonedForm"
