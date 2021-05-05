@@ -72,7 +72,11 @@ export default class FormSync extends HTMLElement {
         // not work on DocumentFragments, see
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template
         this.inputs.forEach((inputConfig) => {
-            const clone = template.content.firstElementChild.cloneNode(true);
+            // IE11 and its polyfill have issues with template.content (it is empty); use fallback
+            // for IE11 by cloning the template itself, not its content.
+            const clone = template.content ?
+                template.content.firstElementChild.cloneNode(true) :
+                template.cloneNode(true).firstElementChild;
             const cloneInput = clone.querySelector('[data-input]');
             const cloneLabel = clone.querySelector('[data-label]');
 
