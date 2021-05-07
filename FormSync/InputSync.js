@@ -60,11 +60,12 @@ export default class {
         }
         // If we used form.submit(), Drupal would hard reload the form (even if AJAX was chosen
         // as the method of submitting the form). Only if we use submitButton.click() auto-submit
-        // works correctly for AJAX and non-AJAX forms.
-        // Drupal uses input by default, but it may be changed to a regular button in the template
-        // (which is easier to style) where type=submit will be added by Drupal.
-        // const submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
-        const submitButton = form.querySelector('input[type="submit"]');
+        // works correctly for AJAX and non-AJAX forms with Drupal.
+        // Drupal uses input[type=submit] by default, but it may be changed to a regular
+        // button[type=submit] in the template (which is easier to style); as there can only be one
+        // template for all form buttons, in Drupal, we have to support buttons here, even though
+        // they're invisible in the original form.
+        const submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
         if (!submitButton) {
             console.warn('InputSync: autoSubmit is true, but original form does not contain a submit button; button is required to submit the original form.');
         }
