@@ -63,7 +63,8 @@ export default class {
         // works correctly for AJAX and non-AJAX forms.
         // Drupal uses input by default, but it may be changed to a regular button in the template
         // (which is easier to style) where type=submit will be added by Drupal.
-        const submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
+        // const submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
+        const submitButton = form.querySelector('input[type="submit"]');
         if (!submitButton) {
             console.warn('InputSync: autoSubmit is true, but original form does not contain a submit button; button is required to submit the original form.');
         }

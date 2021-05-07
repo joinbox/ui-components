@@ -187,7 +187,7 @@ test('Auto-submits original form', async(t) => {
     t.is(errors.length, 0);
 });
 
-test.only('Uses button as original submit button', async(t) => {
+/* test('Uses button as original submit button', async(t) => {
     const { document, errors, window } = await setup(true);
 
     const source = document.createElement('input');
@@ -221,4 +221,4 @@ test.only('Uses button as original submit button', async(t) => {
     t.is(submitted, 1);
 
     t.is(errors.length, 0);
-});
+}); */

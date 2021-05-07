@@ -100,7 +100,7 @@ Features:
 
 #### Attributes
 - `data-auto-submit` (optional): Set to `"true"` if changing one of the input's value (event of
-type `input`) should auto-submit the original form. To submit the form, the component will trigger
+type `change`) should auto-submit the original form. To submit the form, the component will trigger
 a click on the original element's `button` or `input` with `type="submit"`. Defaults to `false`.
 - data-form-elements-selector: CSS selector for all input elements that should be cloned and synced
 between the original and the cloned input.
