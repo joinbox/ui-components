@@ -14,24 +14,6 @@ const createElement = (document, html) => {
     return container.firstChild;
 };
 
-test('throws if form is missing', async(t) => {
-    const { document, errors, window } = await setup(true);
-    const content = createElement(
-        document,
-        `<div>
-            <form-submit-button data-form-selector="#originalForm"></form-submit-button>
-        </div>`,
-    );
-    document.body.appendChild(content);
-
-    document.querySelector('form-submit-button')
-        .dispatchEvent(new window.Event('click', { bubbles: true }));
-
-    t.is(errors.length, 1);
-    t.is(errors[0].message.includes('with selector #originalForm'), true);
-});
-
-
 test('submits form', async(t) => {
     const { document, errors, window } = await setup(true);
     const content = createElement(
@@ -94,3 +76,4 @@ test('changed class is added on change', async(t) => {
 
     t.is(errors.length, 0);
 });
+

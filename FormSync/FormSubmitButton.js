@@ -1,5 +1,6 @@
 import canReadAttributes from '../shared/canReadAttributes.js';
 import createListener from '../shared/createListener.mjs';
+import submitForm from './submitForm.js';
 
 /**
  * Lets a button that is placed outside of a form submit a form.
@@ -43,27 +44,12 @@ export default class FormSubmitButton extends HTMLElement {
      * Submits original form (defined by this.formSelector)
      */
     submitForm(ev) {
-        const form = document.querySelector(this.formSelector);
-        if (!form) {
-            throw new Error(`FormSubmitButton: Form with selector ${this.formSelector} does not exist in document, cannot be submitted.`);
-        }
-
-        // If we use Druapl and submit the form by AJAX, Drupal will not look for a submit event
-        // on the form, but only for a click event on the submit button. We therefore have to fake
-        // a click on the original submit button.
-        const submitButton = form.querySelector('input[type="submit"]');
-        if (!submitButton) {
-            throw new Error(`FormSubmitButton: Original submit button with selector input[type="submit"] could not be found in form ${form}. Form cannot be submitted.`);
-        }
-
         // If the FormSubmitButton is part of a form, this form should not be submitted, only the
         // original one.
         ev.preventDefault();
         ev.stopPropagation();
-        // Drupal forms do not work with dispatchEvent(new Event('click', { bubbles: true }))
-        // if they are submitted using AJAX. Only .click() works with Drupal forms (with and
-        // without AJAX), but does not work with JSDOM.
-        submitButton.click();
+        const form = document.querySelector(this.formSelector);
+        submitForm(form);
     }
 
     /**
