@@ -1,3 +1,5 @@
+import submitForm from './submitForm.js';
+
 /* global HTMLElement */
 
 /**
@@ -44,32 +46,7 @@ export default class {
      * Submits original form by clicking its main submit button
      */
     submitOriginalForm() {
-        const submitButton = this.getOriginalSubmitButton();
-        if (!submitButton) return;
-        submitButton.click();
-    }
-
-    /**
-     * Finds submit button in original form
-     */
-    getOriginalSubmitButton() {
-        const form = this.getOriginalForm();
-        if (!form) {
-            console.warn(`InputSync: autoSubmit is true, but original element ${this.originalElement} does not have a parent that is a form.`);
-            return null;
-        }
-        // If we used form.submit(), Drupal would hard reload the form (even if AJAX was chosen
-        // as the method of submitting the form). Only if we use submitButton.click() auto-submit
-        // works correctly for AJAX and non-AJAX forms with Drupal.
-        // Drupal uses input[type=submit] by default, but it may be changed to a regular
-        // button[type=submit] in the template (which is easier to style); as there can only be one
-        // template for all form buttons, in Drupal, we have to support buttons here, even though
-        // they're invisible in the original form.
-        const submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
-        if (!submitButton) {
-            console.warn('InputSync: autoSubmit is true, but original form does not contain a submit button; button is required to submit the original form.');
-        }
-        return submitButton;
+        submitForm(this.getOriginalForm());
     }
 
     setupOriginalWatcher() {

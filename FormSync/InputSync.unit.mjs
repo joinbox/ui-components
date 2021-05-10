@@ -187,39 +187,3 @@ test('Auto-submits original form', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('Uses button as original submit button', async(t) => {
-    const { document, errors, window } = await setup(true);
-
-    const source = document.createElement('input');
-    source.setAttribute('type', 'checkbox');
-    source.setAttribute('id', 'source');
-
-    const sourceForm = document.createElement('form');
-
-    const sourceSubmitButton = document.createElement('button');
-    sourceSubmitButton.setAttribute('type', 'submit');
-    let submitted = 0;
-    sourceSubmitButton.click = () => submitted++;
-
-    sourceForm.appendChild(source);
-    sourceForm.appendChild(sourceSubmitButton);
-    document.body.appendChild(sourceForm);
-
-    const target = document.createElement('input');
-    target.setAttribute('type', 'checkbox');
-    target.setAttribute('id', 'target');
-    document.body.appendChild(target);
-
-    const script = createScript(document, `
-        const sync = new InputSync();
-        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), autoSubmit: true });
-    `);
-    document.body.appendChild(script);
-
-    target.checked = true;
-    target.dispatchEvent(new window.Event('change', { bubbles: true }));
-    t.is(submitted, 1);
-
-    t.is(errors.length, 0);
-});
-
