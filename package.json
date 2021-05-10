@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/ui-components",
-  "version": "2.6.4",
+  "version": "2.6.5",
   "description": "UI components for the web",
   "main": "main.mjs",
   "scripts": {
