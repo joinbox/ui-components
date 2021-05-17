@@ -24,5 +24,6 @@
     "jsdom": "^16.4.0",
     "lerna": "^4.0.0",
     "rollup": "^2.26.6"
-  }
+  },
+  "gitHead": "e2ae56c44ea4baa828fb87cd6657d22e141ee5fe"
 }

@@ -8,5 +8,8 @@
       "message": "chore(release): publish"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "independent"
 }
