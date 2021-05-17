@@ -1,8 +1,4 @@
 {
-  "name": "@joinbox/ui-components",
-  "version": "2.6.6",
-  "description": "UI components for the web",
-  "main": "main.mjs",
   "scripts": {
     "test": "npx lerna run test",
     "bootstrap": "npx lerna bootstrap --hoist",

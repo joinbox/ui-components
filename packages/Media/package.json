@@ -1,8 +1,8 @@
 {
-  "name": "@joinbox/formsync",
-  "version": "1.0.1",
-  "description": "Synchronizes forms and elements between an original form (e.g. one created by Drupal) and another form (e.g. freely created as a template based on mockups).",
-  "main": "FormSync.js",
+  "name": "@joinbox/media",
+  "version": "1.0.0",
+  "description": "Audio component",
+  "main": "AudioComponent.js",
   "scripts": {
     "test": "npx ava --verbose"
   },

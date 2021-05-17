@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/slider",
-  "version": "1.0.1-alpha.1",
+  "version": "1.0.1",
   "description": "Simple slider for scrollable panes",
   "main": "Slider.js",
   "scripts": {
@@ -27,6 +27,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "84a2dc4c45cd66e8d74ad7bbdd7e4b829d11dc51"
+  }
 }
