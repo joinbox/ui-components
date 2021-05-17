@@ -1,5 +1,16 @@
 # Re-usable UI Components for and from Joinbox
 
+## Develop
+
+- This is a monorepo that uses lerna to publish the components as indnvidual packages
+- Run `npm run bootstrap` to initialize the whole repo
+- Run `npm run test` to run all tests in all packages
+- Run `npm run version` to create new versions for all packages with changes since their last
+release; versions are created automatically based on 
+[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+- Run `npm run publish` to publish packages
+
+
 ## Use
 - All components are [custom elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements). 
 - Make sure to use the appropriate [polyfill](https://github.com/webcomponents/polyfills/tree/master/packages/custom-elements)

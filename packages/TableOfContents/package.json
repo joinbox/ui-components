@@ -1,0 +1,31 @@
+{
+  "name": "@joinbox/tableofcontents",
+  "version": "1.0.0",
+  "description": "Table of contents component",
+  "main": "TableOfContents.js",
+  "scripts": {
+    "test": "npx ava --verbose"
+  },
+  "author": "Felix Steiner <felix@joinbox.com>",
+  "license": "ISC",
+  "ava": {
+    "files": [
+      "**/*.unit.mjs",
+      "**/*.integration.mjs"
+    ],
+    "nodeArguments": [
+      "--experimental-modules"
+    ]
+  },
+  "devDependencies": {
+    "@joinbox/eslint-config-joinbox": "^1.0.8",
+    "ava": "^3.15.0",
+    "babel-eslint": "^10.1.0",
+    "jsdom": "^16.4.0",
+    "lerna": "^4.0.0",
+    "rollup": "^2.26.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

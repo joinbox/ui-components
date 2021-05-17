@@ -1,16 +1,15 @@
 {
-  "name": "@joinbox/ui-components",
-  "version": "2.6.6",
-  "description": "UI components for the web",
-  "main": "main.mjs",
   "scripts": {
-    "test": "npx ava --watch --verbose"
+    "test": "npx lerna run test",
+    "bootstrap": "npx lerna bootstrap --hoist",
+    "version": "npx lerna version --conventional-commits",
+    "publish": "npx lerna publish from-package"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/joinbox/ui-components.git"
   },
-  "author": "",
+  "author": "Felix Steiner <felix@joinbox.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/joinbox/ui-components/issues"
@@ -21,16 +20,7 @@
     "ava": "^3.15.0",
     "babel-eslint": "^10.1.0",
     "jsdom": "^16.4.0",
+    "lerna": "^4.0.0",
     "rollup": "^2.26.6"
-  },
-  "ava": {
-    "files": [
-      "**/*.unit.mjs",
-      "**/*.integration.mjs"
-    ],
-    "nodeArguments": [
-      "--experimental-modules"
-    ]
-  },
-  "dependencies": {}
+  }
 }
