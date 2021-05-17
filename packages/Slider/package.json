@@ -25,5 +25,8 @@
     "lerna": "^4.0.0",
     "rollup": "^2.26.6"
   },
-  "gitHead": "e2ae56c44ea4baa828fb87cd6657d22e141ee5fe"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "84a2dc4c45cd66e8d74ad7bbdd7e4b829d11dc51"
 }
