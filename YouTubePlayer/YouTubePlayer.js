@@ -73,7 +73,8 @@ export default class YouTubePlayer extends HTMLElement {
     /**
      * @private
      */
-    async handleClick() {
+    async handleClick(event) {
+        event.preventDefault();
         if (!this.player) this.player = loadYouTubeAPI();
         this.status = 'loading';
         this.updateDOM();
