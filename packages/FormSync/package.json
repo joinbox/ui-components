@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/formsync",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha.0",
   "description": "Synchronizes forms and elements between an original form (e.g. one created by Drupal) and another form (e.g. freely created as a template based on mockups).",
   "main": "FormSync.js",
   "scripts": {
