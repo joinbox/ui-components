@@ -1,5 +1,5 @@
-import canReadAttributes from '../shared/canReadAttributes.js';
-import createListener from '../shared/createListener.mjs';
+import canReadAttributes from '../../src/shared/canReadAttributes.js';
+import createListener from '../../src/shared/createListener.mjs';
 
 /* global HTMLElement, requestAnimationFrame, document, MutationObserver, window */
 

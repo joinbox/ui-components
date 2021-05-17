@@ -1,0 +1,21 @@
+{
+    "name": "@joinbox/slider",
+    "version": "1.0.0",
+    "description": "Simple slider for scrollable panes",
+    "main": "Slider.js",
+    "scripts": {
+      "test": "npx ava --verbose"
+    },
+    "author": "Felix Steiner <felix@joinbox.com>",
+    "license": "ISC",
+    "ava": {
+      "files": [
+        "**/*.unit.mjs",
+        "**/*.integration.mjs"
+      ],
+      "nodeArguments": [
+        "--experimental-modules"
+      ]
+    }
+  }
+  
