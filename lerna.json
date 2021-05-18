@@ -4,7 +4,7 @@
   ],
   "command": {
     "publish": {
-      "ignoreChanges": ["*.md"],
+      "ignoreChanges": ["*.md", "*.test.mjs", "*.integration.mjs"],
       "message": "chore(release): publish"
     }
   },
