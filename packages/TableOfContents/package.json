@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/tableofcontents",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Table of contents component",
   "main": "TableOfContents.js",
   "scripts": {
