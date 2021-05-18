@@ -8,7 +8,7 @@
 - Run `npm run version` to create new versions for all packages with changes since their last
 release; versions are created automatically based on 
 [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
-- Run `npm run publish` to publish packages
+- Run `npm run release` to publish packages
 
 
 ## Use
