@@ -5,7 +5,8 @@
   "command": {
     "publish": {
       "ignoreChanges": ["*.md", "*.test.mjs", "*.integration.mjs"],
-      "message": "chore(release): publish"
+      "message": "chore(release): publish",
+      "conventionalCommits": true
     }
   },
   "version": "independent"

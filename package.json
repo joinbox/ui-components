@@ -5,8 +5,8 @@
   "scripts": {
     "test": "npx lerna run test",
     "bootstrap": "npx lerna bootstrap --hoist",
-    "version": "npx lerna version --conventional-commits",
-    "release": "npx lerna publish from-package",
+    "version": "npx lerna version",
+    "release": "npx lerna publish",
     "ls": "npx lerna ls"
   },
   "repository": {
