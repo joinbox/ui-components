@@ -1,6 +1,6 @@
-import canReadAttributes from '../shared/canReadAttributes.js';
+import canReadAttributes from '../../src/shared/canReadAttributes.js';
+import createListener from '../../src/shared/createListener.mjs';
 import loadYouTubeAPI from './loadYouTubeAPI.js';
-import createListener from '../shared/createListener.mjs';
 
 /* global HTMLElement, window, document */
 

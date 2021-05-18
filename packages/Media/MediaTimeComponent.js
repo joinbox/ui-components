@@ -1,5 +1,5 @@
-import canAnnounceElement from '../shared/canAnnounceElement.js';
-import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
+import canAnnounceElement from '../../src/shared/canAnnounceElement.js';
+import getAndValidateAttribute from '../../src/shared/getAndValidateAttribute.mjs';
 
 /* global HTMLElement */
 

@@ -22,7 +22,7 @@ index that counts up (per HTML element).
 ```
 
 ```javascript
-import { splitText } from '@joinbox/ui-components';
+import splitText from '@joinbox/splittext';
 const restore = splitText({
     element: document.querySelector('div'),
     // Pass a custom wrapper function

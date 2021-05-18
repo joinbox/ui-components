@@ -1,6 +1,6 @@
-import canReadAttributes from '../shared/canReadAttributes.js';
-import createListener from '../shared/createListener.mjs';
-import canRegisterElements from '../shared/canRegisterElements.js';
+import canReadAttributes from '../../src/shared/canReadAttributes.js';
+import createListener from '../../src/shared/createListener.mjs';
+import canRegisterElements from '../../src/shared/canRegisterElements.js';
 import OverlayModel from './OverlayModel.mjs';
 
 /* global HTMLElement, window, document, CustomEvent */

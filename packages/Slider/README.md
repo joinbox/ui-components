@@ -28,7 +28,7 @@ Simple slider for scrollable panes. Does
 </slider-component>
 <div class="forward">→</div>
 
-<script type="module" src="Slider/SliderElement.js"></script>
+<script type="module" src="@joinbox/slider/SliderElement.js"></script>
 ````
 
 ## Components

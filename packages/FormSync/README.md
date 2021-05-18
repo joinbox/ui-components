@@ -87,8 +87,8 @@ Features:
 </div>
 
 
-<script type="module" src="@joinbox/ui-components/FormSync/FormSyncElement.js"></script>
-<script type="module" src="@joinbox/ui-components/FormSync/FormSubmitButtonElement.js"></script>
+<script type="module" src="@joinbox/formsync/FormSyncElement.js"></script>
+<script type="module" src="@joinbox/formsync/FormSubmitButtonElement.js"></script>
 ````
 
 ## Components
@@ -131,8 +131,6 @@ the current `form-submit-button`.
 - data-changed-class-name (optional): Class name that will be added to the current data-submit-button
 when the element that matches data-change-element is changed. Use class (instead of disabled
 attribute) as watching for input/change may not be completely fail-safe.
-
-
 
 
 

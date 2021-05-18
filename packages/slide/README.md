@@ -6,7 +6,7 @@ Sets height in px on an element to allow for smooth CSS transitions (that do not
 ## Example
 
 ````javascript
-import { slide } from '@joinbox/ui-components';
+import slide from '@joinbox/slide';
 
 const element = document.querySelector('.js-sliding-element');
 

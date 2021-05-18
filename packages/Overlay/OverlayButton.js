@@ -1,6 +1,6 @@
-import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
-import canAnnounceElement from '../shared/canAnnounceElement.js';
-import createListener from '../shared/createListener.mjs';
+import getAndValidateAttribute from '../../src/shared/getAndValidateAttribute.mjs';
+import canAnnounceElement from '../../src/shared/canAnnounceElement.js';
+import createListener from '../../src/shared/createListener.mjs';
 
 /* global HTMLElement */
 

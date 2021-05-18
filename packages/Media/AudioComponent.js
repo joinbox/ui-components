@@ -1,6 +1,6 @@
 import AudioModel from './AudioModel.js';
-import canRegisterElements from '../shared/canRegisterElements.js';
-import getAndValidateAttribute from '../shared/getAndValidateAttribute.mjs';
+import canRegisterElements from '../../src/shared/canRegisterElements.js';
+import getAndValidateAttribute from '../../src/shared/getAndValidateAttribute.mjs';
 
 /* global HTMLElement, requestAnimationFrame */
 

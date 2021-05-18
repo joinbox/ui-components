@@ -40,7 +40,7 @@ Table of contents component that
 <h1>Second title</h1>
 <p>Some long content …</p>
 
-<script type="module" src="TableOfContentsElement/TableOfContentsElement.js"></script>
+<script type="module" src="@joinbox/tableofcontents/TableOfContentsElement.js"></script>
 ````
 
 ## Components
