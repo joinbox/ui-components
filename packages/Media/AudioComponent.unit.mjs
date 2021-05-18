@@ -1,7 +1,7 @@
 import test from 'ava';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import getDOM from '../testHelpers/getDOM.mjs';
+import getDOM from '../../src/testHelpers/getDOM.mjs';
 
 const setup = async(hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));

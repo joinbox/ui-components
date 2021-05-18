@@ -1,4 +1,4 @@
-import canReadAttributes from '../shared/canReadAttributes.js';
+import canReadAttributes from '../../src/shared/canReadAttributes.js';
 
 /* global HTMLElement, requestAnimationFrame, document, window */
 

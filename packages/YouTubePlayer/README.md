@@ -19,7 +19,7 @@ window.YT or existing script tag first).
 </youtube-player-component>
 
 <!-- Import all components you use -->
-<script src="Overlay/YouTubePlayerElement.js"></script>
+<script src="@joinbox/youtubeplayer/YouTubePlayerElement.js"></script>
 ````
 
 ## Components

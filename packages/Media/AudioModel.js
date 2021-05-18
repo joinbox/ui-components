@@ -1,4 +1,4 @@
-import canEmitEvents from '../shared/canEmitEvents.mjs';
+import canEmitEvents from '../../src/shared/canEmitEvents.mjs';
 
 /**
  * Abstraction of HTML Audio element that is shared between all components.

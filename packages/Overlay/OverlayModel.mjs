@@ -1,4 +1,4 @@
-import canEmitEvents from '../shared/canEmitEvents.mjs';
+import canEmitEvents from '../../src/shared/canEmitEvents.mjs';
 
 export default class {
 
