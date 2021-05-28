@@ -1,5 +1,5 @@
-import canReadAttributes from '../../src/shared/canReadAttributes.js';
-import createListener from '../../src/shared/createListener.mjs';
+import canReadAttributes from '../../../src/shared/canReadAttributes.js';
+import createListener from '../../../src/shared/createListener.mjs';
 import submitForm from './submitForm.js';
 
 /**

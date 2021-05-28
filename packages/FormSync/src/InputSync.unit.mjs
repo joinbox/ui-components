@@ -1,7 +1,7 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import test from 'ava';
-import getDOM from '../../src/testHelpers/getDOM.mjs';
+import getDOM from '../../../src/testHelpers/getDOM.mjs';
 
 const setup = async(hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
@@ -18,6 +18,7 @@ const createScript = (document, content) => {
 
 test('throws if required attributes are missing', async(t) => {
     const { document, errors } = await setup(true);
+    
     // Missing target
     const missingTarget = createScript(document, `
         const sync = new InputSync();
@@ -26,6 +27,7 @@ test('throws if required attributes are missing', async(t) => {
     document.body.appendChild(missingTarget);
     t.is(errors.length, 1);
     t.is(errors[0].message.includes('originalElement to be'), true);
+    
     // Missing source
     const missingSource = createScript(document, `
         sync.setup({ originalElement: document.createElement('input') });
@@ -33,6 +35,13 @@ test('throws if required attributes are missing', async(t) => {
     document.body.appendChild(missingSource);
     t.is(errors.length, 2);
     t.is(errors[1].message.includes('clonedElement to be'), true);
+    
+    // Invalid autoSubmit
+    const invalidAutoSubmit = createScript(document, `
+        sync.setup({ originalElement: document.createElement('input'), clonedElement: document.createElement('input'), autoSubmit: false });
+    `);
+    document.body.appendChild(invalidAutoSubmit);
+    t.is(errors[2].message.includes('(strings), is false'), true);
 });
 
 
@@ -164,25 +173,20 @@ test('Auto-submits original form', async(t) => {
     // Sync'em
     const script = createScript(document, `
         const sync = new InputSync();
-        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), autoSubmit: true });
+        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), autoSubmit: ['change', 'myEvent'] });
     `);
     document.body.appendChild(script);
 
     t.is(submitted, 0);
 
-    target.checked = false;
-    // Does not submit on input, only on change
-    target.dispatchEvent(new window.Event('input', { bubbles: true }));
-    t.is(submitted, 0);
-
     // Submits on change of target element
-    target.dispatchEvent(new window.Event('change', { bubbles: true }));
-    t.is(submitted, 1);
+    target.dispatchEvent(new window.Event('change'));
+    target.dispatchEvent(new window.CustomEvent('myEvent'));
+    t.is(submitted, 2);
 
     // Don't submit if original changes
-    source.checked = false;
-    source.dispatchEvent(new window.Event('change', { bubbles: true }));
-    t.is(submitted, 1);
+    source.dispatchEvent(new window.Event('change'));
+    t.is(submitted, 2);
 
     t.is(errors.length, 0);
 });
