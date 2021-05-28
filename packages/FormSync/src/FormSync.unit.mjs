@@ -1,7 +1,7 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import test from 'ava';
-import getDOM from '../../src/testHelpers/getDOM.mjs';
+import getDOM from '../../../src/testHelpers/getDOM.mjs';
 
 const setup = async(hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
@@ -57,7 +57,6 @@ test('creates and syncs checked inputs', async(t) => {
     firstInput.checked = true;
     firstInput.dispatchEvent(new window.Event('change'));
     t.is(document.querySelector('#chickenInput').checked, true);
-
     t.is(errors.length, 0);
 });
 
@@ -113,7 +112,8 @@ test('works with auto-submit attribute', async(t) => {
     document.body.appendChild(original);
     const clone = createElement(
         document,
-        `<form-sync data-form-elements-selector="#originalText" data-auto-submit="true">
+        // Use quite an invalid auto-submit parameter
+        `<form-sync data-form-elements-selector="#originalText" data-auto-submit="some ,  change, other,">
             <template>
                 <div>
                     <input type="text" id="cloneText" data-input>

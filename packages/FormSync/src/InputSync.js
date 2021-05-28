@@ -14,20 +14,24 @@ export default class {
      *                                      original form is.
      * @param {HTMLElement} clonedElement   Element to sync changes from and to
      * @param {string} property             Property to watch (e.g. 'value', 'checked')
-     * @param {boolean} autoSubmit          Should we submit the original form when a value is
-     *                                      changed in the cloned form?
+     * @param {string[]} autoSubmit         If original form should be submitted when the input
+                                            value changes: Provide all events that, if fired
+                                            on the input, cause a submit on the original form.
      */
     setup({
         originalElement,
         clonedElement,
         property = 'checked',
-        autoSubmit = false,
+        autoSubmit = [],
     } = {}) {
         if (!(originalElement instanceof HTMLElement)) {
             throw new Error(`InputSync: Expected originalElement to be instance of HTMLElement, is ${originalElement} instead.`);
         }
         if (!(clonedElement instanceof HTMLElement)) {
             throw new Error(`InputSync: Expected clonedElement to be instance of HTMLElement, is ${clonedElement} instead.`);
+        }
+        if (!Array.isArray(autoSubmit) || !autoSubmit.every(item => typeof item === 'string')) {
+            throw new Error(`InputSync: Expected autoSubmit to be an array of event names (strings), is ${autoSubmit} instead.`);
         }
         this.originalElement = originalElement;
         this.clonedElement = clonedElement;
@@ -36,6 +40,7 @@ export default class {
         this.setupOriginalWatcher();
         this.setupClonedWatcher();
         this.syncOriginalToCloned();
+        this.setupAutoSubmitWatcher();
     }
 
     getOriginalForm() {
@@ -60,11 +65,7 @@ export default class {
         // Listen to input and change on cloned element. On original, change is enough as it is
         // not visible to the user.
         this.clonedElement.addEventListener('input', this.syncClonedElementToOriginal.bind(this));
-        // Only submit form on input, not on change (which would be way too often)
-        this.clonedElement.addEventListener('change', () => {
-            this.syncClonedElementToOriginal();
-            this.autoSubmitIfSet();
-        });
+        this.clonedElement.addEventListener('change', this.syncClonedElementToOriginal.bind(this));
     }
 
     /**
@@ -85,8 +86,10 @@ export default class {
     /**
      * Auto-submits original form if autoSubmit is set
      */
-    autoSubmitIfSet() {
-        if (this.autoSubmit) this.submitOriginalForm();
+    setupAutoSubmitWatcher() {
+        for (const eventType of this.autoSubmit) {
+            this.clonedElement.addEventListener(eventType, this.submitOriginalForm.bind(this))
+        }
     }
 
 }

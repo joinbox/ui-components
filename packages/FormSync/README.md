@@ -50,7 +50,7 @@ Features:
             </div>
         </template>
     </form-sync>
-    <form-sync data-form-elements-selector="#checkboxes input" data-auto-submit="true">
+    <form-sync data-form-elements-selector="#checkboxes input" data-auto-submit="change,submit,blur">
         <div>
             <h3>Checkboxes</h3>
             <!-- One template will be cloned for every input in #checkboxes -->
@@ -99,9 +99,11 @@ Features:
 `<form-sync></form-sync>`
 
 #### Attributes
-- `data-auto-submit` (optional): Set to `"true"` if changing one of the input's value (event of
-type `change`) should auto-submit the original form. To submit the form, the component will trigger
-a click on the original element's `button` or `input` with `type="submit"`. Defaults to `false`.
+- `data-auto-submit` (optional): Use if certain events on the cloned input should auto-submit the
+original form. Provide all events that should trigger the auto-submit as a comma delimited list,
+e.g. `"blur,input"`. To submit the form, the component will trigger a click on the original
+element's `button` or `input` with `type="submit"` (this is required in order to work with Drupal's
+AJAX based forms). 
 - data-form-elements-selector: CSS selector for all input elements that should be cloned and synced
 between the original and the cloned input.
 
@@ -135,7 +137,6 @@ attribute) as watching for input/change may not be completely fail-safe.
 
 
 
-
 ## Libraries/Classes
 
 ### InputSync
@@ -148,13 +149,13 @@ sync.setup({
     originalElement: document.querySelector('#source'),
     clonedElement: document.querySelector('#target'),
     property: 'value',
-    autoSubmit: true,
+    autoSubmit: ['change', 'input'],
 });
 ```
 
 Synchronizes the property `value` of the two inputs `#source` and `#target` whenever a change event
 occurs on one of them. When `setup()` is called, also copies `value` of original to cloned element
-and calls `submit()` on closest `<form>` of `originalElement` whenever a `change` event occurs on
-the cloned element.
+and calls `submit()` on closest `<form>` of `originalElement` whenever a `change` or `input` event
+occurs on the cloned element.
 
 

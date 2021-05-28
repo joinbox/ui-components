@@ -4,7 +4,8 @@
   "description": "Synchronizes forms and elements between an original form (e.g. one created by Drupal) and another form (e.g. freely created as a template based on mockups).",
   "main": "FormSync.js",
   "scripts": {
-    "test": "npx ava --verbose"
+    "test": "npx ava --verbose",
+    "build": "npx rollup --c rollup.config.js"
   },
   "author": "Felix Steiner <felix@joinbox.com>",
   "license": "ISC",
@@ -23,7 +24,7 @@
     "babel-eslint": "^10.1.0",
     "jsdom": "^16.4.0",
     "lerna": "^4.0.0",
-    "rollup": "^2.26.6"
+    "rollup": "^2.50.2"
   },
   "publishConfig": {
     "access": "public"

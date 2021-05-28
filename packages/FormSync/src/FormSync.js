@@ -1,4 +1,4 @@
-import canReadAttributes from '../../src/shared/canReadAttributes.js';
+import canReadAttributes from '../../../src/shared/canReadAttributes.js';
 import InputSync from './InputSync.js';
 
 /* global HTMLElement, document, requestAnimationFrame */
@@ -20,6 +20,11 @@ export default class FormSync extends HTMLElement {
             }, {
                 name: 'data-auto-submit',
                 property: 'autoSubmit',
+                // Split string at comma and only use valid (non-empty) values
+                transform: value => !value ? [] : value
+                    .split(',')
+                    .map(item => item.trim())
+                    .filter(item => !!item),
             }]),
         );
         this.readAttributes();
@@ -175,11 +180,11 @@ export default class FormSync extends HTMLElement {
         // change event on radio inputs.
         this.addEventListener('change', (ev) => {
             if (!ev.target.matches('input[type="radio"]')) return;
-            this.syncSimilarRadIonputs(ev.target);
+            this.syncSimilarRadioInputs(ev.target);
         });
     }
 
-    syncSimilarRadIonputs(radioInput) {
+    syncSimilarRadioInputs(radioInput) {
         // Get all radio inputs with the same name attribute
         const name = radioInput.getAttribute('name');
         const similarClonedInputs = this.querySelectorAll(`input[type="radio"][name="${name}"]`);
@@ -209,7 +214,7 @@ export default class FormSync extends HTMLElement {
         sync.setup({
             originalElement: originalInput,
             clonedElement: clonedInput,
-            autoSubmit: !!this.autoSubmit || false,
+            autoSubmit: this.autoSubmit,
             property: this.getInputProperty(originalInput),
         });
         // Store sync instance on element to update it later (see radio workaround above)

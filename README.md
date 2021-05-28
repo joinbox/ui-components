@@ -9,13 +9,14 @@
 - Run `npm run bootstrap` to initialize the whole repo locally (install NPM modules and link them)
 
 ### Release
-- Run `npm run test` to run all tests in all packages
-- Checkout master branch and merge
-- Run `npm run version` to create new versions for all packages with changes since their last
+1. Run `npm run test` to run all tests in all packages
+1. Run `npm run build` in packages
+1. Checkout master branch and merge develop into it
+1. Run `npm run version` to create new versions for all packages with changes since their last
 release; versions are created automatically based on 
 [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
-- Run `npm run release` to publish packages
-- Make sure to create a GIT tag; when versioning, conventional commits are compared to to the
+1. Run `npm run release` to publish packages
+1. Make sure to create a GIT tag; when versioning, conventional commits are compared to to the
 most recent GIT tag.
 
 
