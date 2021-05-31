@@ -10,7 +10,7 @@
 
 ### Release
 1. Run `npm run test` to run all tests in all packages
-1. Run `npm run build` in packages
+1. Run `npm run build`
 1. Checkout master branch and merge develop into it
 1. Run `npm run version` to create new versions for all packages with changes since their last
 release; versions are created automatically based on 
