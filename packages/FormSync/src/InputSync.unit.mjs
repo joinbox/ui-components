@@ -184,6 +184,11 @@ test('Auto-submits original form', async(t) => {
     target.dispatchEvent(new window.CustomEvent('myEvent'));
     t.is(submitted, 2);
 
+    // Only submit if elemtn is valid
+    target.setCustomValidity('invalid state');
+    target.dispatchEvent(new window.Event('change'));
+    t.is(submitted, 2);
+
     // Don't submit if original changes
     source.dispatchEvent(new window.Event('change'));
     t.is(submitted, 2);

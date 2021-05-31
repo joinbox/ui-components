@@ -6,7 +6,8 @@
     "test": "npx lerna run test",
     "bootstrap": "npx lerna bootstrap --hoist",
     "version": "npx lerna version",
-    "release": "npx lerna publish",
+    "release": "npx lerna publish from-package",
+    "build": "npx lerna run build",
     "ls": "npx lerna ls"
   },
   "repository": {
