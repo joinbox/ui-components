@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/youtubeplayer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "YouTube custom element",
   "main": "YouTubePlayer.js",
   "scripts": {
