@@ -129,6 +129,11 @@
          * Submits original form by clicking its main submit button
          */
         submitOriginalForm() {
+            // Only submit form if input is valid; is needed to e.g. not submit a form on a date
+            // input that reads 0002-01-01 (which is what happens when user enters 01012); to prevent
+            // it, use e.g. min="2021-05-31"; the form will only be submitted if the value entered
+            // is in the future.
+            if (!this.clonedElement.checkValidity()) return;
             submitForm(this.getOriginalForm());
         }
 
