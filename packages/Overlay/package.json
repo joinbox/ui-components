@@ -4,7 +4,8 @@
   "description": "Overlay component that can be opened and closed via OverlayButtons",
   "main": "Overlay.js",
   "scripts": {
-    "test": "npx ava --verbose"
+    "test": "npx ava --verbose",
+    "build": "npx rollup --c rollup.config.js"
   },
   "author": "Felix Steiner <felix@joinbox.com>",
   "license": "ISC",
@@ -23,7 +24,7 @@
     "babel-eslint": "^10.1.0",
     "jsdom": "^16.4.0",
     "lerna": "^4.0.0",
-    "rollup": "^2.26.6"
+    "rollup": "^2.50.5"
   },
   "publishConfig": {
     "access": "public"
