@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.0.1 (2021-06-01)
+
+
+### Bug Fixes
+
+* **formsync:** only autosubmit form if input is valid ([b1753a0](https://github.com/joinbox/ui-components/commit/b1753a0c53ca06df0071d8fb033f84585ac691af))
+
+
+
+
+
 # 2.0.0 (2021-05-28)
 
 
