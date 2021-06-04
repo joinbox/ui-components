@@ -15,6 +15,12 @@ By default, all types are wrapped into a `span` with class `letter`, `word` or `
 attribute `data-letter-index`, `data-word-index` or `data-line-index` with the corresponding
 index that counts up (per HTML element).
 
+### Important
+- In order for `wrapLine` to work, you **may not** use `false` as the value for 
+`wrapLetter`; in other words, every letter must be wrapped for `wrapLine` to work!
+- `splitText` does – due to JS restrictions – not work with hyphens. To prevent layout shifts, use
+e.g. `hyphens: none` in your CSS for elements that splitText will be applied to.
+
 ## Example
 
 ```html
@@ -26,13 +32,13 @@ import splitText from '@joinbox/splittext';
 const restore = splitText({
     element: document.querySelector('div'),
     // Pass a custom wrapper function
-    wrapLetter: (content, index) => `<div class='my-letter' data-index='${index}'>${content}</div>`,
+    wrapLetter: (content, index) => `<div class='my-letter' style='--splitTextIndex: ${index}'>${content}</div>`,
     // Don't wrap words
-    wrapWords: false,
+    wrapWord: false,
     // Prevent restore and update on resize
     updateOnResize: false,
 });
-// Restore content of div to original content
+// Restore content of div to original content; this destroys the elements created by splitText.
 restore();
 ```
 
@@ -47,3 +53,9 @@ Pass arguments as an object. The following properties are supported:
     - or a function that takes two arguments `content` and `index` and is expected to return a
     string. Defaults to a function (see above).
 - updateOnResize: `boolean`, defaults to true.
+
+### Return Value
+
+Returns a function that, when called, destroys all elements created by splitText. Try to use it
+as soon as the animations splitText was used for is done to ensure the text is as responsive
+as possible again.
