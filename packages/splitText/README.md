@@ -15,6 +15,13 @@ By default, all types are wrapped into a `span` with class `letter`, `word` or `
 attribute `data-letter-index`, `data-word-index` or `data-line-index` with the corresponding
 index that counts up (per HTML element).
 
+
+### Important
+- In order for `wrapLine` to work, you **may not** use `false` as the value for 
+`wrapLetter`; in other words, every letter must be wrapped for `wrapLine` to work!
+- `splitText` does – due to JS restrictions – not work with hyphens. To prevent layout shifts, use
+e.g. `hyphens: none` in your CSS for elements that `splitText` will be applied to.
+
 ## Example
 
 ```html

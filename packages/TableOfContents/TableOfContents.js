@@ -6,7 +6,7 @@ import canReadAttributes from '../../src/shared/canReadAttributes.js';
  * Overlay that is opened/closed by open/closeoverlay events. Optionally closes on esc or
  * click outside and always locks background (prevents scrolling).
  */
-export default class Overlay extends HTMLElement {
+export default class TableOfContents extends HTMLElement {
 
     chapters = [];
 
@@ -33,6 +33,9 @@ export default class Overlay extends HTMLElement {
                 name: 'data-offset-selector',
                 property: 'offsetSelector',
             }, {
+                name: 'data-update-event-name',
+                property: 'updateEventName',
+            }, {
                 name: 'data-offset-value',
                 property: 'offsetValue',
                 validate: value => !value || !Number.isNaN(parseInt(value, 10)),
@@ -45,6 +48,15 @@ export default class Overlay extends HTMLElement {
     connectedCallback() {
         this.getChapters();
         this.updateDOM();
+        this.setupUpdateEventListener();
+    }
+
+    setupUpdateEventListener() {
+        if (!this.updateEventName) return;
+        window.addEventListener(this.updateEventName, () => {
+            this.getChapters();
+            this.updateDOM();
+        });
     }
 
     /**
@@ -65,6 +77,9 @@ export default class Overlay extends HTMLElement {
      * Reads all chapters from DOM, stores them
      */
     getChapters() {
+        // Reset chapters to empty array; necessary to ensure that entries are not duplicated
+        // when we update the contents when this.updateEventName is caught.
+        this.chapters = [];
         const chapters = document.querySelectorAll(this.chaptersSelector);
         if (!chapters.length) {
             console.warn('No titles found for selector %s', this.chaptersSelector);
@@ -159,9 +174,16 @@ export default class Overlay extends HTMLElement {
             // Only append content of div, not temporary div itself
             fragment.appendChild(clone);
         });
+        // Remove previous contents; needed if e.g. updateEventName is dispatched to prevent
+        // duplicates
+        const toRemove = [...template.parentNode.children]
+            .filter(item => !item.matches(this.templateSelector));
         // Append table of contents after template; template must therefore be placed at the
         // place where content will be inserted
         requestAnimationFrame(() => {
+            for (const elementToRemove of toRemove) {
+                template.parentNode.removeChild(elementToRemove);
+            }
             template.parentNode.appendChild(fragment);
         });
     }
