@@ -19,7 +19,7 @@ index that counts up (per HTML element).
 - In order for `wrapLine` to work, you **may not** use `false` as the value for 
 `wrapLetter`; in other words, every letter must be wrapped for `wrapLine` to work!
 - `splitText` does – due to JS restrictions – not work with hyphens. To prevent layout shifts, use
-e.g. `hyphens: none` in your CSS for elements that splitText will be applied to.
+e.g. `hyphens: none` in your CSS for elements that `splitText` will be applied to.
 
 ## Example
 
