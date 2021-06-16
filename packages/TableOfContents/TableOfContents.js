@@ -3,8 +3,8 @@ import canReadAttributes from '../../src/shared/canReadAttributes.js';
 /* global HTMLElement, requestAnimationFrame, document, window */
 
 /**
- * Overlay that is opened/closed by open/closeoverlay events. Optionally closes on esc or
- * click outside and always locks background (prevents scrolling).
+ * Table of contents that takes contents (e.g. titles) from the current page depending on the
+ * selector provided.
  */
 export default class TableOfContents extends HTMLElement {
 
