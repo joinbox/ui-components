@@ -3,8 +3,8 @@ import canReadAttributes from '../../src/shared/canReadAttributes.js';
 /* global HTMLElement, requestAnimationFrame, document, window */
 
 /**
- * Table of contents that takes contents (e.g. titles) from the current page depending on the
- * selector provided.
+ * Overlay that is opened/closed by open/closeoverlay events. Optionally closes on esc or
+ * click outside and always locks background (prevents scrolling).
  */
 export default class TableOfContents extends HTMLElement {
 
@@ -180,12 +180,14 @@ export default class TableOfContents extends HTMLElement {
             .filter(item => !item.matches(this.templateSelector));
         // Append table of contents after template; template must therefore be placed at the
         // place where content will be inserted
-        requestAnimationFrame(() => {
-            for (const elementToRemove of toRemove) {
-                template.parentNode.removeChild(elementToRemove);
-            }
-            template.parentNode.appendChild(fragment);
-        });
+        // DO NOT USE RAF! Will not work (will not remove children, as they are not children
+        // of the parent)
+        // requestAnimationFrame(() => {
+        for (const elementToRemove of toRemove) {
+            template.parentNode.removeChild(elementToRemove);
+        }
+        template.parentNode.appendChild(fragment);
+        // });
     }
 
 }
