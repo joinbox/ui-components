@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.1...@joinbox/tableofcontents@1.1.2) (2021-06-16)
+
+
+### Bug Fixes
+
+* **toc:** remove raf ([35634da](https://github.com/joinbox/ui-components/commit/35634da9669b790b9cd2a9bfea19586f826344c5))
+
+
+
+
+
 ## [1.1.1](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.0...@joinbox/tableofcontents@1.1.1) (2021-06-16)
 
 
