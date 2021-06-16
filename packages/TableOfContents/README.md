@@ -70,3 +70,5 @@ table of contents entry.
 - `data-offset-selector` (optional): CSS selector for an element whose height will be used as scroll
 offset. Helpful if there is e.g. a sticky menu at the top of the screen to prevent elements from
 scrolling behind it. `data-offset-value` precedes `data-offset-selector`.
+- `data-update-event-name`: Name of an event that, if fired on `window`, will update the contents
+of the table of contents.

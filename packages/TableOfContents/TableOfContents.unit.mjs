@@ -115,3 +115,18 @@ test('does not modify existing ids on titles', async(t) => {
     t.is(toc.querySelectorAll(`[href="#${id}"]`).length, 1);
     t.is(errors.length, 0);
 });
+
+test('updates toc contents on update event', async(t) => {
+    const { window, document, errors } = await setup(true);
+    window.requestAnimationFrame = content => content();
+    const h2No1 = createElement(document, '<h2>h-1</h2>');
+    const h2No2 = createElement(document, '<h2>h-2</h2>');
+    const toc = createElement(document, '<table-of-contents-component data-update-event-name="updateToc" data-template-link-selector="a" data-chapters-selector="h2" data-template-selector="template" data-template-content-selector=".text"><ul><template><li><a><span class="text"></span></a></li></template></ul></table-of-contents-component>');
+    document.body.appendChild(h2No1);
+    document.body.appendChild(toc);
+    t.is(toc.querySelectorAll('a').length, 1);
+    document.body.appendChild(h2No2);
+    window.dispatchEvent(new window.CustomEvent('updateToc'));
+    t.is(toc.querySelectorAll('a').length, 2);
+    t.is(errors.length, 0);
+});
