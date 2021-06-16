@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.0.2...@joinbox/tableofcontents@1.1.0) (2021-06-16)
+
+
+### Features
+
+* **toc:** add update event ([e215aca](https://github.com/joinbox/ui-components/commit/e215aca5567e7d24f796340957585a4ab9bc16f2))
+
+
+
+
+
 ## 1.0.2 (2021-06-01)
 
 
