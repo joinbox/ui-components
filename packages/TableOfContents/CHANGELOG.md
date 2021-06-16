@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.0...@joinbox/tableofcontents@1.1.1) (2021-06-16)
+
+
+### Bug Fixes
+
+* **toc:** remove requestAnimationFrame that prevent elements from being removed ([02da343](https://github.com/joinbox/ui-components/commit/02da3439ed684766e4a5c2e895e69fb802c234de))
+
+
+
+
+
 # [1.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.0.2...@joinbox/tableofcontents@1.1.0) (2021-06-16)
 
 
