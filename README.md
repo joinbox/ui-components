@@ -15,6 +15,7 @@
 1. Run `npm run createVersion` in the root directory to create new versions for all packages with
 changes since their last release; versions are created automatically based on 
 [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) and on the previous Git tag
+1. Push to master
 1. Run `npm run release` to publish packages
 1. Make sure to create a Git tag; when versioning, conventional commits are compared to to the
 most recent Git tag.
