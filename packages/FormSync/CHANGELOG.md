@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.0.2...@joinbox/formsync@2.0.3) (2021-06-21)
+
+
+### Bug Fixes
+
+* **formsync:** check if element is already defined ([b740185](https://github.com/joinbox/ui-components/commit/b740185ac0f4935f4d2a093c77610ac880b3c64d))
+
+
+
+
+
 ## 2.0.2 (2021-06-01)
 
 
