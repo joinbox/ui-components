@@ -18,7 +18,7 @@ const createScript = (document, content) => {
 
 test('throws if required attributes are missing', async(t) => {
     const { document, errors } = await setup(true);
-    
+
     // Missing target
     const missingTarget = createScript(document, `
         const sync = new InputSync();
@@ -27,7 +27,7 @@ test('throws if required attributes are missing', async(t) => {
     document.body.appendChild(missingTarget);
     t.is(errors.length, 1);
     t.is(errors[0].message.includes('originalElement to be'), true);
-    
+
     // Missing source
     const missingSource = createScript(document, `
         sync.setup({ originalElement: document.createElement('input') });
@@ -35,7 +35,7 @@ test('throws if required attributes are missing', async(t) => {
     document.body.appendChild(missingSource);
     t.is(errors.length, 2);
     t.is(errors[1].message.includes('clonedElement to be'), true);
-    
+
     // Invalid autoSubmit
     const invalidAutoSubmit = createScript(document, `
         sync.setup({ originalElement: document.createElement('input'), clonedElement: document.createElement('input'), autoSubmit: false });
