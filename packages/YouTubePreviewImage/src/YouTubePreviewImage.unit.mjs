@@ -54,7 +54,26 @@ test('displays best matching image ', async(t) => {
     await document.body.querySelector('youtube-preview-image').promise;
     t.is(errors.length, 0);
     const src = preview.querySelector('img').getAttribute('src');
-    t.is(src.startsWith('https://img.youtube.com'), true);
+    t.is(/https:\/\/img\.youtube\.com\/.*\/maxresdefault.jpg/.test(src), true);
+});
+
+
+test('tests for 120px width of images ', async(t) => {
+    const { document, errors } = await setup(true);
+    const preview = createElement({
+        document,
+        // Video without a high res preview image
+        html: `<youtube-preview-image data-video-id="Fo5fMMojk38">
+                <img src="https://picsum.photos/200/300" />
+            </youtube-preview-image>`,
+    });
+    document.body.appendChild(preview);
+    await document.body.querySelector('youtube-preview-image').promise;
+    const src = preview.querySelector('img').getAttribute('src');
+    // There will be errors (from image that could not be loaded). Make sure that errors only
+    // contains these expected errors (120px wide images also throw because they get a 404)
+    t.is(errors.every(({ message }) => message.includes('Could not load img:')), true);
+    t.is(/https:\/\/img\.youtube\.com\/.*\/hqdefault.jpg/.test(src), true);
 });
 
 
