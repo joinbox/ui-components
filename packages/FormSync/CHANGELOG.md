@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.0.3...@joinbox/formsync@2.1.0) (2021-07-06)
+
+
+### Features
+
+* **FormSync:** sync disabled attribute ([abc5d2f](https://github.com/joinbox/ui-components/commit/abc5d2fabfed6b46cb5ba8d46c8c3a2bc9af4a6d))
+
+
+
+
+
 ## [2.0.3](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.0.2...@joinbox/formsync@2.0.3) (2021-06-21)
 
 
