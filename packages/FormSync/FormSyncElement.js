@@ -177,6 +177,31 @@
 
     }
 
+    /**
+     * Copies an attribute and its value from one element to another
+     */
+    var copyAttribute = ({ sourceElement, targetElement, attribute, overwrite = true } = {}) => {
+        /* global HTMLElement */
+        if (!(sourceElement instanceof HTMLElement)) {
+            throw new Error(`copyAttribute: sourceElement must be a HTMLElement, is ${sourceElement} instead.`)
+        }
+        if (!(targetElement instanceof HTMLElement)) {
+            throw new Error(`copyAttribute: sourceElement must be a HTMLElement, is ${targetElement} instead.`)
+        }
+        if (typeof attribute !== 'string') {
+            throw new Error(`copyAttribute: attribute must be a string, is ${attribute} instead.`)
+        }
+
+        // Don't overwrite existing attribute if overwrite is false
+        if (!overwrite && targetElement.hasAttribute(attribute)) return;
+
+        targetElement.setAttribute(
+            attribute,
+            sourceElement.getAttribute(attribute),
+        );
+
+    };
+
     /* global HTMLElement, document, requestAnimationFrame */
     class FormSync extends HTMLElement {
 
@@ -197,10 +222,10 @@
                     name: 'data-auto-submit',
                     property: 'autoSubmit',
                     // Split string at comma and only use valid (non-empty) values
-                    transform: value => !value ? [] : value
+                    transform: value => (!value ? [] : value
                         .split(',')
                         .map(item => item.trim())
-                        .filter(item => !!item),
+                        .filter(item => !!item)),
                 }]),
             );
             this.readAttributes();
@@ -265,6 +290,7 @@
                 this.copySelectOptions(inputConfig.input, cloneInput);
                 this.syncInput(inputConfig.input, cloneInput);
                 this.copyPlaceholder(inputConfig.input, cloneInput);
+                this.copyDisabled(inputConfig.input, cloneInput);
                 this.connectLabelToInput(cloneLabel, cloneInput);
 
                 fragment.appendChild(clone);
@@ -318,17 +344,29 @@
          * @param {HTMLElement} clonedInput
          */
         copyPlaceholder(originalInput, clonedInput) {
-            if (
-                originalInput &&
-                clonedInput &&
-                originalInput.hasAttribute('placeholder') &&
-                !clonedInput.hasAttribute('placeholder')
-            ) {
-                clonedInput.setAttribute(
-                    'placeholder',
-                    originalInput.getAttribute('placeholder'),
-                );
-            }
+            if (!originalInput || !clonedInput) return;
+            copyAttribute({
+                sourceElement: originalInput,
+                targetElement: clonedInput,
+                attribute: 'placeholder',
+                overwrite: false,
+            });
+        }
+
+        /**
+         * Clones disabled attribute from original to cloned input. If it is already set on cloned
+         * input, let's assume this was done on purpose and don't overwrite it.
+         * @param {HTMLElement} originalInput
+         * @param {HTMLElement} clonedInput
+         */
+        copyDisabled(originalInput, clonedInput) {
+            if (!originalInput || !clonedInput) return;
+            copyAttribute({
+                sourceElement: originalInput,
+                targetElement: clonedInput,
+                attribute: 'disabled',
+                overwrite: false,
+            });
         }
 
         /**
@@ -348,7 +386,7 @@
         /**
          * Multiple original radio button sets might be linked to one single cloned radio button set.
          * When **one** cloned radio button is changed, we might therefore have to change multiple
-         * original radio inputs. Do so by syncing the whole form. 
+         * original radio inputs. Do so by syncing the whole form.
          * TODO: Find a better solution.
          */
         setupInputSync() {
@@ -360,11 +398,13 @@
             });
         }
 
+        /**
+         * See comment at this.setupInputSync()
+         */
         syncSimilarRadioInputs(radioInput) {
             // Get all radio inputs with the same name attribute
             const name = radioInput.getAttribute('name');
             const similarClonedInputs = this.querySelectorAll(`input[type="radio"][name="${name}"]`);
-            // Call
             Array.from(similarClonedInputs).forEach((input) => {
                 const sync = input.inputSync;
                 if (!sync) {
@@ -373,7 +413,6 @@
                 }
                 input.inputSync.syncClonedElementToOriginal();
             });
-
         }
 
         /**
