@@ -6,28 +6,24 @@
 ## Example
 
 ````html
-<youtube-player-component
-    data-video-id="m7MtIv9a0A4"
-    data-loading-class-name="loading"
-    data-player-variables='{ "controls": 0, "modestbranding": 1 }'
->
-    Preview here
-</youtube-player-component>
-
-<!-- Import all components you use -->
-<script src="@joinbox/youtubeplayer/YouTubePlayerElement.js"></script>
+    <script type="module">
+        import @joinbox/youtubepreviewimage;
+    </script>
+    <youtube-preview-image data-video-id="m7MtIv9a0A4">
+        <img src="https://picsum.photos/200/300">
+    </youtube-preview-image>
 ````
 
 ## Components
 
-### YouTubePlayer
+### YouTubePreviewImage
 
 #### Exposed Element
-`<youtube-player-component></youtube-player-component>`
+`<youtube-preview-image></youtube-preview-image>`
 
 #### Attributes
-- `data-video-id`: ID of the YouTube video to play.
-- `data-loading-class-name`: Class that should be added to `<youtube-player-component>` while
-the YouTube player (script) is loading.
-- `data-player-variables`: [Player parameters](https://developers.google.com/youtube/player_parameters.html?playerVersion=HTML5)
-for YouTube.
+- `data-video-id`: ID of the YouTube video whose poster image should be displayed.
+
+#### Structure
+- **Make sure** that `<youtube-preview-image>` contains an image. Its source will be replaced with
+the highest resolution YouTube poster image.

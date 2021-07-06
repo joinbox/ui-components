@@ -20,6 +20,13 @@ export default class YouTubePreviewImage extends HTMLElement {
 
     constructor() {
         super();
+
+        // Test for image in constructor as it would throw async in connectedCallback where it's
+        // difficult to handle (especially in tests)
+        if (!this.getImage()) {
+            throw new Error(`YouTubePreviewImage: Use an img as child of youtube-preview-image; content is ${this.innerHTML} instead.`);
+        }
+
         Object.assign(
             this,
             canReadAttributes([{
@@ -32,6 +39,9 @@ export default class YouTubePreviewImage extends HTMLElement {
     }
 
     connectedCallback() {
+        // Allow outsiders to watch status of current image resolution process (needed for testing
+        // to know when we can check the final image)
+        this.promise = new Promise((resolve) => { this.resolve = resolve; });
         this.updateImageSource();
     }
 
@@ -48,22 +58,28 @@ export default class YouTubePreviewImage extends HTMLElement {
     }
 
     /**
+     * Returns the first img child of this component; its src attribute will be changed to the
+     * preview image
+     */
+    getImage() {
+        return this.querySelector('img');
+    }
+
+    /**
      * Change source of existing child img element with best quality video preview image
      */
     async updateImageSource() {
-        const image = this.querySelector('img');
-        if (!image) {
-            throw new Error(`YouTubePreviewImage: Use an img as child of youtube-preview-image; content is ${this.innerHTML} instead.`);
-        }
         const source = await this.getBestValidImage();
-        if (!source) return;
-        image.setAttribute('src', source);
+        if (source) {
+            this.getImage().setAttribute('src', source);
+        }
+        this.resolve();
     }
 
     /**
      * Returns preview image URL for a given videoID and resolution (suffix)
-     * @param {string} videoID 
-     * @param {string} suffix 
+     * @param {string} videoID
+     * @param {string} suffix
      * @returns {string}
      */
     generateImageURL(videoID, suffix) {

@@ -21,10 +21,12 @@
   },
   "homepage": "https://github.com/joinbox/ui-components#readme",
   "devDependencies": {
-    "@joinbox/eslint-config-joinbox": "^1.0.8",
+    "@joinbox/eslint-config-joinbox": "^1.0.9",
     "ava": "^3.15.0",
     "babel-eslint": "^10.1.0",
-    "jsdom": "^16.4.0",
-    "lerna": "^4.0.0"
+    "canvas": "^2.8.0",
+    "jsdom": "^16.6.0",
+    "lerna": "^4.0.0",
+    "rollup": "^2.52.7"
   }
 }

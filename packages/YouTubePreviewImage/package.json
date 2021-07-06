@@ -23,8 +23,7 @@
     "ava": "^3.15.0",
     "babel-eslint": "^10.1.0",
     "jsdom": "^16.4.0",
-    "lerna": "^4.0.0",
-    "rollup": "^2.50.5"
+    "lerna": "^4.0.0"
   },
   "publishConfig": {
     "access": "public"
