@@ -9,9 +9,10 @@
 - Run `npm run bootstrap` to initialize the whole repo locally (install NPM modules and link them)
 
 ### Release
+1. Checkout and merge into develop
 1. Run `npm run test` in the **root directory** to run all tests in all packages
-1. Run `npm run build`
-1. Merge develop into master
+1. Run `npm run build`, then commit generated files
+1. Checkout master and merge develop
 1. Run `npm run createVersion` in the root directory to create new versions for all packages with
 changes since their last release; versions are created automatically based on 
 [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) and on the previous Git tag
