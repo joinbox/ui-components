@@ -16,6 +16,14 @@ export default ({ sourceElement, targetElement, attribute, overwrite = true } = 
     // Don't overwrite existing attribute if overwrite is false
     if (!overwrite && targetElement.hasAttribute(attribute)) return;
 
+    // Make sure we don't copy attributes that are non-existent on source; for boolean attributes
+    // (e.g. disabled) this would lead to the attribute being added to target
+    // (as e.g. disabled="null") while it is not present on the source
+    // At the same time, we will not remove attributes on target if missing on source, as a
+    // developer might e.g. want to add certain classes on target while there's no need for a
+    // class attribute on the source.
+    if (!sourceElement.hasAttribute(attribute)) return;
+
     targetElement.setAttribute(
         attribute,
         sourceElement.getAttribute(attribute),
