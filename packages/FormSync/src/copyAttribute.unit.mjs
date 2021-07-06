@@ -38,6 +38,7 @@ test('copies attribute', async(t) => {
     t.is(errors.length, 0);
 });
 
+
 test('copies bool attribute', async(t) => {
     const { document, errors } = await setup(true);
     const content = getContent(document);
@@ -58,6 +59,28 @@ test('copies bool attribute', async(t) => {
     t.is(target.hasAttribute('data-bool'), true);
     t.is(errors.length, 0);
 });
+
+
+test('does not copy attribute if missing on source', async(t) => {
+    const { document, errors } = await setup(true);
+    const content = getContent(document);
+    document.body.appendChild(content);
+    createScript({
+        content: `
+            const sourceElement = document.querySelector('#src');
+            copyAttribute({
+                sourceElement,
+                targetElement: document.querySelector('#target'),
+                attribute: 'data-missing',
+            });
+        `,
+        document,
+    });
+    const target = content.querySelector('#target');
+    t.is(target.hasAttribute('data-missing'), false);
+    t.is(errors.length, 0);
+});
+
 
 test('does not overwrite attribute', async(t) => {
     const { document, errors } = await setup(true);
