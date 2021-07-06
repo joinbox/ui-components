@@ -179,6 +179,31 @@ test('clones placeholder', async(t) => {
 });
 
 
+test('clones disabled attribute', async(t) => {
+    const { document, errors, window } = await setup(true);
+    const original = createElement(
+        document,
+        '<input type="text" id="originalText" disabled />',
+    );
+    document.body.appendChild(original);
+    const clone = createElement(
+        document,
+        `<form-sync data-form-elements-selector="#originalText">
+            <template>
+                <div>
+                    <input type="text" id="cloneText" data-input>
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(clone);
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+
+    t.is(document.querySelector('#cloneText').hasAttribute('disabled'), true);
+    t.is(errors.length, 0);
+});
+
+
 test('connects label to input via for and id attributes', async(t) => {
     const { document, errors, window } = await setup(true);
     const original = createElement(
