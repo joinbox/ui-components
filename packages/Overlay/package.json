@@ -2,7 +2,7 @@
   "name": "@joinbox/overlay",
   "version": "1.0.2",
   "description": "Overlay component that can be opened and closed via OverlayButtons",
-  "main": "Overlay.js",
+  "main": "OverlayElement.js",
   "scripts": {
     "test": "npx ava --verbose",
     "build": "npx rollup --c rollup.config.js"

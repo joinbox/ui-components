@@ -2,7 +2,7 @@
   "name": "@joinbox/youtubeplayer",
   "version": "1.0.2",
   "description": "YouTube custom element",
-  "main": "YouTubePlayer.js",
+  "main": "YouTubePlayerElement.js",
   "scripts": {
     "test": "npx ava --verbose",
     "build": "npx rollup --c rollup.config.js"
