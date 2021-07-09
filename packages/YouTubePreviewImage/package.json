@@ -2,7 +2,7 @@
   "name": "@joinbox/youtubepreviewimage",
   "version": "1.0.0",
   "description": "YouTube preview image custom element",
-  "main": "YouTubePreviewImage.js",
+  "main": "YouTubePreviewImageElement.js",
   "scripts": {
     "test": "npx ava --verbose",
     "build": "npx rollup --c rollup.config.js"
