@@ -33,8 +33,7 @@ test('displays fallback image if video cannot be found ', async(t) => {
                 <img src="${src}" />
             </youtube-preview-image>`,
     });
-    document.body.appendChild(preview);
-    await document.body.querySelector('youtube-preview-image').promise;
+    await preview.connectedCallback();
     // There will be errors (from image that could not be loaded). Make sure that errors only
     // contains these expected errors
     t.is(errors.every(({ message }) => message.includes('Could not load img:')), true);
@@ -50,8 +49,7 @@ test('displays best matching image ', async(t) => {
                 <img src="https://picsum.photos/200/300" />
             </youtube-preview-image>`,
     });
-    document.body.appendChild(preview);
-    await document.body.querySelector('youtube-preview-image').promise;
+    await preview.connectedCallback();
     t.is(errors.length, 0);
     const src = preview.querySelector('img').getAttribute('src');
     t.is(/https:\/\/img\.youtube\.com\/.*\/maxresdefault.jpg/.test(src), true);
@@ -67,8 +65,7 @@ test('tests for 120px width of images ', async(t) => {
                 <img src="https://picsum.photos/200/300" />
             </youtube-preview-image>`,
     });
-    document.body.appendChild(preview);
-    await document.body.querySelector('youtube-preview-image').promise;
+    await preview.connectedCallback();
     const src = preview.querySelector('img').getAttribute('src');
     // There will be errors (from image that could not be loaded). Make sure that errors only
     // contains these expected errors (120px wide images also throw because they get a 404)

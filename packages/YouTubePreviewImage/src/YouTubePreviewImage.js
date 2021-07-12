@@ -38,11 +38,8 @@ export default class YouTubePreviewImage extends HTMLElement {
         this.readAttributes();
     }
 
-    connectedCallback() {
-        // Allow outsiders to watch status of current image resolution process (needed for testing
-        // to know when we can check the final image)
-        this.promise = new Promise((resolve) => { this.resolve = resolve; });
-        this.updateImageSource();
+    async connectedCallback() {
+        await this.updateImageSource();
     }
 
     /**
@@ -73,7 +70,6 @@ export default class YouTubePreviewImage extends HTMLElement {
         if (source) {
             this.getImage().setAttribute('src', source);
         }
-        this.resolve();
     }
 
     /**
