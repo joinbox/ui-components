@@ -7,6 +7,7 @@
 
 ### Init
 - Run `npm run bootstrap` to initialize the whole repo locally (install NPM modules and link them)
+- Run `npx lerna exec npm install` to install package specific `node_module`s
 
 ### Release
 1. Run `npm run test` in the **root directory** to run all tests in all packages
