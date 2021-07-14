@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.0.2...@joinbox/splittext@1.1.0) (2021-07-14)
+
+
+### Bug Fixes
+
+* Fix main files in package.json ([1bd07b2](https://github.com/joinbox/ui-components/commit/1bd07b28a92881f499edac71e25453010bb2fe6c))
+
+
+### Features
+
+* **toc:** add update event ([e215aca](https://github.com/joinbox/ui-components/commit/e215aca5567e7d24f796340957585a4ab9bc16f2))
+
+
+
+
+
 ## 1.0.2 (2021-06-01)
 
 

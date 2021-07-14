@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/vimeoplayer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Vimeo video player custom element",
   "main": "VimeoPlayerElement.js",
   "scripts": {

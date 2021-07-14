@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.1.1...@joinbox/formsync@2.1.2) (2021-07-14)
+
+
+### Bug Fixes
+
+* Fix main files in package.json ([1bd07b2](https://github.com/joinbox/ui-components/commit/1bd07b28a92881f499edac71e25453010bb2fe6c))
+
+
+
+
+
 ## [2.1.1](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.1.0...@joinbox/formsync@2.1.1) (2021-07-06)
 
 
