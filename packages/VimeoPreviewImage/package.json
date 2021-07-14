@@ -1,8 +1,8 @@
 {
-  "name": "@joinbox/youtubepreviewimage",
+  "name": "@joinbox/vimeopreviewimage",
   "version": "1.0.0",
-  "description": "YouTube preview image custom element",
-  "main": "YouTubePreviewImage.js",
+  "description": "Vimeo preview image custom element",
+  "main": "VimeoPreviewImage.js",
   "scripts": {
     "test": "npx ava --verbose",
     "build": "npx rollup --c rollup.config.js"
