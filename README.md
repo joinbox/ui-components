@@ -35,6 +35,7 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 
 ## Components
 - [YouTube Player](./packages/YouTubePlayer/README.md)
+- [YouTube Preview Image](./packages/YouTubePreviewImage/README.md)
 - [Overlay and Buttons](./packages/Overlay/README.md)
 - [Audio Player](./packages/Media/README.md)
 - [Table of Contents](./packages/TableOfContents/README.md)
@@ -42,6 +43,7 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 - [FormSync](./packages/FormSync/README.md)
 - [VimeoPlayer](./packages/VimeoPlayer/README.md)
 - [VimeoPreviewImage](./packages/VimeoPreviewImage/README.md)
+
 
 ## Tools
 - [Split Text](./packages/splitText/README.md)
