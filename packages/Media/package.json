@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/media",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Audio component",
   "main": "AudioComponentElement.js",
   "scripts": {
