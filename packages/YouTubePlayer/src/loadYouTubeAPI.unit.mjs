@@ -28,7 +28,7 @@ test('only loads player once', async(t) => {
 });
 
 test('returns correct instance while loading', async(t) => {
-    const { document, window, errors } = await setup();
+    const { window, errors } = await setup();
     window.loadYouTubeAPI();
     const Player = await window.loadYouTubeAPI();
     t.is(typeof Player, 'function');
@@ -36,7 +36,7 @@ test('returns correct instance while loading', async(t) => {
 });
 
 test('returns correct instance after loading', async(t) => {
-    const { document, window, errors } = await setup();
+    const { window, errors } = await setup();
     await window.loadYouTubeAPI();
     const Player = await window.loadYouTubeAPI();
     t.is(typeof Player, 'function');
