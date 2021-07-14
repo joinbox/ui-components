@@ -39,10 +39,12 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 - [Table of Contents](./packages/TableOfContents/README.md)
 - [Slider](./packages/Slider/README.md)
 - [FormSync](./packages/FormSync/README.md)
+- [VimeoPlayer](./packages/VimeoPlayer/README.md)
+- [VimeoPreviewImage](./packages/VimeoPreviewImage/README.md)
 
 ## Tools
 - [Split Text](./packages/splitText/README.md)
-- [Dynamic Page Loader](./DynamicPageLoader/README.md) – use [barba.js](https://barba.js.org/) instead!
+- ~~[Dynamic Page Loader](./DynamicPageLoader/README.md)~~ – use [barba.js](https://barba.js.org/) instead!
 - [once](./src/shared/once.mjs), import as `import { once } from '@joinbox/ui-components'`
 - [slide](./packages/slide/README.md), import as `import { slide } from '@joinbox/ui-components'`
 - [createDebounce](./src/shared/createDebounce.mjs), import as `import { createDebounce } from '@joinbox/ui-components'`

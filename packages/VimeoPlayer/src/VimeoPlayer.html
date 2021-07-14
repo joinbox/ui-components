@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        </style>
+    </head>
+    <body>
+    
+        <vimeo-player data-video-id="558118399">
+            <img src="https://picsum.photos/640/360">
+        </vimeo-player>
+        <p>Press <code>esc</code> to restore original content</pre></p>
+    </body>
+    <script type="module" src="./VimeoPlayerElement.js"></script>
+    <script>
+        // Restore preview image
+        document.addEventListener('keydown', ({ keyCode }) => {
+            if (keyCode !== 27) return;
+            const player = document.querySelector('vimeo-player');
+            player.restore();
+        });
+    </script>
+
+</html>

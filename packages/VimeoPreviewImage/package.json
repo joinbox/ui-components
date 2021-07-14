@@ -1,8 +1,8 @@
 {
-  "name": "@joinbox/tableofcontents",
-  "version": "1.1.2",
-  "description": "Table of contents component",
-  "main": "TableOfContentsElement.js",
+  "name": "@joinbox/youtubepreviewimage",
+  "version": "1.0.0",
+  "description": "YouTube preview image custom element",
+  "main": "YouTubePreviewImage.js",
   "scripts": {
     "test": "npx ava --verbose",
     "build": "npx rollup --c rollup.config.js"
@@ -24,7 +24,7 @@
     "babel-eslint": "^10.1.0",
     "jsdom": "^16.4.0",
     "lerna": "^4.0.0",
-    "rollup": "^2.50.5"
+    "whatwg-fetch": "^3.6.2"
   },
   "publishConfig": {
     "access": "public"

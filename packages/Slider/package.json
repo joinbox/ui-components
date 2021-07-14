@@ -2,7 +2,7 @@
   "name": "@joinbox/slider",
   "version": "1.0.3",
   "description": "Simple slider for scrollable panes",
-  "main": "Slider.js",
+  "main": "SliderElement.js",
   "scripts": {
     "test": "npx ava --verbose",
     "build": "npx rollup --c rollup.config.js"
