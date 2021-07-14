@@ -1,10 +1,10 @@
 {
   "packages": [
-    "packages/*"
+    "packages/**"
   ],
   "command": {
     "publish": {
-      "ignoreChanges": ["*.md", "*.test.mjs", "*.integration.mjs"],
+      "ignoreChanges": ["*.md", "*.test.mjs", "*.unit.mjs", "*.integration.mjs"],
       "message": "chore(release): publish",
       "conventionalCommits": true
     }
