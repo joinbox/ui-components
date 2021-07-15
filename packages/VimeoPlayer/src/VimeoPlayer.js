@@ -4,7 +4,9 @@ import loadVimeoAPI from './loadVimeoAPI.js';
 /* global HTMLElement */
 
 /**
- * Replaces content on click with YouTube movie that auto-plays.
+ * Replaces content on click with YouTube movie that auto-plays in muted mode. Then tries to
+ * unmute video. See
+ * https://vimeo.zendesk.com/hc/en-us/articles/115004485728-Autoplaying-and-looping-embedded-videos
  */
 export default class extends HTMLElement {
 
@@ -76,9 +78,12 @@ export default class extends HTMLElement {
     }
 
     /**
-     * Some devices (e.g. Safari on iOS) do not allow unmuted videos to be autoplayed. As it is
-     * hard/impossible to discover those devices, go the opposite way: Mute all videos and try
-     * to unmute them afterwards through the Vimeo Player API.
+     * Some browsers (e.g. Safari on iOS) do not allow unmuted videos to be autoplayed. As it is
+     * hard/impossible to discover those browsers, go the opposite way:
+     * 1. Mute the video
+     * 2. Try to unmute it afterwards through the Vimeo Player API
+     * 3. If video stops playing, the browser does not support autoplay on unmuted videos
+     * 4. Mute the video again and restart playing
      */
     async unmute() {
         const iframe = this.querySelector('iframe');
@@ -92,7 +97,21 @@ export default class extends HTMLElement {
         this.vimeoPlayerPromise = loadVimeoAPI();
         const Player = await this.vimeoPlayerPromise;
         this.player = new Player(iframe);
-        this.player.setVolume(1);
+        // Make sure we don't access the player before it's ready
+        await this.player.ready();
+        // Wait until player fires first timeupdate (which means the video is effectively playing)
+        // – before, time may not elapse and getPaused() might be wrong
+        await new Promise(resolve => this.player.on('timeupdate', resolve));
+        await this.player.setVolume(1);
+        // Wait until the volume change has been taking place (seems to take some time especially
+        // on mobile devices … there is no event we can wait for)
+        await new Promise(resolve => setTimeout(resolve, 0));
+        const isPaused = await this.player.getPaused();
+        if (isPaused) {
+            await this.player.setVolume(0);
+            await this.player.play();
+        }
+
     }
 
 }
