@@ -4,8 +4,7 @@
   "description": "Uses XHR/Ajax to create dynamic transitions when a user navigates from one page to another. This allows for seamless transitions between page changes.",
   "main": "src/index.js",
   "scripts": {
-    "test": "npx ava --verbose",
-    "build": "npx rollup --c rollup.config.js"
+    "test": "npx ava --verbose"
   },
   "author": "Felix Steiner <felix@joinbox.com>",
   "license": "ISC",
