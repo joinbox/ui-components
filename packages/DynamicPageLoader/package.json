@@ -1,0 +1,31 @@
+{
+  "name": "@joinbox/dynamicpageloader",
+  "version": "0.1.0",
+  "description": "Uses XHR/Ajax to create dynamic transitions when a user navigates from one page to another. This allows for seamless transitions between page changes.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "npx ava --verbose"
+  },
+  "author": "Felix Steiner <felix@joinbox.com>",
+  "license": "ISC",
+  "ava": {
+    "files": [
+      "**/*.unit.mjs",
+      "**/*.integration.mjs"
+    ],
+    "nodeArguments": [
+      "--experimental-modules"
+    ]
+  },
+  "devDependencies": {
+    "@joinbox/eslint-config-joinbox": "^1.0.8",
+    "ava": "^3.15.0",
+    "babel-eslint": "^10.1.0",
+    "jsdom": "^16.4.0",
+    "lerna": "^4.0.0",
+    "rollup": "^2.50.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
