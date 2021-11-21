@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/dynamicpageloader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Uses XHR/Ajax to create dynamic transitions when a user navigates from one page to another. This allows for seamless transitions between page changes.",
   "main": "src/index.js",
   "scripts": {
