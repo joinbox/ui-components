@@ -1,161 +1,196 @@
-# Form Sync
+# Dynamic Page Loader
 
-Synchronizes forms and elements between an original form (e.g. one created by Drupal) and another
-form (e.g. freely created as a template based on crazy mockups). Needed as Drupal has strict limits 
-on how filter forms are structured.
+Loads content of a web page dynamically when the user navigates to a different URL. It thereby
+enables seamless page transitions between two different static web pages, similar to the ones
+provided by Next.js or Gatsby.
 
-Features:
-- clones any number of inputs from the original form to a new container
-- synchronizes original and cloned form elements
-- supports auto submit on cloned form elements
-- clones placeholder from original to cloned inputs (if not already set on cloned input)
-- sets for attribute on label and id attribute on input (if not already set on cloned input)
+Supports:
+- Elements that are preserved in the DOM when the page changes (`data-preserve-id`)
+- Hook to test if the given URL should be loaded dynamically
+- Hook to execute a script before the page content is changed (e.g. for animations)
+- Hook to execute a script after the page content was changed (e.g. for animations)
+- Only adds dynamic click handler to elements once (to not fire url change multiple times for
+elements that are preserved over a page change)
 
+## Attention!
+- For now only modifies HTMLElements – and no other node types (text, comments, etc.)
 
-## Polyfills
-- Use a [template polyfill](https://github.com/webcomponents/polyfills/tree/master/packages/template)
-[if needed](https://caniuse.com/#feat=template)
+## Important
 
+There are certain limitations concerning the use of JavaScript, as the global scope is preserved
+over page loads:
+- Don't use any global variables or functions, especially not `const`s (would throw an already
+declared error). Use [IFFEs](https://developer.mozilla.org/en-US/docs/Glossary/IIFE) e.g. where
+appropriate.
+- Don't use `type="module"` script tags for code that should be executed on page load. Module
+script tags will only execute when the page is initially loaded.
+
+Be aware that CSS is handled differently:
+- The sort order of `<link>` elements will not be adjusted to the element order of the new page,
+as moving `<link>` elements around causes flickering.
 
 ## Example
 
-````html
-<form id="originalForm">
-    <label for="firstName">Your First Name:</label>
-    <input type="text" id="firstName" />
-    <div id="checkboxes">
-        <label for="fish"><input type="checkbox" id="fish" checked> Fish</label>
-        <label for="chicken"><input type="checkbox" id="chicken"> Chicken</label>
-    </div>
-    <!-- Without label -->
-    <select id="dropdown">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-    </select>
-</form>
+````javascript
+import {
+    applyChanges,
+    handleLinkClicks,
+    handlePopState,
+    loadFile,
+    createNode,
+    canBeIdentical,
+    isIdentical,
+    applyAttributes,
+} from '@joinbox/ui-components/DynamicPageLoader';
+
+// Prevents loading of a new page when a link is clicked. Uses pushState to update the URL 
+// displayed by the browser instead and emits 'urlchange' event that will be handled later.
+handleLinkClicks({
+    // In this case, we hijack all clicks on regular links
+    linkElements: document.querySelectorAll('a'),
+    // Limit the links that are hijacked; in this case, only use dynamic page loader for absolute
+    // links (on current domain)
+    checkLink: link => link.startsWith('/'),
+});
+
+// Handles navigation through the back button and emits 'urlchange' event if the previous page
+// was loaded dynamically.
+handlePopState();
 
 
-<!-- The cloned form -->
-<div id="clonedForm">
-    <form-sync data-form-elements-selector="#firstName">
-        <template>
-            <!-- Template needs exactly one child -->
-            <div>
-                <!-- Original label's textContent is copied to textContent of element with
-                attribute data-label -->
-                <label data-label></label>
-                <!-- Original's element's value is copied to element with attribute data-input -->
-                <input type="text" data-input/>
-            </div>
-        </template>
-    </form-sync>
-    <form-sync data-form-elements-selector="#checkboxes input" data-auto-submit="change,submit,blur">
-        <div>
-            <h3>Checkboxes</h3>
-            <!-- One template will be cloned for every input in #checkboxes -->
-            <template>
-                <div>
-                    <label>
-                        <span data-label></span>
-                        <input type="checkbox" data-input/>
-                    </label>
-                </div>
-            </template>
-        </div>
-    </form-sync>
-    <form-sync data-form-elements-selector="#dropdown">
-        <template>
-            <div>
-                <!-- Options will be cloned from original <select> -->
-                <select data-input>
-                </select>
-            </div>
-        </template>
-    </form-sync>
+// Add event listener to 'urlchange' event that was fired above. Handle URL change with a smooth
+// transition instead of a hard page load.
+window.addEventListener(
+    'urlchange',
+    async(ev) => {
+        const { url } = ev.detail;
+        const dom = await loadFile(url);
 
-    <!-- Will submit #originalForm; gets class .active when #cloned is changed for the
-    first time-->
-    <form-submit-button
-        data-form-selector="#originalForm"
-        data-change-selector="#clonedForm"
-        data-changed-class-name="active"
-    >
-        <button>Submit</button>
-    </form-submit-button>
+        // If you like, add some nice animations here.
 
-</div>
+        // <script> tags must be created through document.createElement and appended to DOM in order
+        // to be executed; we generally use innerHTML to change DOM, which does not execute script
+        // elements.
+        const updateNode = node => (node.tagName === 'SCRIPT' ? createNode(document, node) : node);
 
+        // Update body
+        applyChanges({
+            originalNode: document.querySelector('body'),
+            newNode: dom.querySelector('body'),
+            canBeIdentical,
+            isIdentical,
+            updateNode,
+            updateAttributes: applyAttributes,
+        });
 
-<script type="module" src="@joinbox/formsync/FormSyncElement.js"></script>
-<script type="module" src="@joinbox/formsync/FormSubmitButtonElement.js"></script>
+        // Update head
+        applyChanges({
+            originalNode: document.querySelector('head'),
+            newNode: dom.querySelector('head'),
+            canBeIdentical,
+            isIdentical,
+            updateNode,
+            updateAttributes: applyAttributes,
+        });
+
+        // To update a preserved DOM element, use a minimal timeOut; if we add the class while
+        // the DOM element is being moved, transitions will not happen.
+        setTimeout(() => {
+            const method = url.includes('about') ? 'add' : 'remove';
+            document.querySelector('.header').classList[method]('about');
+        });
+
+    },
+
+    // Note once here which is crucial; window will persist over all page changes. If we add
+    // the urlchange handler every time, it will fire many times after many page reloads.
+    { once: true },
+);
 ````
 
-## Components
 
-### FormSync
 
-#### Exposed Element
-`<form-sync></form-sync>`
+## Functions
 
-#### Attributes
-- `data-auto-submit` (optional): Use if certain events on the cloned input should auto-submit the
-original form. Provide all events that should trigger the auto-submit as a comma delimited list,
-e.g. `"blur,input"`. To submit the form, the component will trigger a click on the original
-element's `button` or `input` with `type="submit"` (this is required in order to work with Drupal's
-AJAX based forms). 
-- data-form-elements-selector: CSS selector for all input elements that should be cloned and synced
-between the original and the cloned input.
+### handleLinkClicks
 
-#### Content
-- Use any content you like with the following exceptions:
-    - Use a `<template>` tag to provide a template for the inputs that will be selected by
-      `data-form-elements-selector` and cloned. 
-    - The `<template>` tag must contain **exactly** one child.
-    - Provide an element with a `data-label` attribute within the template tag, if you wish. This
-      element's `textContent` will be set to the original label's `textContent`.
-    - You must provide an element with a `data-input` attribute within the template tag. This
-      element's `changed` or `value` property will be synced with the original element.
+Adds click event listener to `linkElements` passed in; executes `pushState` on click and dispatches
+`urlchange` event on `window`.
+
+#### Parameters
+- `linkElements`: iterable collection of DOM elements (i.e. links) whose behaviour should be
+'hijacked' and not trigger a page refresh in the browser.
+- `checkLink`: function that takes a single parameter `url` that corresponds to the link's `href``
+attribute. Return falsy value if the link should be handled by the browser and not by
+DynamicPageLoader.
 
 
 
-### FormSubmitButton
+### handlePopState
 
-#### Exposed Element
-`<form-submit-button></form-submit-button>`
+Dispatches a `urlchange` event on window when a `popState` event occurs on `window`.
 
-#### Attributes
-- `data-form-selector` (mandatory): CSS selector for the form element that should be submitted
-when the current element is clicked.
-- `data-change-selector` (optional): CSS selector for a HTML element that should be watched for
-`change` and `input` events; if any of those happens, `data-changed-class-name` will be added to
-the current `form-submit-button`.
-- data-changed-class-name (optional): Class name that will be added to the current data-submit-button
-when the element that matches data-change-element is changed. Use class (instead of disabled
-attribute) as watching for input/change may not be completely fail-safe.
+#### Parameters
+None
 
 
 
+### loadFile
 
-## Libraries/Classes
+Loads a remote file (through `fetch`) and returns its content as a DOM tree.
 
-### InputSync
-
-Class that synchronizes two inputs (form elements). Example:
-
-```
-const sync = new InputSync();
-sync.setup({
-    originalElement: document.querySelector('#source'),
-    clonedElement: document.querySelector('#target'),
-    property: 'value',
-    autoSubmit: ['change', 'input'],
-});
-```
-
-Synchronizes the property `value` of the two inputs `#source` and `#target` whenever a change event
-occurs on one of them. When `setup()` is called, also copies `value` of original to cloned element
-and calls `submit()` on closest `<form>` of `originalElement` whenever a `change` or `input` event
-occurs on the cloned element.
+#### Parameters
+- `url`: URL to load
 
 
+
+### createNode
+
+Takes a HTMLElement and creates a new element (through `document.createElement`) with the same
+tag name and attributes. Needed to e.g. create a proper `script` tag.
+
+#### Parameters
+- `document`: reference to the document that the element should be created for
+- `node`: HTMLElement that should be cloned/created
+
+
+
+### applyChanges
+
+Takes two DOM nodes and applies the changes from `newNode` to `originalNode`.
+
+#### Parameters
+- `originalNode`: HTMLElement that will be patched with the changes in newNode
+- `newNode`: HTMLElement whose contents will be added to/removed from `originalNode`
+- `canBeIdentical`: function that thakes a single parameter element (`HTMLElement`); return true if
+the element **might** be preserved (`isIdentical` might return true). Only needed to improve speed.
+- `isIdentical`: function that takes two parameters (both `HTMLElement`s) and returns true if both
+elements are **considered** identical. The original element will be preserved in the DOM, the new
+element will be ignored.
+- `updateNode` (optional): function that takes a single parameter (`HTMLElement`) and is expected
+to return a modified HTMLElement, if you wish to change the HTMLElement before it is added to the
+DOM. Needed to e.g. create a `<script>` element from scratch to make sure it is executed.
+- `updateAttributes` (optional): function that takes two parameters (`newElement, originalelement`,
+both `HTMLElement`s) and copies attributes from preserved `newElement` to `originalElement`. By
+default, `applyChanges` does not update attributes on preserved elements.
+
+
+### canBeIdentical
+
+A default function for the `canBeIdentical` argument of `applyChanges`. Returns true if
+- both elements are `link` or `meta` elements
+- element has an attribute `data-preserve-id`.
+
+
+### isIdentical
+
+A default function for the `isIdentical` argument of `applyChanges`. Returns true if
+- both elements are `link` or `meta` elements and have exactly the same attributes
+- both elements have a `data-preserve-id` attribute that is identical.
+
+
+### applyAttributes
+
+A default function for the `updateAttributes` argument of `applyChanges`. Copies all **changed or
+new** attributes from `origin` to `target` and removes the ones from `target` that are not present
+on `origin`.
