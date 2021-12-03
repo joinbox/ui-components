@@ -101,9 +101,10 @@ Features:
 #### Attributes
 - `data-auto-submit` (optional): Use if certain events on the cloned input should auto-submit the
 original form. Provide all events that should trigger the auto-submit as a comma delimited list,
-e.g. `"blur,input"`. To submit the form, the component will trigger a click on the original
-element's `button` or `input` with `type="submit"` (this is required in order to work with Drupal's
-AJAX based forms). 
+e.g. `"blur,input"`. If you want to auto-submit with a debounce, add the debounce after a colon in
+ms, e.g. `"input:50,blur"` (for a debounce of 50ms after an input). To submit the form, the
+component will trigger a click on the original element's `button` or `input` with `type="submit"`
+(this is required in order to work with Drupal's AJAX based forms). 
 - data-form-elements-selector: CSS selector for all input elements that should be cloned and synced
 between the original and the cloned input.
 

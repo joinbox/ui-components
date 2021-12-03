@@ -23,9 +23,16 @@ export default class FormSync extends HTMLElement {
                 property: 'autoSubmit',
                 // Split string at comma and only use valid (non-empty) values
                 transform: value => (!value ? [] : value
-                    .split(',')
-                    .map(item => item.trim())
-                    .filter(item => !!item)),
+                    .split(/\s*,\s*/)
+                    // Remove empty items
+                    .filter(item => !!item)
+                    // Get eventName and debounceTime; split at : with white spaces
+                    .map(item => item.split(/\s*:\s*/))
+                    .map(([eventName, debounceTime]) => ({
+                        eventName,
+                        ...(debounceTime ? { debounceTime: parseFloat(debounceTime) } : {}),
+                    }))
+                ),
             }]),
         );
         this.readAttributes();
