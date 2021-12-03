@@ -78,6 +78,20 @@
 
     };
 
+    /**
+     * Simple debounce implementation. Use:
+     * import { createDebounce } from '@joinbox/ui-components;
+     * const debounce = createDebounce();
+     * debounce(() => {}), 500);
+    */
+    var createDebounce = () => {
+        let timeout;
+        return (callback, offset) => {
+            if (timeout) clearTimeout(timeout);
+            timeout = setTimeout(callback, offset);
+        };
+    };
+
     /* global HTMLElement */
 
     /**
@@ -108,7 +122,7 @@
             if (!(clonedElement instanceof HTMLElement)) {
                 throw new Error(`InputSync: Expected clonedElement to be instance of HTMLElement, is ${clonedElement} instead.`);
             }
-            if (!Array.isArray(autoSubmit) || !autoSubmit.every(item => typeof item === 'string')) {
+            if (!Array.isArray(autoSubmit) || !autoSubmit.every(item => typeof item === 'object')) {
                 throw new Error(`InputSync: Expected autoSubmit to be an array of event names (strings), is ${autoSubmit} instead.`);
             }
             this.originalElement = originalElement;
@@ -170,8 +184,17 @@
          * Auto-submits original form if autoSubmit is set
          */
         setupAutoSubmitWatcher() {
-            for (const eventType of this.autoSubmit) {
-                this.clonedElement.addEventListener(eventType, this.submitOriginalForm.bind(this));
+            for (const { eventName, debounceTime } of this.autoSubmit) {
+                let submitHandler = this.submitOriginalForm.bind(this);
+                if (debounceTime) {
+                    const debounce = createDebounce();
+                    submitHandler = debounce.bind(
+                        null,
+                        this.submitOriginalForm.bind(this),
+                        debounceTime,
+                    );
+                }
+                this.clonedElement.addEventListener(eventName, submitHandler);
             }
         }
 
@@ -231,9 +254,16 @@
                     property: 'autoSubmit',
                     // Split string at comma and only use valid (non-empty) values
                     transform: value => (!value ? [] : value
-                        .split(',')
-                        .map(item => item.trim())
-                        .filter(item => !!item)),
+                        .split(/\s*,\s*/)
+                        // Remove empty items
+                        .filter(item => !!item)
+                        // Get eventName and debounceTime; split at : with white spaces
+                        .map(item => item.split(/\s*:\s*/))
+                        .map(([eventName, debounceTime]) => ({
+                            eventName,
+                            ...(debounceTime ? { debounceTime: parseFloat(debounceTime) } : {}),
+                        }))
+                    ),
                 }]),
             );
             this.readAttributes();
