@@ -275,3 +275,55 @@ test('connects label to input via for and id attributes', async(t) => {
 
     t.is(errors.length, 0);
 });
+
+
+test('works with auto-submit debounce', async(t) => {
+    const { document, errors, window } = await setup(true);
+    const original = createElement(
+        document,
+        `<form>
+            <input type="text" id="originalText" />
+            <input type="submit" id="originalSubmit" />
+        </form>`,
+    );
+    document.body.appendChild(original);
+    const clone = createElement(
+        document,
+        // Use quite an invalid auto-submit parameter
+        `<form-sync data-form-elements-selector="#originalText" data-auto-submit="some ,  change:  50, other,">
+            <template>
+                <div>
+                    <input type="text" id="cloneText" data-input>
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(clone);
+
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+
+    let submitted = 0;
+    document.querySelector('#originalSubmit').click = () => { submitted += 1; };
+
+    const input = document.querySelector('#cloneText');
+
+    input.value = 'dealyedValue';
+    input.dispatchEvent(new window.Event('change', { bubbles: true }));
+    // submitted did not (yet) change
+    t.is(submitted, 0);
+
+    await new Promise(resolve => setTimeout(resolve, 10));
+    // submitted did not (yet) change
+    t.is(submitted, 0);
+
+    await new Promise(resolve => setTimeout(resolve, 40));
+    t.is(submitted, 1);
+
+    // Event 'other' syncs directly
+    input.value = 'newValue';
+    input.dispatchEvent(new window.Event('other', { bubbles: true }));
+    t.is(submitted, 2);
+
+
+    t.is(errors.length, 0);
+});
