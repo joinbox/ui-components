@@ -173,7 +173,7 @@ test('Auto-submits original form', async(t) => {
     // Sync'em
     const script = createScript(document, `
         const sync = new InputSync();
-        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), autoSubmit: ['change', 'myEvent'] });
+        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), autoSubmit: [{ eventName: 'change' }, { eventName: 'myEvent' }] });
     `);
     document.body.appendChild(script);
 
@@ -184,7 +184,7 @@ test('Auto-submits original form', async(t) => {
     target.dispatchEvent(new window.CustomEvent('myEvent'));
     t.is(submitted, 2);
 
-    // Only submit if elemtn is valid
+    // Only submit if element is valid
     target.setCustomValidity('invalid state');
     target.dispatchEvent(new window.Event('change'));
     t.is(submitted, 2);
@@ -196,3 +196,49 @@ test('Auto-submits original form', async(t) => {
     t.is(errors.length, 0);
 });
 
+
+test('Respects debounce for auto-submit', async(t) => {
+    const { document, errors, window } = await setup(true);
+    // Create source
+    const source = document.createElement('input');
+    source.setAttribute('type', 'text');
+    source.setAttribute('id', 'source');
+
+    const sourceForm = document.createElement('form');
+
+    const sourceSubmitButton = document.createElement('input');
+    sourceSubmitButton.setAttribute('type', 'submit');
+    let submitted = 0;
+    sourceSubmitButton.click = () => submitted++;
+
+    sourceForm.appendChild(source);
+    sourceForm.appendChild(sourceSubmitButton);
+    document.body.appendChild(sourceForm);
+
+    // Create target
+    const target = document.createElement('input');
+    target.setAttribute('type', 'text');
+    target.setAttribute('id', 'target');
+    document.body.appendChild(target);
+
+    // Sync'em
+    const script = createScript(document, `
+        const sync = new InputSync();
+        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), autoSubmit: [{ eventName: 'myEvent', debounceTime: 50 }, { eventName: 'change' }] });
+    `);
+    document.body.appendChild(script);
+
+    t.is(submitted, 0);
+
+    // Regular submit
+    target.dispatchEvent(new window.CustomEvent('change'));
+    t.is(submitted, 1);
+
+    // Debounced submit
+    target.dispatchEvent(new window.CustomEvent('myEvent'));
+    t.is(submitted, 1);
+    await new Promise(resolve => setTimeout(resolve, 550));
+    t.is(submitted, 2);
+
+    t.is(errors.length, 0);
+});
