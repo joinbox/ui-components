@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.1.3...@joinbox/formsync@2.2.0) (2021-12-03)
+
+
+### Bug Fixes
+
+* **dpl:** fix build task ([b0b80eb](https://github.com/joinbox/ui-components/commit/b0b80ebb9e5e38a49c60843160d697843b235d04))
+
+
+### Features
+
+* **FormSync:** add debounce for auto-submit ([9b940b0](https://github.com/joinbox/ui-components/commit/9b940b06d9a0f178015c1c22013636e0d5a6857b))
+
+
+
+
+
 ## [2.1.3](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.1.2...@joinbox/formsync@2.1.3) (2021-07-14)
 
 **Note:** Version bump only for package @joinbox/formsync
