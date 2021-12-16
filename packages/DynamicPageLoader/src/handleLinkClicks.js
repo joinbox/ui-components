@@ -5,7 +5,7 @@ import once from './once.mjs';
 
 const updateState = (url) => {
     // Update state; does not have any direct effect, but is needed if user reloads or navigates
-    // back
+    // back; url property in state is read on popstate event.
     window.history.pushState({ url }, '', url);
     // Fire urlchange event; same will be done with popstate to harmonize url change behavior
     window.dispatchEvent(new CustomEvent('urlchange', { detail: { url } }));
