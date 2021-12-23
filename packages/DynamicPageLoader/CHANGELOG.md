@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/dynamicpageloader@0.2.1...@joinbox/dynamicpageloader@0.3.0) (2021-12-23)
+
+
+### Bug Fixes
+
+* **dpl:** don't fail if popstate event is missing properties ([da386c5](https://github.com/joinbox/ui-components/commit/da386c56cecb63e669b17e73902348dc7e1825dd))
+
+
+### Features
+
+* **dpl:** add link element as argument to link validator ([551c282](https://github.com/joinbox/ui-components/commit/551c282b35cf303ccd140d8422526dbf548d1dc9))
+
+
+
+
+
 ## [0.2.1](https://github.com/joinbox/ui-components/compare/@joinbox/dynamicpageloader@0.2.0...@joinbox/dynamicpageloader@0.2.1) (2021-11-21)
 
 
