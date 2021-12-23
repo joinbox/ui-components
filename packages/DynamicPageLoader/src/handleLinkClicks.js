@@ -13,9 +13,10 @@ const updateState = (url) => {
 
 
 const handleLinkClick = checkLink => (ev) => {
-    const href = ev.currentTarget.getAttribute('href');
+    const { currentTarget } = ev;
+    const href = currentTarget.getAttribute('href');
     // Don't handle link if filterLinks returns falsy value for the given url
-    if (checkLink && typeof checkLink === 'function' && !checkLink(href)) return;
+    if (checkLink && typeof checkLink === 'function' && !checkLink(href, currentTarget)) return;
     ev.preventDefault();
     updateState(href);
 };
