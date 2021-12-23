@@ -31,6 +31,23 @@ test('dispatches urlchange event and updates state', async(t) => {
     t.is(errors.length, 0);
 });
 
+test('uses link element and link target for checkLink hook', async(t) => {
+    const { window, document, errors } = await setup(true);
+    const link = document.createElement('a');
+    link.setAttribute('href', '/test');
+    document.body.appendChild(link);
+    const script = document.createElement('script');
+    script.textContent = `
+        const links = document.querySelectorAll('a');
+        handleLinkClicks({ linkElements: links, checkLink: (...args) => {
+            window.checkLinkData = args;
+        }});
+    `;
+    document.body.appendChild(script);
+    link.click();
+    t.deepEqual(window.checkLinkData, ['/test', link]);
+    t.is(errors.length, 0);
+});
 
 test('respects checkLink hook', async(t) => {
     const { window, document, errors } = await setup(true);
