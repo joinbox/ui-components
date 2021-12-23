@@ -32,3 +32,20 @@ test('dispatches urlchange event on popstate', async(t) => {
     t.is(errors.length, 0);
 });
 
+test('does not fail if url property in state is missing', async(t) => {
+    const { window, document, errors } = await setup(true);
+    const script = document.createElement('script');
+    script.textContent = `
+        handlePopState();
+    `;
+    document.body.appendChild(script);
+    const events = [];
+    window.addEventListener('urlchange', (ev) => {
+        events.push(ev);
+    });
+    const popStateEvent = new window.PopStateEvent('popstate', {});
+    window.dispatchEvent(popStateEvent);
+    t.is(events.length, 0);
+    t.is(errors.length, 0);
+});
+
