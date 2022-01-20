@@ -71,6 +71,12 @@ to false.
 - `data-disable-click-outside`: Prevents the overlay from being closed when users click with their
 mouse outside of the overlay. Defaults to false.
 
+#### Events
+- `openOverlay`: Dispatched after an overlay is opened; bubbles and has a `details` object with
+a `name` property that corresponds to the overlay's `data-name` attribute value.
+- `closeOverlay`: Dispatched after an overlay is closed; bubbles and has a `details` object with
+a `name` property that corresponds to the overlay's `data-name` attribute value.
+
 
 
 ### Overlay Button
