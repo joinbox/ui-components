@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.0.4...@joinbox/overlay@1.1.0) (2022-01-20)
+
+
+### Features
+
+* **Overlay:** add official and documented openOverlay and closeOverlay events ([d654088](https://github.com/joinbox/ui-components/commit/d654088842b58b8ae3b870437fcc77b76047ceb1))
+
+
+
+
+
 ## [1.0.4](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.0.3...@joinbox/overlay@1.0.4) (2021-07-14)
 
 **Note:** Version bump only for package @joinbox/overlay
