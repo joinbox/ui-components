@@ -88,18 +88,23 @@ export default class Overlay extends HTMLElement {
     updateDOM() {
         window.requestAnimationFrame(() => {
             const visible = this.model.isOpen;
+            const eventPayload = { bubbles: true, detail: { name: this.name } };
             if (visible) {
                 this.classList.add(this.visibleClassName);
                 if (this.background && this.backgroundVisibleClassName) {
                     this.background.classList.add(this.backgroundVisibleClassName);
                 }
-                this.dispatchEvent(new CustomEvent('open'));
+                // Legacy event (naming not clear enough); remove on next breaking change
+                this.dispatchEvent(new CustomEvent('open', eventPayload));
+                this.dispatchEvent(new CustomEvent('openOverlay', eventPayload));
             } else {
                 this.classList.remove(this.visibleClassName);
                 if (this.background && this.backgroundVisibleClassName) {
                     this.background.classList.remove(this.backgroundVisibleClassName);
                 }
-                this.dispatchEvent(new CustomEvent('close'));
+                // Legacy event (naming not clear enough); remove on next breaking change
+                this.dispatchEvent(new CustomEvent('close', eventPayload));
+                this.dispatchEvent(new CustomEvent('closeOverlay', eventPayload));
             }
         });
 

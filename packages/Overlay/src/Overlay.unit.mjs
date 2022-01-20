@@ -64,15 +64,32 @@ test('closes on esc', async(t) => {
 test('dispatch open and close events', async(t) => {
     const { window, document, errors } = await setup(true);
     window.requestAnimationFrame = cb => cb();
-    const overlay = createElement(document, '<overlay-component data-visible-class-name="visible" data-name="test"></overlay-component>');
-    document.body.appendChild(overlay);
+    const elements = createElement(
+        document,
+        '<div class="bubbler"><overlay-component data-visible-class-name="visible" data-name="test"></overlay-component><div class="bubbler">',
+    );
+    document.body.appendChild(elements);
+    const overlay = document.querySelector('overlay-component');
     const events = [];
-    overlay.addEventListener('open', () => events.push('o'));
-    overlay.addEventListener('close', () => events.push('c'));
+    const legacyEvents = [];
+    // Legacy events
+    overlay.addEventListener('open', (ev) => { legacyEvents.push(ev); });
+    overlay.addEventListener('close', (ev) => { legacyEvents.push(ev); });
+    // Current events; check if they bubble
+    const outerElement = document.querySelector('.bubbler');
+    outerElement.addEventListener('openOverlay', (ev) => { events.push(ev); });
+    outerElement.addEventListener('closeOverlay', (ev) => { events.push(ev); });
     overlay.model.open();
     overlay.model.close();
     overlay.model.open();
-    t.deepEqual(events, ['o', 'c', 'o']);
+    t.is(legacyEvents.length, 3);
+    t.deepEqual(legacyEvents.map(ev => ev.type), ['open', 'close', 'open']);
+    // Detail contains a name property with the overlay's name
+    t.deepEqual(legacyEvents.map(ev => ev.detail.name), Array.from({ length: 3 }).fill('test'));
+    t.deepEqual(events.map(ev => ev.type), ['openOverlay', 'closeOverlay', 'openOverlay']);
+    // Detail contains a name property with the overlay's name
+    t.deepEqual(events.map(ev => ev.detail.name), Array.from({ length: 3 }).fill('test'));
+
     t.is(errors.length, 0);
 });
 
