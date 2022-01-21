@@ -21,8 +21,8 @@ If you want to disable scroll when the overlay is open, use
 ```javascript
 import { disableBodyScroll, enableBodyScroll } from '/body-scroll-lock/lib/bodyScrollLock.es6.js';
 const overlay = document.querySelector('#my-overlay-identifier');
-overlay.addEventListener('open', disableBodyScroll);
-overlay.addEventListener('close', enableBodyScroll);
+overlay.addEventListener('openOverlay', disableBodyScroll);
+overlay.addEventListener('closeOverlay', enableBodyScroll);
 ```
 
 ## Example
