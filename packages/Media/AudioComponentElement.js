@@ -85,6 +85,9 @@
             this.emit('load');
             /* global Audio */
             this.audio = new Audio(this.url);
+            // Without calling load explicitly, audio won't load on iOS, see
+            // https://stackoverflow.com/questions/49792768/js-html5-audio-why-is-canplaythrough-not-fired-on-ios-safari
+            this.audio.load();
             this.setupAudioListeners();
         }
 
@@ -129,6 +132,7 @@
                 // If user clicked play to load audio and did not pause afterwards, play audio
                 if (this.playing) this.play();
             });
+            this.audio.addEventListener('error', console.error);
         }
 
         play() {
