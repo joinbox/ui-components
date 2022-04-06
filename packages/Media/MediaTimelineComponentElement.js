@@ -70,56 +70,88 @@
         return () => element.removeEventListener(eventName, handler);
     };
 
-    /* global HTMLElement */
+    /* global HTMLElement, window */
 
-    /**
-     * Play and pause button for media
-     */
-    class MediaPlayPauseButton extends HTMLElement {
+    class MediaTimelineComponent extends HTMLElement {
+
+        // Only update value on input when user is not seeking
+        isSeeking = false;
 
         constructor() {
             super();
-            // Make element play nicely together with AudioComponent
             Object.assign(this, canAnnounceElement());
-            this.setupClickListener();
+            this.getInput();
+            this.setupInputListeners();
         }
 
-        /**
-         * Announces itself to parent AudioComponent when added to DOM
-         */
         async connectedCallback() {
             await this.announce();
+            this.setupModelListeners();
         }
 
         /**
-         * Listens to clicks on element
+         * Reads input[type=range] from DOM
+         */
+        getInput() {
+            const selector = 'input[type="range"]';
+            const input = this.querySelector(selector);
+            if (!input) {
+                throw new Error(`TimelineComponent: Must contain a child that matches ${selector} on initialization.`);
+            }
+            this.input = input;
+        }
+
+        /**
+         * Listens to input changes on input
+         */
+        setupInputListeners() {
+            createListener(this.input, 'change', this.updateTime.bind(this));
+            // Don't update value of input[type="range"] while we're seeking; input wouldn't play
+            // nicely with audio if we did
+            createListener(this.input, 'mousedown', () => { this.isSeeking = true; });
+            createListener(window, 'mouseup', () => { this.isSeeking = false; });
+        }
+
+        /**
+         * Updates volume on audio
          * @private
          */
-        setupClickListener() {
-            this.disposeClickListener = createListener(this, 'click', this.toggle);
+        updateTime() {
+            // Audio is not loaded yet: Prevent user from interacting with the timeline
+            if (!this.model.loadingState) return;
+            const time = this.input.value;
+            this.model.setCurrentTime(time);
         }
 
         /**
-         * Toggles between play and pause. If audio has not started loading, it loads the file and
-         * plays it when it's loaded, given that playback was not paused in the meantime.
+         * Listens to changes on AudioModel
+         * @private
          */
-        toggle() {
-            // Only load audio data when data is not yet ready and user starts playing
-            if (!this.model.loadingState && !this.model.playing) {
-                this.model.load();
-                // Try to start playing. Will fire 'play' event when file is ready.
-                this.model.play();
-                return;
-            }
-            if (this.model.playing) this.model.pause();
-            else this.model.play();
+        setupModelListeners() {
+            this.model.on('canplaythrough', () => {
+                this.input.max = this.model.getDuration();
+            });
+            this.model.on('timeupdate', this.updateValue.bind(this));
+        }
+
+        /**
+         * Updates volume (value) on input
+         * @param {number} value 
+         * @private
+         */
+        updateValue() {
+            // Don't update value (that will trigger change event) while the user is changing
+            // the current time.
+            if (this.isSeeking) return;
+            const time = this.model.getCurrentTime();
+            this.input.value = time;
         }
 
     }
 
     /* global window */
-    if (!window.customElements.get('media-play-pause-component')) {
-        window.customElements.define('media-play-pause-component', MediaPlayPauseButton);
+    if (!window.customElements.get('media-timeline-component')) {
+        window.customElements.define('media-timeline-component', MediaTimelineComponent);
     }
 
 }());

@@ -4,5 +4,6 @@ const components = [
     'MediaPlayPauseComponentElement.js',
     'MediaTimeComponentElement.js',
     'MediaVolumeComponentElement.js',
+    'MediaTimelineComponentElement.js',
 ];
 export default createRollupConfig(components);
