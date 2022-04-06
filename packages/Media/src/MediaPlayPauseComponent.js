@@ -2,7 +2,7 @@ import canAnnounceElement from '../../../src/shared/canAnnounceElement.js';
 import createListener from '../../../src/shared/createListener.mjs';
 import getAndValidateAttribute from '../../../src/shared/getAndValidateAttribute.mjs';
 
-/* global HTMLElement, window */
+/* global HTMLElement */
 
 /**
  * Play and pause button for media
