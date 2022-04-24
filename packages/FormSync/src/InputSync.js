@@ -24,6 +24,7 @@ export default class {
         clonedElement,
         property = 'checked',
         autoSubmit = [],
+        submitOnEnter = false,
     } = {}) {
         if (!(originalElement instanceof HTMLElement)) {
             throw new Error(`InputSync: Expected originalElement to be instance of HTMLElement, is ${originalElement} instead.`);
@@ -37,11 +38,13 @@ export default class {
         this.originalElement = originalElement;
         this.clonedElement = clonedElement;
         this.autoSubmit = autoSubmit;
+        this.submitOnEnter = submitOnEnter;
         this.property = property;
         this.setupOriginalWatcher();
         this.setupClonedWatcher();
         this.syncOriginalToCloned();
         this.setupAutoSubmitWatcher();
+        this.setupEnterWatcher();
     }
 
     getOriginalForm() {
@@ -68,10 +71,17 @@ export default class {
     }
 
     setupClonedWatcher() {
-        // Listen to input and change on cloned element. On original, change is enough as it is
+        // Listen to input and change on cloned element. On original, change is enough as it issubmitOnEnter
         // not visible to the user.
         this.clonedElement.addEventListener('input', this.syncClonedElementToOriginal.bind(this));
         this.clonedElement.addEventListener('change', this.syncClonedElementToOriginal.bind(this));
+    }
+
+    setupEnterWatcher() {
+        if (!this.submitOnEnter) return;
+        this.clonedElement.addEventListener('keyup', (ev) => {
+            if (ev.key === 'Enter') this.submitOriginalForm();
+        });
     }
 
     /**
