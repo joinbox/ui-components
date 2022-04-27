@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.1](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.0.2...@joinbox/formsync@2.2.1) (2022-04-27)
+
+
+### Bug Fixes
+
+* **dpl:** fix build task ([b0b80eb](https://github.com/joinbox/ui-components/commit/b0b80ebb9e5e38a49c60843160d697843b235d04))
+* fix comment fauxpas ([6502b03](https://github.com/joinbox/ui-components/commit/6502b031f4c202301078e7a2c91dc2a3e46cbe1a))
+* Fix main files in package.json ([1bd07b2](https://github.com/joinbox/ui-components/commit/1bd07b28a92881f499edac71e25453010bb2fe6c))
+* fix versions in package.json (to match latest release) ([77137df](https://github.com/joinbox/ui-components/commit/77137df6758b2d39ee06941ba3e6a062c1f5b9e4))
+* **formsync:** check if element is already defined ([b740185](https://github.com/joinbox/ui-components/commit/b740185ac0f4935f4d2a093c77610ac880b3c64d))
+* **formsync:** don't copy attributes if missing on source ([99ac7ce](https://github.com/joinbox/ui-components/commit/99ac7ce0caa70095ffcfd591c30be3221e339d7f))
+
+
+### Features
+
+* **FormSync:** add debounce for auto-submit ([9b940b0](https://github.com/joinbox/ui-components/commit/9b940b06d9a0f178015c1c22013636e0d5a6857b))
+* **FormSync:** submit original form if user presses enter in cloned input ([f818b07](https://github.com/joinbox/ui-components/commit/f818b079413825fec13441b0f79108142b849482))
+* **FormSync:** sync disabled attribute ([abc5d2f](https://github.com/joinbox/ui-components/commit/abc5d2fabfed6b46cb5ba8d46c8c3a2bc9af4a6d))
+
+
+
+
+
 ## 2.0.2 (2021-06-01)
 
 

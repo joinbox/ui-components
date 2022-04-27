@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/joinbox/ui-components/compare/@joinbox/slide@1.0.2...@joinbox/slide@1.0.5) (2022-04-27)
+
+
+### Bug Fixes
+
+* Fix main files in package.json ([1bd07b2](https://github.com/joinbox/ui-components/commit/1bd07b28a92881f499edac71e25453010bb2fe6c))
+* fix versions in package.json (to match latest release) ([77137df](https://github.com/joinbox/ui-components/commit/77137df6758b2d39ee06941ba3e6a062c1f5b9e4))
+
+
+
+
+
 ## 1.0.2 (2021-06-01)
 
 

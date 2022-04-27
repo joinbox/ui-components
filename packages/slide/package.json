@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/slide",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Sets height in px on an element to allow for smooth CSS transitions",
   "main": "slide.js",
   "scripts": {
