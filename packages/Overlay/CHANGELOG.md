@@ -28,6 +28,18 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * Fix main files in package.json ([1bd07b2](https://github.com/joinbox/ui-components/commit/1bd07b28a92881f499edac71e25453010bb2fe6c))
+## [1.1.1](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.0.2...@joinbox/overlay@1.1.1) (2022-04-27)
+
+
+### Bug Fixes
+
+* Fix main files in package.json ([1bd07b2](https://github.com/joinbox/ui-components/commit/1bd07b28a92881f499edac71e25453010bb2fe6c))
+* fix versions in package.json (to match latest release) ([77137df](https://github.com/joinbox/ui-components/commit/77137df6758b2d39ee06941ba3e6a062c1f5b9e4))
+
+
+### Features
+
+* **Overlay:** add official and documented openOverlay and closeOverlay events ([d654088](https://github.com/joinbox/ui-components/commit/d654088842b58b8ae3b870437fcc77b76047ceb1))
 
 
 

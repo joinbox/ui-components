@@ -12,11 +12,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 ## [1.1.3](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.2...@joinbox/tableofcontents@1.1.3) (2021-07-14)
+## [1.1.5](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.2...@joinbox/tableofcontents@1.1.5) (2022-04-27)
 
 
 ### Bug Fixes
 
 * Fix main files in package.json ([1bd07b2](https://github.com/joinbox/ui-components/commit/1bd07b28a92881f499edac71e25453010bb2fe6c))
+* fix versions in package.json (to match latest release) ([77137df](https://github.com/joinbox/ui-components/commit/77137df6758b2d39ee06941ba3e6a062c1f5b9e4))
 
 
 

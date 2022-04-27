@@ -20,10 +20,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 # 1.1.0 (2021-07-14)
+## 1.1.3 (2022-04-27)
 
 
 ### Bug Fixes
 
+* fix versions in package.json (to match latest release) ([77137df](https://github.com/joinbox/ui-components/commit/77137df6758b2d39ee06941ba3e6a062c1f5b9e4))
 * **vimeo:** add missing files ([1ea95fd](https://github.com/joinbox/ui-components/commit/1ea95fdc529e28b8513d9f3d4822ef68ad439e13))
 * **vimeopreviewimage:** fix package.json ([47965b5](https://github.com/joinbox/ui-components/commit/47965b511677ee31ce43174225d8f868b11c0ca6))
 
