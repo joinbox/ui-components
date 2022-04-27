@@ -105,8 +105,10 @@ e.g. `"blur,input"`. If you want to auto-submit with a debounce, add the debounc
 ms, e.g. `"input:50,blur"` (for a debounce of 50ms after an input). To submit the form, the
 component will trigger a click on the original element's `button` or `input` with `type="submit"`
 (this is required in order to work with Drupal's AJAX based forms). 
-- data-form-elements-selector: CSS selector for all input elements that should be cloned and synced
+- `data-form-elements-selector`: CSS selector for all input elements that should be cloned and synced
 between the original and the cloned input.
+- `data-submit-on-enter` (optional, boolean attribute): Submit original form if user presses enter
+while the input is focused.
 
 #### Content
 - Use any content you like with the following exceptions:

@@ -327,3 +327,38 @@ test('works with auto-submit debounce', async(t) => {
 
     t.is(errors.length, 0);
 });
+
+
+test('works with submit-on-enter', async(t) => {
+    const { document, errors, window } = await setup(true);
+    const original = createElement(
+        document,
+        `<form>
+            <input type="text" id="originalText" />
+            <input type="submit" id="originalSubmit" />
+        </form>`,
+    );
+    document.body.appendChild(original);
+    const clone = createElement(
+        document,
+        `<form-sync data-form-elements-selector="#originalText" data-submit-on-enter>
+            <template>
+                <div>
+                    <input type="text" id="cloneText" data-input>
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(clone);
+
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+
+    let submitted = 0;
+    document.querySelector('#originalSubmit').click = () => { submitted += 1; };
+
+    const input = document.querySelector('#cloneText');
+    input.dispatchEvent(new window.KeyboardEvent('keyup', { key: 'Enter' }));
+    t.is(submitted, 1);
+
+    t.is(errors.length, 0);
+});

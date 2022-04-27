@@ -33,6 +33,10 @@ export default class FormSync extends HTMLElement {
                         ...(debounceTime ? { debounceTime: parseFloat(debounceTime) } : {}),
                     }))
                 ),
+            }, {
+                name: 'data-submit-on-enter',
+                property: 'submitOnEnter',
+                transform: value => (value === null || value === undefined) ? false : true,
             }]),
         );
         this.readAttributes();
@@ -238,6 +242,7 @@ export default class FormSync extends HTMLElement {
             clonedElement: clonedInput,
             autoSubmit: this.autoSubmit,
             property: this.getInputProperty(originalInput),
+            submitOnEnter: this.submitOnEnter,
         });
         // Store sync instance on element to update it later (see radio workaround above)
         clonedInput.inputSync = sync;
