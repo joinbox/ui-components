@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/youtubepreviewimage",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "YouTube preview image custom element",
   "main": "YouTubePreviewImageElement.js",
   "scripts": {
