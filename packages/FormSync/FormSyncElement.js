@@ -115,6 +115,7 @@
             clonedElement,
             property = 'checked',
             autoSubmit = [],
+            submitOnEnter = false,
         } = {}) {
             if (!(originalElement instanceof HTMLElement)) {
                 throw new Error(`InputSync: Expected originalElement to be instance of HTMLElement, is ${originalElement} instead.`);
@@ -128,11 +129,13 @@
             this.originalElement = originalElement;
             this.clonedElement = clonedElement;
             this.autoSubmit = autoSubmit;
+            this.submitOnEnter = submitOnEnter;
             this.property = property;
             this.setupOriginalWatcher();
             this.setupClonedWatcher();
             this.syncOriginalToCloned();
             this.setupAutoSubmitWatcher();
+            this.setupEnterWatcher();
         }
 
         getOriginalForm() {
@@ -163,6 +166,13 @@
             // not visible to the user.
             this.clonedElement.addEventListener('input', this.syncClonedElementToOriginal.bind(this));
             this.clonedElement.addEventListener('change', this.syncClonedElementToOriginal.bind(this));
+        }
+
+        setupEnterWatcher() {
+            if (!this.submitOnEnter) return;
+            this.clonedElement.addEventListener('keyup', (ev) => {
+                if (ev.key === 'Enter') this.submitOriginalForm();
+            });
         }
 
         /**
@@ -264,6 +274,10 @@
                             ...(debounceTime ? { debounceTime: parseFloat(debounceTime) } : {}),
                         }))
                     ),
+                }, {
+                    name: 'data-submit-on-enter',
+                    property: 'submitOnEnter',
+                    transform: value => (value === null || value === undefined) ? false : true,
                 }]),
             );
             this.readAttributes();
@@ -469,6 +483,7 @@
                 clonedElement: clonedInput,
                 autoSubmit: this.autoSubmit,
                 property: this.getInputProperty(originalInput),
+                submitOnEnter: this.submitOnEnter,
             });
             // Store sync instance on element to update it later (see radio workaround above)
             clonedInput.inputSync = sync;
@@ -481,4 +496,4 @@
         window.customElements.define('form-sync', FormSync);
     }
 
-}());
+})();
