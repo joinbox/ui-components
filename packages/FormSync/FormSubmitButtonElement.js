@@ -180,4 +180,4 @@
         window.customElements.define('form-submit-button', FormSubmitButton);
     }
 
-}());
+})();
