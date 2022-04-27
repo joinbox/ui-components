@@ -71,7 +71,7 @@ export default class {
     }
 
     setupClonedWatcher() {
-        // Listen to input and change on cloned element. On original, change is enough as it issubmitOnEnter
+        // Listen to input and change on cloned element. On original, change is enough as it is
         // not visible to the user.
         this.clonedElement.addEventListener('input', this.syncClonedElementToOriginal.bind(this));
         this.clonedElement.addEventListener('change', this.syncClonedElementToOriginal.bind(this));
