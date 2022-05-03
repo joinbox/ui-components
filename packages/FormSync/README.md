@@ -108,7 +108,8 @@ component will trigger a click on the original element's `button` or `input` wit
 - `data-form-elements-selector`: CSS selector for all input elements that should be cloned and synced
 between the original and the cloned input.
 - `data-submit-on-enter` (optional, boolean attribute): Submit original form if user presses enter
-while the input is focused.
+while the input is focused. Make sure the cloned form is not wrapped in a <form> element or it will
+be submitted at the same time (and reload the page if not prevented).
 
 #### Content
 - Use any content you like with the following exceptions:
