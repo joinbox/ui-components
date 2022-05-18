@@ -45,7 +45,7 @@ export default class YouTubePreviewImage extends HTMLElement {
             throw new Error(`VimeoPreviewImage: Status returned by Vimeo API is ${result.status}, should be 200`);
         }
         const json = await result.json();
-        return json.thumbnail_url;
+        return json.thumbnail_url.replace(/_[0-9]+x[0-9]+/, '');
     }
 
     getVideoInfoURL() {
