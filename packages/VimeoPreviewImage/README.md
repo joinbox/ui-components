@@ -22,7 +22,10 @@
 `<vimeo-preview-image></vimeo-preview-image>`
 
 #### Attributes
-- `data-video-id`: ID of the Vimeo video whose poster image should be displayed.
+- `data-video-id` (required): ID of the Vimeo video whose poster image should be displayed.
+- `data-video-width` (int, optional): Used to get best matching video preview image resolution;
+Vimeo returns the next smaller sized preview image, see
+[docs](https://developer.vimeo.com/api/oembed/videos)
 
 #### Structure
 - **Make sure** that `<vimeo-preview-image>` contains an image. Its source will be replaced with

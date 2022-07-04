@@ -225,4 +225,4 @@
         window.customElements.define('overlay-button-component', OverlayButton);
     }
 
-}());
+})();

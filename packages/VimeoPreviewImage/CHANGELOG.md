@@ -20,6 +20,17 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 # 1.1.0 (2021-07-14)
+## [1.1.4](https://github.com/joinbox/ui-components/compare/@joinbox/vimeopreviewimage@1.1.3...@joinbox/vimeopreviewimage@1.1.4) (2022-07-04)
+
+
+### Features
+
+* **VimeoPreviewImage:** add width attribute to get optimal size ([28fdd2c](https://github.com/joinbox/ui-components/commit/28fdd2ccf1995093d1f71d6ef5b5e48339d4293c))
+
+
+
+
+
 ## 1.1.3 (2022-04-27)
 
 

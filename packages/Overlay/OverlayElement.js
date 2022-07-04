@@ -311,4 +311,4 @@
         window.customElements.define('overlay-component', Overlay);
     }
 
-}());
+})();

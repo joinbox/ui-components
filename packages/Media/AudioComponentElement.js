@@ -317,4 +317,4 @@
         window.customElements.define('audio-component', AudioComponent);
     }
 
-}());
+})();

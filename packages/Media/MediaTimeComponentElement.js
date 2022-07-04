@@ -155,4 +155,4 @@
         window.customElements.define('media-time-component', MediaTime);
     }
 
-}());
+})();
