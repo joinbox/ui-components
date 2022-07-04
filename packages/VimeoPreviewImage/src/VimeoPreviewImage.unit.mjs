@@ -17,7 +17,7 @@ const polyfillFetch = (document) => {
     const fetchContent = readFileSync(join(base, fetchPath), 'utf8');
     const fetchScript = document.createElement('script');
     fetchScript.textContent = fetchContent;
-    document.body.appendChild(fetchScript);    
+    document.body.appendChild(fetchScript);
 };
 
 test('fails if img element is missing', async(t) => {
@@ -49,7 +49,7 @@ test('displays thumbnail', async(t) => {
 });
 
 test('fails with invalid video id', async(t) => {
-    const { document, errors, window } = await setup(true);
+    const { document, errors } = await setup(true);
     polyfillFetch(document);
     const preview = createElement({
         document,
@@ -60,6 +60,25 @@ test('fails with invalid video id', async(t) => {
     t.throwsAsync(async() => preview.connectedCallback(), {
         message: /404, should be/,
     });
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    t.is(errors.length, 0);
+});
+
+test('passes width to get matching preview image', async(t) => {
+    const { document, errors } = await setup(true);
+    polyfillFetch(document);
+    const videoID = 558118399;
+    const preview = createElement({
+        document,
+        html: `<vimeo-preview-image data-video-id="${videoID}" data-video-width="1000">
+                <img src="test.jpg">
+            </vimeo-preview-image>`,
+    });
+    document.body.appendChild(preview);
+    const image = document.querySelector('img');
+    await preview.connectedCallback();
+    // Next smaller image is used, for 1000px that would be 960px. See docs
+    // https://developer.vimeo.com/api/oembed/videos
+    t.is(image.getAttribute('src').endsWith('_960'), true);
     t.is(errors.length, 0);
 });

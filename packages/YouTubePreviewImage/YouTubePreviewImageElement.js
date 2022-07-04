@@ -155,4 +155,4 @@
         window.customElements.define('youtube-preview-image', YouTubePreviewImage);
     }
 
-}());
+})();

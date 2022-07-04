@@ -245,4 +245,4 @@
         window.customElements.define('table-of-contents-component', TableOfContents);
     }
 
-}());
+})();

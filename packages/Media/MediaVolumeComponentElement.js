@@ -144,4 +144,4 @@
         window.customElements.define('media-volume-component', MediaVolumeComponent);
     }
 
-}());
+})();

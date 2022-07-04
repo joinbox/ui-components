@@ -38,4 +38,4 @@ var slide = ({ element, targetSize, dimension = 'y' } = {}) => {
 
 };
 
-export default slide;
+export { slide as default };
