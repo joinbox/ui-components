@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.1.1...@joinbox/overlay@1.1.2) (2022-07-04)
+
+
+### Features
+
+* **VimeoPreviewImage:** add width attribute to get optimal size ([28fdd2c](https://github.com/joinbox/ui-components/commit/28fdd2ccf1995093d1f71d6ef5b5e48339d4293c))
+
+
+
+
+
 ## [1.1.1](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.0.2...@joinbox/overlay@1.1.1) (2022-04-27)
 
 
