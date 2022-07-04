@@ -154,4 +154,4 @@
         window.customElements.define('media-timeline-component', MediaTimelineComponent);
     }
 
-}());
+})();

@@ -234,4 +234,4 @@
         window.customElements.define('slider-component', Slider);
     }
 
-}());
+})();

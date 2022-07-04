@@ -25,13 +25,21 @@ export default class YouTubePreviewImage extends HTMLElement {
             this,
             canReadAttributes([{
                 name: 'data-video-id',
-                validate: value => !!value,
+                validate: (value) => !!value,
                 property: 'videoID',
+            }, {
+                name: 'data-video-width',
+                transform: (value) => parseInt(value, 10),
+                validate: (value) => !value || !Number.isNaN(parseInt(value, 10)),
+                property: 'width',
             }]),
         );
         this.readAttributes();
     }
 
+    /**
+    * Use async so that we can await the api call in our tests
+    */
     async connectedCallback() {
         await this.updateImageSource();
     }
@@ -45,11 +53,18 @@ export default class YouTubePreviewImage extends HTMLElement {
             throw new Error(`VimeoPreviewImage: Status returned by Vimeo API is ${result.status}, should be 200`);
         }
         const json = await result.json();
-        return json.thumbnail_url.replace(/_[0-9]+x[0-9]+/, '');
+        return json.thumbnail_url;
     }
 
     getVideoInfoURL() {
-        return `${this.baseURL}${this.urlInfoPath}?url=${this.baseURL}${this.videoID}`;
+        const params = {
+            url: `${this.baseURL}${this.videoID}`,
+            ...(this.width ? { width: this.width } : {})
+        };
+        const getParams = Object.entries(params)
+            .map(([key, value]) => `${key}=${value}`)
+            .join('&');
+        return `${this.baseURL}${this.urlInfoPath}?${getParams}`;
     }
 
     /**

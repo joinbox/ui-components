@@ -179,4 +179,4 @@ var splitText = ({
 
 };
 
-export default splitText;
+export { splitText as default };
