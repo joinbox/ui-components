@@ -1,4 +1,4 @@
-# Slider
+# Async Loader
 
 Component that fetches contents asynchronously and displays it when ready:
 - support loading indicator
@@ -6,7 +6,7 @@ Component that fetches contents asynchronously and displays it when ready:
 
 ## Example
 
-````html
+```html
 <async-loader
     data-endpoint-url="/testContent.html"
     data-trigger-event-name="loadData"
@@ -25,7 +25,7 @@ Component that fetches contents asynchronously and displays it when ready:
         window.dispatchEvent(new CustomEvent('loadData', options));
     });
 </script>
-````
+```
 
 ## Components
 

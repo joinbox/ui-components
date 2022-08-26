@@ -168,12 +168,12 @@
          *                                                '{{message}}' to be replaced)
          */
         #displayTemplate(selector, replacements = {}) {
-            const loadingTemplate = this.querySelector(selector);
-            if (!loadingTemplate) {
+            const template = this.querySelector(selector);
+            if (!template) {
                 console.warn(`AsyncLoader: Could not find child element that matches selector ${selector}.`);
                 return;
             }
-            const templateContent = loadingTemplate.innerHTML;
+            const templateContent = template.innerHTML;
             const content = this.#replaceContent(templateContent, replacements);
             this.#getContentContainer().innerHTML = content;
 
