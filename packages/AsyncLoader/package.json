@@ -1,0 +1,32 @@
+{
+  "name": "@joinbox/async-loader",
+  "version": "1.0.0",
+  "description": "Custom element that loads content through XHR",
+  "main": "AsyncLoaderElement.js",
+  "scripts": {
+    "test": "npx ava --verbose",
+    "build": "npx rollup --c rollup.config.js"
+  },
+  "author": "Felix Steiner <felix@joinbox.com>",
+  "license": "ISC",
+  "ava": {
+    "files": [
+      "**/*.unit.mjs",
+      "**/*.integration.mjs"
+    ],
+    "nodeArguments": [
+      "--experimental-modules"
+    ]
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
+    "@joinbox/eslint-config-joinbox": "^1.0.10",
+    "ava": "^4.2.0",
+    "jsdom": "^19.0.0",
+    "lerna": "^4.0.0",
+    "rollup": "^2.70.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
