@@ -1,6 +1,6 @@
 import createRollupConfig from '../../createRollupConfig.mjs';
 
 const components = [
-    'AsyncLoader.js',
+    'AsyncLoaderElement.js',
 ];
 export default createRollupConfig(components);
