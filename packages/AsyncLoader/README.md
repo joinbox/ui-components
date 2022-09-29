@@ -42,6 +42,8 @@ be listened to on `window`.
 the event if provided. Only if the event matches the expression, data will be loaded; if not, the
 event will be ignored. Only one variable is passed (the `Event` thats name matches
 `data-trigger-event-name`); it can be accessed through `event`.
+`data-load-once` (optional): if this boolean attribute is set, content will load only once,
+no matter how many times a valid event fires.
 
 #### Content
 The following elements may or must be provided within `<aync-loader>`:
@@ -52,3 +54,9 @@ displayed within `[data-content-container]` while data is loading.
 - A `template` element that matches `[data-error-template]` (required): Its content will be
 displayed within `[data-content-container]` if loading data fails; you may use a string
 `{{message}}` within the template's `textContent` to display the error message.
+
+### Events
+- Dispatches `asyncLoaderFail` event if loading content fails (bubbles).
+- Dispatches `asyncLoaderSuccess` event if loading content succeeds (bubbles).
+- Both events carry a `detail` object with properties `url` (`String`) and `element`
+(`HTMLElement` that matches the dispatching `AsyncLoader`).
