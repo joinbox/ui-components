@@ -134,3 +134,87 @@ test('filters trigger event', async(t) => {
     t.is(errors.length, 0);
 });
 
+test('loads data only multiple times if once is not used', async(t) => {
+    const { document, window, errors } = await setup(true);
+    window.fetch = polyfillFetch(200, 'onceTest');
+    const loader = createElement(document,
+        `<async-loader
+            data-endpoint-url="oncetest.html"
+            data-trigger-event-name="loadData"
+        >
+            <div data-content-container>Original</div>
+        </async-loader>`);
+    let loadedCount = 0;
+    window.addEventListener('asyncLoaderSuccess', () => loadedCount++);
+    document.body.appendChild(loader);
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true }));
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(loadedCount, 2);
+    t.is(errors.length, 0);
+});
+
+test('loads data only once if specified', async(t) => {
+    const { document, window, errors } = await setup(true);
+    window.fetch = polyfillFetch(200, 'onceTest');
+    const loader = createElement(document,
+        `<async-loader
+            data-endpoint-url="oncetest.html"
+            data-trigger-event-name="loadData"
+            data-load-once
+        >
+            <div data-content-container>Original</div>
+        </async-loader>`);
+    let loadedCount = 0;
+    window.addEventListener('asyncLoaderSuccess', () => loadedCount++);
+    document.body.appendChild(loader);
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true }));
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(loadedCount, 1);
+    t.is(errors.length, 0);
+});
+
+test('dispatches success event if content was loaded successfully', async(t) => {
+    const { document, window, errors } = await setup(true);
+    window.fetch = polyfillFetch(200, 'allGood');
+    const loader = createElement(document,
+        `<async-loader
+            data-endpoint-url="testContent.html"
+            data-trigger-event-name="loadData"
+        >
+            <div data-content-container>Original</div>
+        </async-loader>`);
+    document.body.appendChild(loader);
+    const succeeded = [];
+    window.addEventListener('asyncLoaderSuccess', (ev) => succeeded.push(ev));
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(succeeded.length, 1);
+    t.is(succeeded[0].detail.url, 'testContent.html');
+    t.is(succeeded[0].detail.element, loader);
+    t.is(errors.length, 0);
+});
+
+test('dispatches fail event if loading content failed', async(t) => {
+    const { document, window, errors } = await setup(true);
+    window.fetch = polyfillFetch(404, 'notFound');
+    const loader = createElement(document,
+        `<async-loader
+            data-endpoint-url="testContent.html"
+            data-trigger-event-name="loadData"
+        >
+            <div data-content-container>Original</div>
+        </async-loader>`);
+    document.body.appendChild(loader);
+    const failed = [];
+    // Request fails because status returned by polyfilled fetch is 404
+    window.addEventListener('asyncLoaderFail', (ev) => failed.push(ev));
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(failed.length, 1);
+    t.is(failed[0].detail.url, 'testContent.html');
+    t.is(failed[0].detail.element, loader);
+    t.is(errors.length, 0);
+});
+

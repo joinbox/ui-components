@@ -1,14 +1,23 @@
 import canReadAttributes from '../../../src/shared/canReadAttributes.js';
 import createListener from '../../../src/shared/createListener.mjs';
 
-/* global HTMLElement, window */
+/* global HTMLElement, window , CustomEvent*/
 
 /**
  * Custom element that loads content through XHR. Displays error messages if such are encountered.
  */
 export default class extends HTMLElement {
 
+    #loadingStates = {
+        initial: 'initial',
+        loading: 'loading',
+        failed: 'failed',
+        loaded: 'loaded',
+    };
+
     #teardownTriggerEventListener
+
+    #loadingStatus = this.#loadingStates.initial;
 
     constructor() {
         super();
@@ -25,6 +34,10 @@ export default class extends HTMLElement {
             }, {
                 name: 'data-trigger-event-filter',
                 property: 'triggerEventFilter',
+            }, {
+                name: 'data-load-once',
+                property: 'loadOnce',
+                transform: (value) => value === '',
             }]),
         );
         this.readAttributes();
@@ -66,21 +79,28 @@ export default class extends HTMLElement {
                 throw error;
             }
         }
+        // If content should only be loaded once, return if fetch request was started or succeeded
+        const requestIsLoadingOrLoaded = [this.#loadingStates.loading, this.#loadingStates.loaded]
+            .includes(this.#loadingStatus);
+        if (this.loadOnce && requestIsLoadingOrLoaded) return;
         this.#fetchData();
     }
 
     async #fetchData() {
+        this.#loadingStatus = this.#loadingStates.loading;
         this.#displayTemplate('[data-loading-template]');
         try {
             const response = await fetch(this.endpointURL);
             if (!response.ok) {
-                this.#displayError(`Status ${response.status}`);
+                this.#handleError(`Status ${response.status}`);
             } else {
                 const content = await response.text();
+                this.#dispatchStatusEvent();
+                this.#loadingStatus = this.#loadingStates.loaded;
                 this.#getContentContainer().innerHTML = content;
             }
         } catch (error) {
-            this.#displayError(error.message);
+            this.#handleError(error.message);
             // Do not prevent error from being handled correctly; JSDOM displays an "Unhandled
             // rejection" error, therefore ignore it for now
             // throw error;
@@ -95,7 +115,9 @@ export default class extends HTMLElement {
         return container;
     }
 
-    #displayError(message) {
+    #handleError(message) {
+        this.#loadingStates = this.#loadingStates.failed;
+        this.#dispatchStatusEvent(true);
         this.#displayTemplate('[data-error-template]', { message });
     }
 
@@ -129,6 +151,18 @@ export default class extends HTMLElement {
                 prev.replaceAll(`{{${key}}}`, value)
             ), template);
         return replaced;
+    }
+
+    #dispatchStatusEvent(failed = false) {
+        const type = failed ? 'asyncLoaderFail' : 'asyncLoaderSuccess';
+        const payload = {
+            bubbles: true,
+            detail: {
+                url: this.endpointURL,
+                element: this,
+            },
+        };
+        this.dispatchEvent(new CustomEvent(type, payload));
     }
 
 }
