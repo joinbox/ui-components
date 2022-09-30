@@ -60,7 +60,8 @@ test('works with boolean attributes', async(t) => {
     const { window, document, errors } = await setup(true);
     window.createWatcher([{
         name: 'test',
-        transform: value => (value === null || value === undefined) ? false : true,
+        // A boolean set attribute has a value of ''
+        transform: (value) => value === ''
     }]);
     const watcher = createElement(document, '<test-watcher test></test-watcher>');
     t.is(watcher.test, true);

@@ -42,7 +42,7 @@ be listened to on `window`.
 the event if provided. Only if the event matches the expression, data will be loaded; if not, the
 event will be ignored. Only one variable is passed (the `Event` thats name matches
 `data-trigger-event-name`); it can be accessed through `event`.
-`data-load-once` (optional): if this boolean attribute is set, content will load only once,
+- `data-load-once` (optional): if this boolean attribute is set, content will load only once,
 no matter how many times a valid event fires.
 
 #### Content

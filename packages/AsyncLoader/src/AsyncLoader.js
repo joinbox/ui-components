@@ -37,7 +37,7 @@ export default class extends HTMLElement {
             }, {
                 name: 'data-load-once',
                 property: 'loadOnce',
-                transform: (value) => value !== null,
+                transform: (value) => value === '',
             }]),
         );
         this.readAttributes();
@@ -80,9 +80,9 @@ export default class extends HTMLElement {
             }
         }
         // If content should only be loaded once, return if fetch request was started or succeeded
-        const notYetLoaded = [this.#loadingStates.initial, this.#loadingStates.failed]
+        const requestIsLoadingOrLoaded = [this.#loadingStates.loading, this.#loadingStates.loaded]
             .includes(this.#loadingStatus);
-        if (this.loadOnce && !notYetLoaded) return;
+        if (this.loadOnce && requestIsLoadingOrLoaded) return;
         this.#fetchData();
     }
 
@@ -95,8 +95,8 @@ export default class extends HTMLElement {
                 this.#handleError(`Status ${response.status}`);
             } else {
                 const content = await response.text();
-                this.#dispatchEvent();
-                this.#loadingStates = this.#loadingStates.loaded;
+                this.#dispatchStatusEvent();
+                this.#loadingStatus = this.#loadingStates.loaded;
                 this.#getContentContainer().innerHTML = content;
             }
         } catch (error) {
@@ -117,7 +117,7 @@ export default class extends HTMLElement {
 
     #handleError(message) {
         this.#loadingStates = this.#loadingStates.failed;
-        this.#dispatchEvent(true);
+        this.#dispatchStatusEvent(true);
         this.#displayTemplate('[data-error-template]', { message });
     }
 
@@ -153,7 +153,7 @@ export default class extends HTMLElement {
         return replaced;
     }
 
-    #dispatchEvent(failed = false) {
+    #dispatchStatusEvent(failed = false) {
         const type = failed ? 'asyncLoaderFail' : 'asyncLoaderSuccess';
         const payload = {
             bubbles: true,
