@@ -114,6 +114,7 @@
             originalElement,
             clonedElement,
             property = 'checked',
+            clonedProperty = 'checked',
             autoSubmit = [],
             submitOnEnter = false,
         } = {}) {
@@ -131,6 +132,7 @@
             this.autoSubmit = autoSubmit;
             this.submitOnEnter = submitOnEnter;
             this.property = property;
+            this.clonedProperty = clonedProperty;
             this.setupOriginalWatcher();
             this.setupClonedWatcher();
             this.syncOriginalToCloned();
@@ -157,7 +159,7 @@
         setupOriginalWatcher() {
             this.originalElement.addEventListener('change', () => {
                 // Don't auto submit if original form changed
-                this.clonedElement[this.property] = this.originalElement[this.property];
+                this.clonedElement[this.clonedProperty] = this.originalElement[this.property];
             });
         }
 
@@ -180,14 +182,14 @@
          * we'd sync originalElement's initial state back to originalElement.
          */
         syncOriginalToCloned() {
-            this.clonedElement[this.property] = this.originalElement[this.property];
+            this.clonedElement[this.clonedProperty] = this.originalElement[this.property];
         }
 
         /**
          * Synchronizes data of cloned element to original element.
          */
         syncClonedElementToOriginal() {
-            this.originalElement[this.property] = this.clonedElement[this.property];        
+            this.originalElement[this.property] = this.clonedElement[this.clonedProperty];
         }
 
         /**
@@ -309,6 +311,7 @@
         getInputProperty(input) {
             if (input.tagName === 'TEXTAREA') return 'value';
             if (input.tagName === 'SELECT') return 'value';
+            if (input.tagName === 'OPTION') return 'selected';
             if (input.tagName === 'INPUT') {
                 const type = input.getAttribute('type');
                 if (['radio', 'checkbox'].includes(type)) return 'checked';
@@ -340,6 +343,7 @@
 
                 this.copyLabel(inputConfig.label, cloneLabel);
                 this.copySelectOptions(inputConfig.input, cloneInput);
+                this.copySelectOptionLabel(inputConfig.input, cloneLabel);
                 this.syncInput(inputConfig.input, cloneInput);
                 this.copyPlaceholder(inputConfig.input, cloneInput);
                 this.copyDisabled(inputConfig.input, cloneInput);
@@ -436,6 +440,20 @@
         }
 
         /**
+         * Copies text of a select option to the cloned input
+         * @param {HTMLElement} originalInput
+         * @param {HTMLElement} clonedInput
+         */
+        copySelectOptionLabel(originalInput, clonedInput) {
+            if (originalInput.tagName === 'OPTION') {
+                if (!clonedInput || clonedInput.tagName === 'OPTION') {
+                    throw new Error(`FormSync: If original element is a select, you must provide a template that contains a select with a data-input attribute; you privded ${clonedInput.outerHTML} instead.`);
+                }
+                clonedInput.innerText = originalInput.innerText;
+            }
+        }
+
+        /**
          * Multiple original radio button sets might be linked to one single cloned radio button set.
          * When **one** cloned radio button is changed, we might therefore have to change multiple
          * original radio inputs. Do so by syncing the whole form.
@@ -478,11 +496,16 @@
                 return;
             }
             const sync = new InputSync();
+
+            const isSelectOptionClonedToInput = originalInput.tagName === 'OPTION' && originalInput.tagName !== clonedInput.tagName;
+            const property = this.getInputProperty(originalInput);
+
             sync.setup({
                 originalElement: originalInput,
                 clonedElement: clonedInput,
                 autoSubmit: this.autoSubmit,
-                property: this.getInputProperty(originalInput),
+                property: property,
+                clonedProperty: isSelectOptionClonedToInput ? this.getInputProperty(clonedInput) : property,
                 submitOnEnter: this.submitOnEnter,
             });
             // Store sync instance on element to update it later (see radio workaround above)
