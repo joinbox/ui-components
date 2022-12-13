@@ -498,6 +498,15 @@
             const sync = new InputSync();
 
             const isSelectOptionClonedToInput = originalInput.tagName === 'OPTION' && originalInput.tagName !== clonedInput.tagName;
+
+            if (isSelectOptionClonedToInput
+                && clonedInput.type === 'checkbox'
+                && originalInput.parentElement.multiple === false
+            ) {
+                console.warn('FormSync: Can\'t sync select element without attribute multiple to checkboxes!');
+                return;
+            }
+
             const property = this.getInputProperty(originalInput);
 
             sync.setup({
