@@ -105,16 +105,18 @@
          * @param {HTMLElement} originalElement Element to sync changes from and to. This is, where the
          *                                      original form is.
          * @param {HTMLElement} clonedElement   Element to sync changes from and to
-         * @param {string} property             Property to watch (e.g. 'value', 'checked')
+         * @param {string} originalProperty     Property of original element to watch (e.g. 'value', 'checked')
+         * @param {string} clonedProperty       Property of cloned element to watch (e.g. 'value', 'checked')
          * @param {string[]} autoSubmit         If original form should be submitted when the input
                                                 value changes: Provide all events that, if fired
                                                 on the input, cause a submit on the original form.
+         @param submitOnEnter
          */
         setup({
             originalElement,
             clonedElement,
-            property = 'checked',
-            clonedProperty = 'checked',
+            originalProperty = 'checked',
+            clonedProperty = originalProperty,
             autoSubmit = [],
             submitOnEnter = false,
         } = {}) {
@@ -131,7 +133,7 @@
             this.clonedElement = clonedElement;
             this.autoSubmit = autoSubmit;
             this.submitOnEnter = submitOnEnter;
-            this.property = property;
+            this.originalProperty = originalProperty;
             this.clonedProperty = clonedProperty;
             this.setupOriginalWatcher();
             this.setupClonedWatcher();
@@ -157,10 +159,7 @@
         }
 
         setupOriginalWatcher() {
-            this.originalElement.addEventListener('change', () => {
-                // Don't auto submit if original form changed
-                this.clonedElement[this.clonedProperty] = this.originalElement[this.property];
-            });
+            this.originalElement.addEventListener('change', this.syncOriginalToCloned.bind(this));
         }
 
         setupClonedWatcher() {
@@ -182,14 +181,15 @@
          * we'd sync originalElement's initial state back to originalElement.
          */
         syncOriginalToCloned() {
-            this.clonedElement[this.clonedProperty] = this.originalElement[this.property];
+            console.log(this.clonedProperty,this.originalProperty);
+            this.clonedElement[this.clonedProperty] = this.originalElement[this.originalProperty];
         }
 
         /**
          * Synchronizes data of cloned element to original element.
          */
         syncClonedElementToOriginal() {
-            this.originalElement[this.property] = this.clonedElement[this.clonedProperty];
+            this.originalElement[this.originalProperty] = this.clonedElement[this.clonedProperty];
         }
 
         /**
@@ -351,7 +351,6 @@
 
                 fragment.appendChild(clone);
             });
-
             // Append elements after template; template must therefore be placed at the
             // place where content will be inserted
             requestAnimationFrame(() => {
@@ -426,7 +425,7 @@
         }
 
         /**
-         * Copies options of original to cloned <select> input
+         * Copies options of original to cloned <select> input to the cloned inputs label
          * @param {HTMLElement} originalInput
          * @param {HTMLElement} clonedInput
          */
@@ -442,14 +441,14 @@
         /**
          * Copies text of a select option to the cloned input
          * @param {HTMLElement} originalInput
-         * @param {HTMLElement} clonedInput
+         * @param {HTMLElement} clonedLabel
          */
-        copySelectOptionLabel(originalInput, clonedInput) {
+        copySelectOptionLabel(originalInput, clonedLabel) {
             if (originalInput.tagName === 'OPTION') {
-                if (!clonedInput || clonedInput.tagName === 'OPTION') {
-                    throw new Error(`FormSync: If original element is a select, you must provide a template that contains a select with a data-input attribute; you privded ${clonedInput.outerHTML} instead.`);
+                if (!clonedLabel) {
+                    throw new Error(`FormSync: If you want to sync select options, you must provide a template that contains an element with data-label to sync the label; you provided ${clonedLabel.outerHTML} instead.`);
                 }
-                clonedInput.innerText = originalInput.innerText;
+                clonedLabel.innerText = originalInput.innerText;
             }
         }
 
@@ -497,30 +496,43 @@
             }
             const sync = new InputSync();
 
-            const isSelectOptionClonedToInput = originalInput.tagName === 'OPTION' && originalInput.tagName !== clonedInput.tagName;
+            // If we are cloning select options to a checkbox we need to use different properties
+            const isSelectOptionClonedToInput =
+                this.checkSelectOptionCloneCompatibility(originalInput, clonedInput);
 
-            if (isSelectOptionClonedToInput
-                && clonedInput.type === 'checkbox'
-                && originalInput.parentElement.multiple === false
-            ) {
-                console.warn('FormSync: Can\'t sync select element without attribute multiple to checkboxes!');
-                return;
-            }
-
-            const property = this.getInputProperty(originalInput);
+            const originalProperty = this.getInputProperty(originalInput);
 
             sync.setup({
                 originalElement: originalInput,
                 clonedElement: clonedInput,
                 autoSubmit: this.autoSubmit,
-                property: property,
-                clonedProperty: isSelectOptionClonedToInput ? this.getInputProperty(clonedInput) : property,
+                originalProperty,
+                clonedProperty: isSelectOptionClonedToInput
+                                ? this.getInputProperty(clonedInput)
+                                : originalProperty,
                 submitOnEnter: this.submitOnEnter,
             });
             // Store sync instance on element to update it later (see radio workaround above)
             clonedInput.inputSync = sync;
         }
 
+
+        /**
+         * Checks if select option is being cloned to a checkbox and if it is compatible
+         * @param {HTMLElement} originalInput
+         * @param {HTMLInputElement} clonedInput
+         */
+        checkSelectOptionCloneCompatibility(originalInput, clonedInput) {
+            const isSelectOptionClonedToInput = originalInput.tagName === 'OPTION' && originalInput.tagName !== clonedInput.tagName;
+
+            if (isSelectOptionClonedToInput
+                && (clonedInput.type !== 'checkbox' || originalInput.parentElement.multiple === false)
+            ) {
+                throw new Error('FormSync: Can\'t sync select element without attribute multiple to checkboxes!');
+            }
+
+            return true;
+        }
     }
 
     /* global window */

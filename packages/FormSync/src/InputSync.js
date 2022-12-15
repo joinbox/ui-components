@@ -14,15 +14,18 @@ export default class {
      * @param {HTMLElement} originalElement Element to sync changes from and to. This is, where the
      *                                      original form is.
      * @param {HTMLElement} clonedElement   Element to sync changes from and to
-     * @param {string} property             Property to watch (e.g. 'value', 'checked')
+     * @param {string} originalProperty     Property of original element to watch (e.g. 'value', 'checked')
+     * @param {string} clonedProperty       Property of cloned element to watch (e.g. 'value', 'checked')
      * @param {string[]} autoSubmit         If original form should be submitted when the input
-                                            value changes: Provide all events that, if fired
-                                            on the input, cause a submit on the original form.
+     *                                      value changes: Provide all events that, if fired
+     *                                      on the input, cause a submit on the original form.
+     * @param submitOnEnter
      */
     setup({
         originalElement,
         clonedElement,
-        property = 'checked',
+        originalProperty = 'checked',
+        clonedProperty = originalProperty,
         autoSubmit = [],
         submitOnEnter = false,
     } = {}) {
@@ -39,7 +42,8 @@ export default class {
         this.clonedElement = clonedElement;
         this.autoSubmit = autoSubmit;
         this.submitOnEnter = submitOnEnter;
-        this.property = property;
+        this.originalProperty = originalProperty;
+        this.clonedProperty = clonedProperty;
         this.setupOriginalWatcher();
         this.setupClonedWatcher();
         this.syncOriginalToCloned();
@@ -64,10 +68,7 @@ export default class {
     }
 
     setupOriginalWatcher() {
-        this.originalElement.addEventListener('change', () => {
-            // Don't auto submit if original form changed
-            this.clonedElement[this.property] = this.originalElement[this.property];
-        });
+        this.originalElement.addEventListener('change', this.syncOriginalToCloned.bind(this));
     }
 
     setupClonedWatcher() {
@@ -89,14 +90,14 @@ export default class {
      * we'd sync originalElement's initial state back to originalElement.
      */
     syncOriginalToCloned() {
-        this.clonedElement[this.property] = this.originalElement[this.property];
+        this.clonedElement[this.clonedProperty] = this.originalElement[this.originalProperty];
     }
 
     /**
      * Synchronizes data of cloned element to original element.
      */
     syncClonedElementToOriginal() {
-        this.originalElement[this.property] = this.clonedElement[this.property];        
+        this.originalElement[this.originalProperty] = this.clonedElement[this.clonedProperty];
     }
 
     /**

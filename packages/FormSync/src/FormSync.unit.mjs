@@ -100,6 +100,47 @@ test('works with selects', async(t) => {
 });
 
 
+test('works with select options to checkboxes', async(t) => {
+    const { document, errors, window } = await setup(true);
+    const original = createElement(
+        document,
+        `<select id="mySelect" multiple="multiple">
+            <option>1</option>
+            <option>2</option>
+        </select>`,
+    );
+    document.body.appendChild(original);
+    const clone = createElement(
+        document,
+        `<form-sync data-form-elements-selector="#mySelect option">
+            <template>
+                <div>
+                    <label data-label class="label-clone"></label>
+                    <input data-input class="option-clone" type="checkbox">
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(clone);
+
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+
+    // Options were cloned
+    t.is(document.querySelectorAll('.option-clone').length, 2);
+
+    // Option values were cloned to the labels
+    t.is(document.querySelectorAll('.label-clone').length, 2);
+
+    // Change is synced
+    const firstInput = document.querySelector('.option-clone');
+    firstInput.checked = true;
+    firstInput.dispatchEvent(new window.Event('change'));
+    t.is(document.querySelector('#mySelect').value, '1');
+
+    t.is(errors.length, 0);
+});
+
+
 test('works with auto-submit attribute', async(t) => {
     const { document, errors, window } = await setup(true);
     const original = createElement(
