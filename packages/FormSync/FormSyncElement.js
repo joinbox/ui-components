@@ -108,9 +108,9 @@
          * @param {string} originalProperty     Property of original element to watch (e.g. 'value', 'checked')
          * @param {string} clonedProperty       Property of cloned element to watch (e.g. 'value', 'checked')
          * @param {string[]} autoSubmit         If original form should be submitted when the input
-                                                value changes: Provide all events that, if fired
-                                                on the input, cause a submit on the original form.
-         @param submitOnEnter
+         *                                      value changes: Provide all events that, if fired
+         *                                      on the input, cause a submit on the original form.
+         * @param submitOnEnter
          */
         setup({
             originalElement,
@@ -181,7 +181,6 @@
          * we'd sync originalElement's initial state back to originalElement.
          */
         syncOriginalToCloned() {
-            console.log(this.clonedProperty,this.originalProperty);
             this.clonedElement[this.clonedProperty] = this.originalElement[this.originalProperty];
         }
 
@@ -351,6 +350,7 @@
 
                 fragment.appendChild(clone);
             });
+
             // Append elements after template; template must therefore be placed at the
             // place where content will be inserted
             requestAnimationFrame(() => {
@@ -425,7 +425,7 @@
         }
 
         /**
-         * Copies options of original to cloned <select> input to the cloned inputs label
+         * Copies options of original to cloned <select> input
          * @param {HTMLElement} originalInput
          * @param {HTMLElement} clonedInput
          */
@@ -439,7 +439,7 @@
         }
 
         /**
-         * Copies text of a select option to the cloned input
+         * Copies text of a select option to the cloned input to the cloned inputs label
          * @param {HTMLElement} originalInput
          * @param {HTMLElement} clonedLabel
          */
