@@ -147,7 +147,7 @@ test('works with select options to checkboxes', async(t) => {
 });
 
 
-test('throws if options of a select without multiple are synced with radios ', async(t) => {
+test('throws if options of a select without attribute multiple are synced with checkboxes', async(t) => {
     const { document, errors, window } = await setup(true);
     const original = createElement(
         document,
