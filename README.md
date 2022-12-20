@@ -10,6 +10,7 @@
 - Run `npx lerna exec npm install` to install package specific `node_module`s
 
 ### Release
+1. Checkout develop and merge feature branch
 1. Run `npm run test` in the **root directory** to run all tests in all packages
 1. Run `npm run build`
 1. Run `npm run createVersion` in the root directory to create new versions for all packages with
