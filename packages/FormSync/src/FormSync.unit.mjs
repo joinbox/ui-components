@@ -131,13 +131,49 @@ test('works with select options to checkboxes', async(t) => {
     // Option values were cloned to the labels
     t.is(document.querySelectorAll('.label-clone').length, 2);
 
-    // Change is synced
+    // Change is synced (Clone -> Original)
+    const select = document.querySelector('#mySelect');
     const firstInput = document.querySelector('.option-clone');
     firstInput.checked = true;
     firstInput.dispatchEvent(new window.Event('change'));
-    t.is(document.querySelector('#mySelect').value, '1');
+    t.is(select.value, '1');
+
+    // Change is synced (Original -> Clone)
+    select.options[0].selected = false;
+    select.dispatchEvent(new window.Event('change'));
+    t.is(firstInput.checked, false);
 
     t.is(errors.length, 0);
+});
+
+
+test('throws if options of a select without multiple are synced with radios ', async(t) => {
+    const { document, errors, window } = await setup(true);
+    const original = createElement(
+        document,
+        `<select id="mySelect">
+            <option>1</option>
+            <option>2</option>
+        </select>`,
+    );
+    document.body.appendChild(original);
+    const clone = createElement(
+        document,
+        `<form-sync data-form-elements-selector="#mySelect option">
+            <template>
+                <div>
+                    <label data-label class="label-clone"></label>
+                    <input data-input class="option-clone" type="checkbox">
+                </div>
+            </template>
+        </form-sync>`,
+    );
+    document.body.appendChild(clone);
+
+    await new Promise(resolve => window.requestAnimationFrame(resolve));
+
+    t.is(errors.length, 1);
+    t.is(errors[0].message.includes('select element without attribute multiple'), true);
 });
 
 

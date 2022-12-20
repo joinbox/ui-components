@@ -276,7 +276,7 @@ export default class FormSync extends HTMLElement {
 
 
     /**
-     * Checks if select option is being cloned to a checkbox and if it is compatible
+     * Checks if select option is being cloned to a radio and if it is compatible
      * @param {HTMLElement} originalInput
      * @param {HTMLInputElement} clonedInput
      */
@@ -286,7 +286,7 @@ export default class FormSync extends HTMLElement {
         if (isSelectOptionClonedToInput
             && (clonedInput.type !== 'checkbox' || originalInput.parentElement.multiple === false)
         ) {
-            throw new Error('FormSync: Can\'t sync select element without attribute multiple to checkboxes!');
+            throw new Error('FormSync: Can\'t sync select element without attribute multiple to radios!');
         }
 
         return true;
