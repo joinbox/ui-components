@@ -159,7 +159,13 @@
         }
 
         setupOriginalWatcher() {
-            this.originalElement.addEventListener('change', this.syncOriginalToCloned.bind(this));
+            // When syncing select options to radios, the change event of the original element is fired
+            // on the select element not the option element.
+            if (this.originalElement.tagName === 'OPTION') {
+                this.originalElement.parentElement.addEventListener('change', this.syncOriginalToCloned.bind(this));
+            }else {
+                this.originalElement.addEventListener('change', this.syncOriginalToCloned.bind(this));
+            }
         }
 
         setupClonedWatcher() {
@@ -528,7 +534,7 @@
             if (isSelectOptionClonedToInput
                 && (clonedInput.type !== 'checkbox' || originalInput.parentElement.multiple === false)
             ) {
-                throw new Error('FormSync: Can\'t sync select element without attribute multiple to checkboxes!');
+                throw new Error('FormSync: Can\'t sync select element without attribute multiple to checkbox!');
             }
 
             return true;
