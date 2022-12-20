@@ -130,7 +130,7 @@ test('Syncs other properties', async(t) => {
     // Sync'em
     const script = createScript(document, `
         const sync = new InputSync();
-        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), property: 'value' });
+        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), originalProperty: 'value' });
     `);
     document.body.appendChild(script);
 

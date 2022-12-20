@@ -10,6 +10,7 @@ Features:
 - supports auto submit on cloned form elements
 - clones placeholder from original to cloned inputs (if not already set on cloned input)
 - sets for attribute on label and id attribute on input (if not already set on cloned input)
+- can clone select options to checkbox inputs
 
 
 ## Polyfills
@@ -152,7 +153,8 @@ const sync = new InputSync();
 sync.setup({
     originalElement: document.querySelector('#source'),
     clonedElement: document.querySelector('#target'),
-    property: 'value',
+    originalProperty: 'value',
+    clonedProperty: 'value',
     autoSubmit: ['change', 'input'],
 });
 ```
