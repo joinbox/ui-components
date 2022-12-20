@@ -23,7 +23,6 @@ most recent Git tag, therefore this step is essential.
 1. Run `npm run release` to publish packages
 
 
-
 ## Use
 - All components are [custom elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements). 
 - Make sure to use the appropriate [polyfill](https://github.com/webcomponents/polyfills/tree/master/packages/custom-elements)
