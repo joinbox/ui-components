@@ -68,6 +68,7 @@ export default class FormSync extends HTMLElement {
     getInputProperty(input) {
         if (input.tagName === 'TEXTAREA') return 'value';
         if (input.tagName === 'SELECT') return 'value';
+        if (input.tagName === 'OPTION') return 'selected';
         if (input.tagName === 'INPUT') {
             const type = input.getAttribute('type');
             if (['radio', 'checkbox'].includes(type)) return 'checked';
@@ -99,6 +100,7 @@ export default class FormSync extends HTMLElement {
 
             this.copyLabel(inputConfig.label, cloneLabel);
             this.copySelectOptions(inputConfig.input, cloneInput);
+            this.copySelectOptionLabel(inputConfig.input, cloneLabel);
             this.syncInput(inputConfig.input, cloneInput);
             this.copyPlaceholder(inputConfig.input, cloneInput);
             this.copyDisabled(inputConfig.input, cloneInput);
@@ -195,6 +197,20 @@ export default class FormSync extends HTMLElement {
     }
 
     /**
+     * Copies text of a select option to the cloned input to the cloned inputs label
+     * @param {HTMLElement} originalInput
+     * @param {HTMLElement} clonedLabel
+     */
+    copySelectOptionLabel(originalInput, clonedLabel) {
+        if (originalInput.tagName === 'OPTION') {
+            if (!clonedLabel) {
+                throw new Error(`FormSync: If you want to sync select options, you must provide a template that contains an element with data-label to sync the label; you provided ${clonedLabel.outerHTML} instead.`);
+            }
+            clonedLabel.innerText = originalInput.innerText;
+        }
+    }
+
+    /**
      * Multiple original radio button sets might be linked to one single cloned radio button set.
      * When **one** cloned radio button is changed, we might therefore have to change multiple
      * original radio inputs. Do so by syncing the whole form.
@@ -237,15 +253,42 @@ export default class FormSync extends HTMLElement {
             return;
         }
         const sync = new InputSync();
+
+        // If we are cloning select options to a checkbox we need to use different properties
+        const isSelectOptionClonedToInput =
+            this.checkSelectOptionCloneCompatibility(originalInput, clonedInput);
+
+        const originalProperty = this.getInputProperty(originalInput);
+
         sync.setup({
             originalElement: originalInput,
             clonedElement: clonedInput,
             autoSubmit: this.autoSubmit,
-            property: this.getInputProperty(originalInput),
+            originalProperty,
+            clonedProperty: isSelectOptionClonedToInput
+                            ? this.getInputProperty(clonedInput)
+                            : originalProperty,
             submitOnEnter: this.submitOnEnter,
         });
         // Store sync instance on element to update it later (see radio workaround above)
         clonedInput.inputSync = sync;
     }
 
+
+    /**
+     * Checks if select option is being cloned to a checkbox and if it is compatible
+     * @param {HTMLElement} originalInput
+     * @param {HTMLInputElement} clonedInput
+     */
+    checkSelectOptionCloneCompatibility(originalInput, clonedInput) {
+        const isSelectOptionClonedToInput = originalInput.tagName === 'OPTION' && originalInput.tagName !== clonedInput.tagName;
+
+        if (isSelectOptionClonedToInput
+            && (clonedInput.type !== 'checkbox' || originalInput.parentElement.multiple === false)
+        ) {
+            throw new Error('FormSync: Can\'t sync select element without attribute multiple to checkbox!');
+        }
+
+        return true;
+    }
 }
