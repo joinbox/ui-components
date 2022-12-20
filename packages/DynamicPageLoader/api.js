@@ -27,7 +27,7 @@ import {
 } from '@joinbox/dynamic-page-loader';
 
 
-const enableBodyScrollLock = () => {};
+const disableBodyScroll = () => {};
 const curtain = document.querySelector('.curtain');
 
 // Remove Link
@@ -46,7 +46,7 @@ setupDynamicPageLoader({
     events: {
         // Use return false to prevent further operation? Especially on applyAttribute
         afterTriggerEvent: (element, event) => {
-            enableBodyScrollLock();
+            disableBodyScroll();
             curtain.classList.add('js-page-is-changing');
         },
         beforeLoad: (url, element, event) => {
@@ -66,6 +66,7 @@ setupDynamicPageLoader({
         },
         afterDOMUpdate: (newFragment) => {
             curtain.classList.remove('js-page-is-changing');
+            // Execute Drupal behaviors here?
         },
     },
 });
