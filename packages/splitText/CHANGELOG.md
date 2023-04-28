@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+## [1.1.4](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.1.3...@joinbox/splittext@1.1.4) (2023-04-28)
+
+
+### Bug Fixes
+
+* **splittext:** add special characters to previous word ([8104435](https://github.com/joinbox/ui-components/commit/810443542f0e5c12ddc8ac85c0a6c542b63662dd))
+
+
+
+
+
+## [1.1.3](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.1.2...@joinbox/splittext@1.1.3) (2022-07-04)
+
 ## [1.1.1](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.1.0...@joinbox/splittext@1.1.1) (2021-07-14)
 
 **Note:** Version bump only for package @joinbox/splittext

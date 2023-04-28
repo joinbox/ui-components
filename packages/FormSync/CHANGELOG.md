@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.2.1...@joinbox/formsync@2.3.0) (2022-12-20)
+# [2.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.2.1...@joinbox/formsync@2.3.0) (2023-04-28)
 
 
 ### Features
@@ -15,33 +15,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **form-sync:** implement functionality to clone select options to checkbox or radio inputs ([ec7517d](https://github.com/joinbox/ui-components/commit/ec7517dc769752d9a8f45997cb02a781176627f9))
 * **form-sync:** implement functionality to clone select options to checkbox or radio inputs ([3ca8b07](https://github.com/joinbox/ui-components/commit/3ca8b07e7913a94dbb250f76af8b5ebdfc4ccb7b))
 
-
-
-# 3.6.0 (2021-12-03)
-
-
-
-# 3.4.0 (2021-07-14)
-
-
-
-# 3.3.0 (2021-07-14)
-
-
-
-## 3.2.1 (2021-07-06)
-
-
-
-# 3.2.0 (2021-07-06)
-
-
-
-
-
-# [2.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.1.3...@joinbox/formsync@2.2.0) (2021-12-03)
 ## [2.2.1](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.0.2...@joinbox/formsync@2.2.1) (2022-04-27)
 
+## [2.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.1.3...@joinbox/formsync@2.2.0) (2021-12-03)
 
 ### Bug Fixes
 
