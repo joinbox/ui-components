@@ -60,12 +60,13 @@ test('splits words', async(t) => {
     });
     const { children } = div;
     t.is(children.length, 4);
-    const words = [...content.matchAll(/\w+/g)];
+    // Use different regex than in code
+    const words = ['Test – ', 'words ', 'are! ', 'Words.'];
     Array.from(children).forEach((child, index) => {
         t.is(child.getAttribute('data-word-index'), `${index}`);
         t.is(child.tagName, 'SPAN');
         t.is(child.classList.contains('word'), true);
-        t.is(child.innerHTML, words[index][0]);
+        t.is(child.innerHTML, words[index]);
     });
     t.is(errors.length, 0);
 });
