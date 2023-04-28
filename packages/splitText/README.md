@@ -20,6 +20,9 @@ index that counts up (per HTML element).
 `wrapLetter`; in other words, every letter must be wrapped for `wrapLine` to work!
 - `splitText` does – due to JS restrictions – not work with hyphens. To prevent layout shifts, use
 e.g. `hyphens: none` in your CSS for elements that `splitText` will be applied to.
+- In order to transform words, use `display: flex; gap 0.25em; flex-wrap: wrap` on the parent 
+element (`display: inline` does not transform while `display: inline-block` kills our precious
+whitespaces)
 
 ## Example
 

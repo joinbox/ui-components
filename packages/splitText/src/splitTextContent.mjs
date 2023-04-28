@@ -35,7 +35,11 @@ export default({
     const wrappedInLettersAndWords = textContent
         // Wrap every word first as we must split at word boundaries which are hard to detect
         // if we split at letters first.
-        .split(/\b/g)
+        // A word consists of word-like characters, followed by everything else until the next
+        // word-like thing is discovered; if we'd only wrap words (and not spaces or special
+        // characters) as a word, those would stand alone as characters and not be animated
+        // (especially bad for special characters).
+        .split(/\b(?=\w)/)
         .map((part) => {
 
             // Wrap single part into letters if wrapLetter is set
@@ -46,10 +50,8 @@ export default({
                 wrappedInLetters = result;
             }
 
-            // If current part is a word-like thing (and if wrapWord was provided), wrap it with
-            // wrapWord; if it is not, use original
             let wrapedInWords = wrappedInLetters;
-            if (/^\w+$/.test(part) && wrapWord) {
+            if (wrapWord) {
                 wrapedInWords = wrapWord(wrappedInLetters, indices.word);
                 indices.word++;
             }
