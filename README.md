@@ -6,8 +6,8 @@
 - This is a monorepo that uses lerna to publish the components as individual packages
 
 ### Init
-- Run `npm run bootstrap` to initialize the whole repo locally (install NPM modules and link them)
-- Run `npx lerna exec npm install` to install package specific `node_module`s
+- Run `npm i && npx lerna exec --npm i` to initialize the whole repo locally (install node modules)
+- Link packages if necessary (`lerna bootstrap` is deprecated)
 
 ### Release
 1. Checkout develop and merge feature branch
