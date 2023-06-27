@@ -45,9 +45,10 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 
 
 ## Tools
+- [readAttribute](./packages/tools/README.md)
 - [Split Text](./packages/splitText/README.md)
 - ~~[Dynamic Page Loader](./DynamicPageLoader/README.md)~~ – use [barba.js](https://barba.js.org/) instead!
-- [once](./src/shared/once.mjs), import as `import { once } from '@joinbox/ui-components'`
+- ~~[once](./src/shared/once.mjs), import as `import { once } from '@joinbox/ui-components'`~~
 - [slide](./packages/slide/README.md), import as `import { slide } from '@joinbox/ui-components'`
 - [createDebounce](./src/shared/createDebounce.mjs), import as `import { createDebounce } from '@joinbox/ui-components'`
 

@@ -23,10 +23,11 @@ Syntax: `readAttribute(element, attribute, additionalArguments)`;
 - `element` (`HTMLElement`, required): Element to read attribute from
 - `attribute` (`string`, required): Name of the attribute to read
 - `additionalArguments` (`object`, optional): Object with properties
-    - `validate` (`function`, optional), takes `value` as its only parameter and should return
-     `true` if the value is valid, else `false`
     - `transform` (`function`, optional), takes `value` as its only parameter and should return the 
     transformed value
+    - `validate` (`function`, optional), takes `value` as its only parameter (that is the
+    attribute's value *after* the `transform` function has been applied) and should return `true`
+    if the value is valid, else `false`
     - `expectation` (`string`, optional): expected value for the (transformed) value; will be
     printed in the error message if `validate` returns `false`
 
