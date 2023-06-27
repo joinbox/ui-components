@@ -1,5 +1,5 @@
 import submitForm from './submitForm.js';
-import createDebounce from '../../../src/shared/createDebounce.mjs';
+import createDebounce from '../../tools/src/createDebounce.mjs';
 
 /* global HTMLElement */
 

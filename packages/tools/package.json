@@ -5,7 +5,7 @@
   "scripts": {
     "test": "npx ava --verbose"
   },
-  "main": "main.js",
+  "main": "main.mjs",
   "author": "Felix Steiner <felix@joinbox.com>",
   "license": "ISC",
   "ava": {

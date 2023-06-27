@@ -1,8 +1,5 @@
 /**
- * Simple debounce implementation. Use:
- * import { createDebounce } from '@joinbox/ui-components;
- * const debounce = createDebounce();
- * debounce(() => {}), 500);
+ * Simple debounce implementation. See README.
 */
 export default () => {
     let timeout;

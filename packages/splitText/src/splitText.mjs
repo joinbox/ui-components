@@ -1,5 +1,5 @@
 import splitTextContent from './splitTextContent.mjs';
-import createDebounce from '../../../src/shared/createDebounce.mjs';
+import createDebounce from '../../tools/src/createDebounce.mjs';
 
 /* global HTMLElement, window */
 
