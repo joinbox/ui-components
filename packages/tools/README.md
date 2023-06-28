@@ -39,29 +39,34 @@ Syntax: `readAttribute(element, attribute, additionalArguments)`;
 
 
 
-## createDebounce
+## debounce
 
 ### Description
-Creates a debounced function
+Creates a debounced function. Primarily needed for performant scroll (and window resize) operations.
 
 ### Usage
 
 ```
-import { createDebounce } from '@joinbox/ui-tools';
+import { debounce } from '@joinbox/ui-tools';
 
-const debounce = createDebounce();
-// Will only print a console.log after the window has *not* been resized for 200ms
-window.addEventListener('resize', debounce(() => console.log(window.innerWidth), 200));
+const callbackFunction = () => { console.log('update'); };
+const debouncedFunction = debounce(callbackFunction, 200);
+// Will only print a console.log *after* the window has *not* been resized for 200ms
+window.addEventListener('resize', debouncedFunction);
 ```
 
 ### Arguments
 
-- None
+Syntax: `debounce(callback, timeout)`
+
+- `callback` (`function`, required): The function that will be executed **after** the debounce 
+function has not been called for `timeout` ms.
+- `timeout` (`number`, required, in ms). The inactivity timeout in ms after which the `callback``
+function will be executed.
 
 ### Returns
-`function`: A function that takes two arguments: `callback` (`function`, required) and 
-`timeout` (`number`, required). The `callback` will only be executed after it has not been
-called for `timeout` ms.
+
+`undefined`
 
 
 
@@ -96,9 +101,11 @@ once(document.querySelector('body'), 'example-executer', executeOnlyOnce);
 Syntax: `once(element, name, function)`
 
 - `element` (`HTMLElement`, required): The HTML element for which the `function` should be executed
-once
+once 
 - `name` (`string`, required): Name under which the execution state function (executed or not)
 will be stored on the provided `element`
 - `function` (`function`, required): Function that shall only be executed once
 
+### Returns
 
+`undefined`

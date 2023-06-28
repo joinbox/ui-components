@@ -1,5 +1,5 @@
 import submitForm from './submitForm.js';
-import createDebounce from '../../tools/src/createDebounce.mjs';
+import debounce from '../../tools/src/debounce.mjs';
 
 /* global HTMLElement */
 
@@ -113,12 +113,7 @@ export default class {
         for (const { eventName, debounceTime } of this.autoSubmit) {
             let submitHandler = this.submitOriginalForm.bind(this);
             if (debounceTime) {
-                const debounce = createDebounce();
-                submitHandler = debounce.bind(
-                    null,
-                    this.submitOriginalForm.bind(this),
-                    debounceTime,
-                );
+                submitHandler = debounce(this.submitOriginalForm.bind(this), debounceTime);
             }
             this.clonedElement.addEventListener(eventName, submitHandler);
         }

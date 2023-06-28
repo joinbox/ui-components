@@ -1,5 +1,5 @@
 import readAttribute from './src/readAttribute.mjs';
-import createDebounce from './src/createDebounce.mjs';
+import debounce from './src/debounce.mjs';
 import once from './src/once.mjs';
 
-export { readAttribute, createDebounce, once };
+export { readAttribute, debounce, once };
