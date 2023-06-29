@@ -1,7 +1,7 @@
 import test from 'ava';
 import debounce from './debounce.mjs';
 
-test('waits with execution', async(t) => {
+test('waits with execution', async (t) => {
     let called = 0;
     const call = () => called++;
     const debouncedCall = debounce(call, 5);
@@ -11,7 +11,7 @@ test('waits with execution', async(t) => {
     t.is(called, 1);
 });
 
-test('debounce re-starts timer', async(t) => {
+test('debounce re-starts timer', async (t) => {
     const call = () => called++;
     const debouncedCall = debounce(call, 5);
     let called = 0;
