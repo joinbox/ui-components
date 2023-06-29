@@ -1,4 +1,4 @@
-import once from './once.mjs';
+import once from '../../tools/src/once.mjs';
 
 /* global window, CustomEvent */
 
