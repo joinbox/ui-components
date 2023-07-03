@@ -79,14 +79,11 @@
     };
 
     /**
-     * Simple debounce implementation. Use:
-     * import { createDebounce } from '@joinbox/ui-components;
-     * const debounce = createDebounce();
-     * debounce(() => {}), 500);
+     * Simple debounce implementation. See README.
     */
-    var createDebounce = () => {
+    var debounce = (callback, offset) => {
         let timeout;
-        return (callback, offset) => {
+        return () => {
             if (timeout) clearTimeout(timeout);
             timeout = setTimeout(callback, offset);
         };
@@ -204,12 +201,7 @@
             for (const { eventName, debounceTime } of this.autoSubmit) {
                 let submitHandler = this.submitOriginalForm.bind(this);
                 if (debounceTime) {
-                    const debounce = createDebounce();
-                    submitHandler = debounce.bind(
-                        null,
-                        this.submitOriginalForm.bind(this),
-                        debounceTime,
-                    );
+                    submitHandler = debounce(this.submitOriginalForm.bind(this), debounceTime);
                 }
                 this.clonedElement.addEventListener(eventName, submitHandler);
             }
