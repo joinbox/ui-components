@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.2.1...@joinbox/formsync@2.3.1) (2023-07-03)
+
+
+### Bug Fixes
+
+* **debounce:** simplify debounce function ([d12f74d](https://github.com/joinbox/ui-components/commit/d12f74d7c0fc7ca77f0873c59caffd175769d149))
+* update rollup configs to reflect version update ([0f9c450](https://github.com/joinbox/ui-components/commit/0f9c4504fd607c325aa0f337c1b36c46f2d48496))
+* update rollup configs to reflect version update ([446b3f7](https://github.com/joinbox/ui-components/commit/446b3f7a6718d277efd7194345a23b90083026cb))
+
+
+### Features
+
+* **form-sync:** changes after code review ([ccb9eb3](https://github.com/joinbox/ui-components/commit/ccb9eb376a14c89e11c645aae0129d110b773246))
+* **form-sync:** changes after code review ([d94161c](https://github.com/joinbox/ui-components/commit/d94161cbd479ba4a826a9bcfdf0af9defd5317c3))
+* **form-sync:** implement functionalit to clone select options to checkbox or radio inputs ([4ef4882](https://github.com/joinbox/ui-components/commit/4ef4882019e2f6099040228a396211b6e73c05f4))
+* **form-sync:** implement functionality to clone select options to checkbox or radio inputs ([582ffcf](https://github.com/joinbox/ui-components/commit/582ffcfb31709cf2dc9febc38ee76227079ce448))
+* **form-sync:** implement functionality to clone select options to checkbox or radio inputs ([ec7517d](https://github.com/joinbox/ui-components/commit/ec7517dc769752d9a8f45997cb02a781176627f9))
+* **form-sync:** implement functionality to clone select options to checkbox or radio inputs ([3ca8b07](https://github.com/joinbox/ui-components/commit/3ca8b07e7913a94dbb250f76af8b5ebdfc4ccb7b))
+* **tools:** move createDebounce and once to tools ([421a66e](https://github.com/joinbox/ui-components/commit/421a66ee43154be4980aabbdc39f198532ab246c))
+
+
+### BREAKING CHANGES
+
+* **tools:** move createDebounce and once to a new repo ui-tools
+
+
+
+
+
 # [2.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.2.1...@joinbox/formsync@2.3.0) (2023-04-28)
 
 

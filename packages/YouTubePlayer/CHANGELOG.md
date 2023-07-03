@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.1.3...@joinbox/youtubeplayer@1.1.4) (2023-07-03)
+
+
+### Bug Fixes
+
+* update rollup configs to reflect version update ([0f9c450](https://github.com/joinbox/ui-components/commit/0f9c4504fd607c325aa0f337c1b36c46f2d48496))
+* update rollup configs to reflect version update ([446b3f7](https://github.com/joinbox/ui-components/commit/446b3f7a6718d277efd7194345a23b90083026cb))
+
+
+
+
+
 ## [1.1.3](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.1.2...@joinbox/youtubeplayer@1.1.3) (2022-07-04)
 
 

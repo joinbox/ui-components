@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/overlay",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Overlay component that can be opened and closed via OverlayButtons",
   "main": "OverlayElement.js",
   "scripts": {
