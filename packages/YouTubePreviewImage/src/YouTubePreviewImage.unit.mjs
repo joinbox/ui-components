@@ -11,6 +11,50 @@ const setup = async(hideErrors) => {
     return getDOM({ basePath, scripts: ['YouTubePreviewImageElement.js'], hideErrors });
 };
 
+/**
+ * Mocks the window.Image JS class
+ * @param {boolean} throwError          If true, loading the image will call the error instead of
+ *                                      the load handler
+ * @param {boolean} videoHasNoPreview   If video has no preview images, return an image with
+ *                                      a naturalWidth of 120px
+ */
+const mockImage = ({ throwError = false, videoHasNoPreview = false } = {}) => {
+    return class {
+
+        #src;
+        #listeners = new Map();
+
+        setAttribute(name, value) {
+            if (name === 'src') this.#src = value;
+            else throw new Error(`Attribute ${name} cannot be set.`);
+
+            setTimeout(() => {
+                // Only return 120 width for maxresdefault image; hq exists in our test case
+                if (videoHasNoPreview && this.#src.endsWith('maxresdefault.jpg')) {
+                    this.naturalWidth = 120;
+                }
+                const listenerType = throwError ? 'error' : 'load';
+                this.#callListeners(listenerType);
+            }, 50);
+        }
+
+        getAttribute(name) {
+            if (name === 'src') return this.#src;
+            else throw new Error(`Attribute ${name} cannot be read.`);
+        }
+
+        addEventListener(type, listener) {
+            if (this.#listeners.has(type)) this.#listeners.get(type).push(listener);
+            else this.#listeners.set(type, [listener]);
+        }
+
+        #callListeners(type) {
+            if (this.#listeners.has(type)) this.#listeners.get(type).forEach((cb) => cb())
+        }
+
+    }
+}
+
 test('fails if img element is missing', async(t) => {
     const { document, errors } = await setup(true);
     const preview = createElement({
@@ -25,7 +69,8 @@ test('fails if img element is missing', async(t) => {
 
 
 test('displays fallback image if video cannot be found ', async(t) => {
-    const { document, errors } = await setup(true);
+    const { document, errors, window } = await setup(true);
+    window.Image = mockImage({ throwError: true });
     const src = 'https://picsum.photos/200/300';
     const preview = createElement({
         document,
@@ -42,7 +87,8 @@ test('displays fallback image if video cannot be found ', async(t) => {
 
 
 test('displays best matching image ', async(t) => {
-    const { document, errors } = await setup(true);
+    const { document, errors, window } = await setup(true);
+    window.Image = mockImage();
     const preview = createElement({
         document,
         html: `<youtube-preview-image data-video-id="m7MtIv9a0A4">
@@ -57,7 +103,8 @@ test('displays best matching image ', async(t) => {
 
 
 test('tests for 120px width of images ', async(t) => {
-    const { document, errors } = await setup(true);
+    const { document, errors, window } = await setup(true);
+    window.Image = mockImage({ videoHasNoPreview: true });
     const preview = createElement({
         document,
         // Video without a high res preview image

@@ -6,8 +6,8 @@
 - This is a monorepo that uses lerna to publish the components as individual packages
 
 ### Init
-- Run `npm run bootstrap` to initialize the whole repo locally (install NPM modules and link them)
-- Run `npx lerna exec npm install` to install package specific `node_module`s
+- Run `npm i && npx lerna exec --npm i` to initialize the whole repo locally (install node modules)
+- Link packages if necessary (`lerna bootstrap` is deprecated)
 
 ### Release
 1. Checkout develop and merge feature branch
@@ -45,11 +45,11 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 
 
 ## Tools
+- [readAttribute](./packages/tools/README.md)
 - [Split Text](./packages/splitText/README.md)
-- ~~[Dynamic Page Loader](./DynamicPageLoader/README.md)~~ – use [barba.js](https://barba.js.org/) instead!
-- [once](./src/shared/once.mjs), import as `import { once } from '@joinbox/ui-components'`
+- [once](./packages/tools/README.md)
 - [slide](./packages/slide/README.md), import as `import { slide } from '@joinbox/ui-components'`
-- [createDebounce](./src/shared/createDebounce.mjs), import as `import { createDebounce } from '@joinbox/ui-components'`
+- [createDebounce](./packages/tools/README.md)
 
 ## Tests
 `npm i && npm test`

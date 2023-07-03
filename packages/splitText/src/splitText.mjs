@@ -1,5 +1,5 @@
 import splitTextContent from './splitTextContent.mjs';
-import createDebounce from '../../../src/shared/createDebounce.mjs';
+import debounce from '../../tools/src/debounce.mjs';
 
 /* global HTMLElement, window */
 
@@ -40,10 +40,10 @@ export default ({
     };
 
     if (updateOnResize) {
-        const debounce = createDebounce();
+        const debouncedUpdate = debounce(split, 500);
         window.addEventListener('resize', () => {
             if (wasSplit) restore();
-            debounce(split, 500);
+            debouncedUpdate();
         });
     }
 

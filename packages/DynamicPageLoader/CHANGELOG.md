@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 # [0.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/dynamicpageloader@0.2.1...@joinbox/dynamicpageloader@0.3.0) (2021-12-23)
+## [0.3.2](https://github.com/joinbox/ui-components/compare/@joinbox/dynamicpageloader@0.3.1...@joinbox/dynamicpageloader@0.3.2) (2023-07-03)
+
+
+### Features
+
+* **tools:** move createDebounce and once to tools ([421a66e](https://github.com/joinbox/ui-components/commit/421a66ee43154be4980aabbdc39f198532ab246c))
+
+
+### BREAKING CHANGES
+
+* **tools:** move createDebounce and once to a new repo ui-tools
+
+
+
+
+
 ## 0.3.1 (2022-04-27)
 
 

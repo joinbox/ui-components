@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 ## [1.1.2](https://github.com/joinbox/ui-components/compare/@joinbox/vimeoplayer@1.1.1...@joinbox/vimeoplayer@1.1.2) (2021-07-16)
+## [1.1.5](https://github.com/joinbox/ui-components/compare/@joinbox/vimeoplayer@1.1.4...@joinbox/vimeoplayer@1.1.5) (2023-07-03)
+
+
+### Bug Fixes
+
+* update rollup configs to reflect version update ([0f9c450](https://github.com/joinbox/ui-components/commit/0f9c4504fd607c325aa0f337c1b36c46f2d48496))
+* update rollup configs to reflect version update ([446b3f7](https://github.com/joinbox/ui-components/commit/446b3f7a6718d277efd7194345a23b90083026cb))
+
+
+
+
+
+## [1.1.4](https://github.com/joinbox/ui-components/compare/@joinbox/vimeoplayer@1.1.3...@joinbox/vimeoplayer@1.1.4) (2022-07-04)
+
+
+### Features
+
+* **VimeoPreviewImage:** add width attribute to get optimal size ([28fdd2c](https://github.com/joinbox/ui-components/commit/28fdd2ccf1995093d1f71d6ef5b5e48339d4293c))
+
+
+
+
+
 ## 1.1.3 (2022-04-27)
 
 

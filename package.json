@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/ui-components",
-  "version": "2.6.7",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "test": "npx lerna run test",
@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/joinbox/ui-components#readme",
   "devDependencies": {
-    "@joinbox/eslint-config-joinbox": "^1.0.9",
-    "ava": "^4.2.0",
+    "@joinbox/eslint-config-joinbox": "^1.0.11",
+    "ava": "^5.3.1",
     "babel-eslint": "^10.1.0",
-    "jsdom": "^19.0.0",
-    "lerna": "^4.0.0",
-    "rollup": "^2.7.1"
+    "jsdom": "^22.1.0",
+    "lerna": "^7.1.0",
+    "rollup": "^3.25.3"
   }
 }

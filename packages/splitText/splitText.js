@@ -115,14 +115,11 @@ var splitTextContent = ({
 };
 
 /**
- * Simple debounce implementation. Use:
- * import { createDebounce } from '@joinbox/ui-components;
- * const debounce = createDebounce();
- * debounce(() => {}), 500);
+ * Simple debounce implementation. See README.
 */
-var createDebounce = () => {
+var debounce = (callback, offset) => {
     let timeout;
-    return (callback, offset) => {
+    return () => {
         if (timeout) clearTimeout(timeout);
         timeout = setTimeout(callback, offset);
     };
@@ -167,10 +164,10 @@ var splitText = ({
     };
 
     if (updateOnResize) {
-        const debounce = createDebounce();
+        const debouncedUpdate = debounce(split, 500);
         window.addEventListener('resize', () => {
             if (wasSplit) restore();
-            debounce(split, 500);
+            debouncedUpdate();
         });
     }
 
