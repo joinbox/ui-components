@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.2](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.3.1...@joinbox/formsync@2.3.2) (2023-07-18)
+
+
+
+# 3.6.0 (2021-12-03)
+
+
+
+# 3.4.0 (2021-07-14)
+
+
+
+# 3.3.0 (2021-07-14)
+
+
+
+## 3.2.1 (2021-07-06)
+
+
+
+# 3.2.0 (2021-07-06)
+
+**Note:** Version bump only for package @joinbox/formsync
+
+
+
+
+
 ## [2.3.1](https://github.com/joinbox/ui-components/compare/@joinbox/formsync@2.2.1...@joinbox/formsync@2.3.1) (2023-07-03)
 
 

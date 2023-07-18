@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/joinbox/ui-components/compare/@joinbox/youtubepreviewimage@1.1.3...@joinbox/youtubepreviewimage@1.1.4) (2023-07-18)
+
+
+### Bug Fixes
+
+* **YouTubePreviewImage:** fix dependency, move to dev ([1b57a67](https://github.com/joinbox/ui-components/commit/1b57a672df1799f38e22112c10a2bb31d5ba148f))
+
+
+
+# 3.4.0 (2021-07-14)
+
+
+
+
+
 # 1.1.0 (2021-07-14)
 ## [1.1.3](https://github.com/joinbox/ui-components/compare/@joinbox/youtubepreviewimage@1.1.2...@joinbox/youtubepreviewimage@1.1.3) (2023-07-03)
 

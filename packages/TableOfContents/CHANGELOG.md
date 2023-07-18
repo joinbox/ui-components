@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.8](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.7...@joinbox/tableofcontents@1.1.8) (2023-07-18)
+
+
+
+# 3.4.0 (2021-07-14)
+
+
+
+# 3.3.0 (2021-07-14)
+
+**Note:** Version bump only for package @joinbox/tableofcontents
+
+
+
+
+
 ## [1.1.4](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.3...@joinbox/tableofcontents@1.1.4) (2021-07-14)
 ## [1.1.7](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.6...@joinbox/tableofcontents@1.1.7) (2023-07-03)
 

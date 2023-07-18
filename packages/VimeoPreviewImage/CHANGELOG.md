@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.6](https://github.com/joinbox/ui-components/compare/@joinbox/vimeopreviewimage@1.1.5...@joinbox/vimeopreviewimage@1.1.6) (2023-07-18)
+
+
+
+# 3.6.0 (2021-12-03)
+
+
+
+# 3.4.0 (2021-07-14)
+
+
+
+# 3.3.0 (2021-07-14)
+
+**Note:** Version bump only for package @joinbox/vimeopreviewimage
+
+
+
+
+
 ## [1.1.2](https://github.com/joinbox/ui-components/compare/@joinbox/vimeopreviewimage@1.1.1...@joinbox/vimeopreviewimage@1.1.2) (2021-12-03)
 
 **Note:** Version bump only for package @joinbox/vimeopreviewimage
