@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.3...@joinbox/tableofcontents@1.1.4) (2021-07-14)
 ## [1.1.7](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.6...@joinbox/tableofcontents@1.1.7) (2023-07-03)
 
 
@@ -17,15 +18,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.1.6](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.5...@joinbox/tableofcontents@1.1.6) (2022-07-04)
 
-
-### Features
-
-* **VimeoPreviewImage:** add width attribute to get optimal size ([28fdd2c](https://github.com/joinbox/ui-components/commit/28fdd2ccf1995093d1f71d6ef5b5e48339d4293c))
+**Note:** Version bump only for package @joinbox/tableofcontents
 
 
 
 
 
+## [1.1.3](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.2...@joinbox/tableofcontents@1.1.3) (2021-07-14)
 ## [1.1.5](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.2...@joinbox/tableofcontents@1.1.5) (2022-04-27)
 
 

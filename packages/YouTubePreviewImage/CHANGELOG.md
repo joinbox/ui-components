@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.1.0 (2021-07-14)
 ## [1.1.3](https://github.com/joinbox/ui-components/compare/@joinbox/youtubepreviewimage@1.1.2...@joinbox/youtubepreviewimage@1.1.3) (2023-07-03)
 
 

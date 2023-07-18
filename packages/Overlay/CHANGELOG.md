@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.0.4...@joinbox/overlay@1.1.0) (2022-01-20)
 ## [1.1.3](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.1.2...@joinbox/overlay@1.1.3) (2023-07-03)
 
 
@@ -20,12 +21,26 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **VimeoPreviewImage:** add width attribute to get optimal size ([28fdd2c](https://github.com/joinbox/ui-components/commit/28fdd2ccf1995093d1f71d6ef5b5e48339d4293c))
+* **Overlay:** add official and documented openOverlay and closeOverlay events ([d654088](https://github.com/joinbox/ui-components/commit/d654088842b58b8ae3b870437fcc77b76047ceb1))
 
 
 
 
 
+## [1.0.4](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.0.3...@joinbox/overlay@1.0.4) (2021-07-14)
+
+**Note:** Version bump only for package @joinbox/overlay
+
+
+
+
+
+## [1.0.3](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.0.2...@joinbox/overlay@1.0.3) (2021-07-14)
+
+
+### Bug Fixes
+
+* Fix main files in package.json ([1bd07b2](https://github.com/joinbox/ui-components/commit/1bd07b28a92881f499edac71e25453010bb2fe6c))
 ## [1.1.1](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.0.2...@joinbox/overlay@1.1.1) (2022-04-27)
 
 

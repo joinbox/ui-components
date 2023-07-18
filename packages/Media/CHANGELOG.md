@@ -36,6 +36,28 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **Media:** fix ios not loading ([de0c0bf](https://github.com/joinbox/ui-components/commit/de0c0bfcda75fdf3d838181b8978ddedd22a6468))
 
 
+## [1.0.5](https://github.com/joinbox/ui-components/compare/@joinbox/media@1.0.4...@joinbox/media@1.0.5) (2022-04-06)
+
+
+### Bug Fixes
+
+* **Media:** fix ios not loading ([de0c0bf](https://github.com/joinbox/ui-components/commit/de0c0bfcda75fdf3d838181b8978ddedd22a6468))
+
+
+
+
+
+## [1.0.4](https://github.com/joinbox/ui-components/compare/@joinbox/media@1.0.3...@joinbox/media@1.0.4) (2021-07-14)
+
+**Note:** Version bump only for package @joinbox/media
+
+
+
+
+
+## [1.0.3](https://github.com/joinbox/ui-components/compare/@joinbox/media@1.0.2...@joinbox/media@1.0.3) (2021-07-14)
+
+
 
 
 

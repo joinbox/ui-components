@@ -134,4 +134,5 @@
         window.customElements.define('vimeo-preview-image', YouTubePreviewImage);
     }
 
-})();
+}());
+
