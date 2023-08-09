@@ -64,7 +64,7 @@
         </div>
         <script>
             document.querySelector('.dynamicEndpointContentButton').addEventListener('click', () => {
-                this.dispatchEvent(new CustomEvent('loadEndpointDynamicContent', { bubbles: true, detail: { endPointUrl: '/packages/AsyncLoader/src/testContent.html' } }));
+                this.dispatchEvent(new CustomEvent('loadDynamicEndpointContent', { bubbles: true, detail: { endPointUrl: '/packages/AsyncLoader/src/testContent.html' } }));
             });
         </script>
 

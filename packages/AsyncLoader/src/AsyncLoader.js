@@ -95,38 +95,32 @@ export default class extends HTMLElement {
                 throw error;
             }
         }
-        console.log(event);
-        if (this.eventEndpointPropertyName) {
 
-            if (event.detail && event.detail[this.eventEndpointPropertyName]) {
-                this.endpointURL = event.detail[this.eventEndpointPropertyName];
-            }else if (!this.endpointURL){
-                throw new Error(`The property ${this.eventEndpointPropertyName} either has no value or was not found in the payload of the "${this.triggerEventName}" Event`);
-            }
-        }
+        const fetchURL = this.endpointURL || event.detail?.[this.eventEndpointPropertyName];
+        if (!fetchURL) throw new Error(`The property ${this.eventEndpointPropertyName} either has no value or was not found in the payload of the "${this.triggerEventName}" Event`);
 
         // If content should only be loaded once, return if fetch request was started or succeeded
         const requestIsLoadingOrLoaded = [this.#loadingStates.loading, this.#loadingStates.loaded]
             .includes(this.#loadingStatus);
         if (this.loadOnce && requestIsLoadingOrLoaded) return;
-        this.#fetchData();
+        this.#fetchData(fetchURL);
     }
 
-    async #fetchData() {
+    async #fetchData(fetchURL) {
         this.#loadingStatus = this.#loadingStates.loading;
         this.#displayTemplate('[data-loading-template]');
         try {
-            const response = await fetch(this.endpointURL);
+            const response = await fetch(fetchURL);
             if (!response.ok) {
-                this.#handleError(`Status ${response.status}`);
+                this.#handleError(`Status ${response.status}`, fetchURL);
             } else {
                 const content = await response.text();
-                this.#dispatchStatusEvent();
+                this.#dispatchStatusEvent(false, fetchURL);
                 this.#loadingStatus = this.#loadingStates.loaded;
                 this.#getContentContainer().innerHTML = content;
             }
         } catch (error) {
-            this.#handleError(error.message);
+            this.#handleError(error.message, fetchURL);
             // Do not prevent error from being handled correctly; JSDOM displays an "Unhandled
             // rejection" error, therefore ignore it for now
             // throw error;
@@ -141,9 +135,9 @@ export default class extends HTMLElement {
         return container;
     }
 
-    #handleError(message) {
+    #handleError(message, fetchURL) {
         this.#loadingStates = this.#loadingStates.failed;
-        this.#dispatchStatusEvent(true);
+        this.#dispatchStatusEvent(true, fetchURL);
         this.#displayTemplate('[data-error-template]', { message });
     }
 
@@ -179,12 +173,12 @@ export default class extends HTMLElement {
         return replaced;
     }
 
-    #dispatchStatusEvent(failed = false) {
+    #dispatchStatusEvent(failed = false, fetchURL) {
         const type = failed ? 'asyncLoaderFail' : 'asyncLoaderSuccess';
         const payload = {
             bubbles: true,
             detail: {
-                url: this.endpointURL,
+                url: fetchURL,
                 element: this,
             },
         };
