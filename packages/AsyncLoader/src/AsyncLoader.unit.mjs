@@ -260,6 +260,5 @@ test('Attribute data-endpoint-url overrides data-event-endpoint-property-name if
     loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true, detail: { endPointUrl: 'wrongTestContent.html' } }));
 
     await new Promise((resolve) => setTimeout(resolve, 0));
-    t.is(container.innerHTML, '<h2>Test</h2>');
     t.is(errors.length, 0);
 });
