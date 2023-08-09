@@ -35,9 +35,13 @@ Component that fetches contents asynchronously and displays it when ready:
 `<async-loader></async-loader>`
 
 #### Attributes
-- `data-endpoint-url` (required): URL that should be fetched
+- `data-endpoint-url` (required if `data-event-endpoint-property-name` is not set): URL that should be fetched.
+If both `data-endpoint-url` and `data-event-endpoint-property-name` are provided, `data-endpoint-url` will be preferred.
 - `data-trigger-event-name` (required): Name of the event that causes content to be loaded; it will
 be listened to on `window`.
+- `data-event-endpoint-property-name` (required if `data-endpoint-url` is not set): Name of the property 
+in the `event` payload (`detail` property of the event object) which contains the endpoint URL.
+Has no effect if `data-endpoint-url` is set.
 - `data-trigger-event-filter` (optional): JavaScript expression that will be evaluated against
 the event if provided. Only if the event matches the expression, data will be loaded; if not, the
 event will be ignored. Only one variable is passed (the `Event` thats name matches

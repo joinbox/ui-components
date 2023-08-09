@@ -1,4 +1,4 @@
-import canReadAttributes from '../../../src/shared/canReadAttributes.js';
+import readAttribute from '../../tools/src/readAttribute.mjs';
 import createListener from '../../../src/shared/createListener.mjs';
 
 /* global HTMLElement, window , CustomEvent*/
@@ -21,26 +21,42 @@ export default class extends HTMLElement {
 
     constructor() {
         super();
-        Object.assign(
+
+        this.endpointURL = readAttribute(
             this,
-            canReadAttributes([{
-                name: 'data-endpoint-url',
-                property: 'endpointURL',
-                validate: (value) => !!value,
-            }, {
-                name: 'data-trigger-event-name',
-                property: 'triggerEventName',
-                validate: (value) => !!value,
-            }, {
-                name: 'data-trigger-event-filter',
-                property: 'triggerEventFilter',
-            }, {
-                name: 'data-load-once',
-                property: 'loadOnce',
-                transform: (value) => value === '',
-            }]),
+            'data-endpoint-url',
         );
-        this.readAttributes();
+
+        this.triggerEventName = readAttribute(
+            this,
+            'data-trigger-event-name',
+            {
+                validate: (value) => !!value,
+                expectation: 'a non-empty string',
+            }
+        );
+
+        this.eventEndpointPropertyName = readAttribute(
+            this,
+            'data-event-endpoint-property-name',
+        );
+
+        this.triggerEventFilter = readAttribute(
+            this,
+            'data-trigger-event-filter'
+        );
+
+        this.loadOnce = readAttribute(
+            this,
+            'data-load-once',
+            {
+                transform: (value) => value === '',
+            }
+        );
+
+        if (!(this.endpointURL || this.eventEndpointPropertyName)) {
+            throw new Error(`The attributes "data-endpoint-url" or "data-event-endpoint-property-name" were not found but one of them needs to be set.`);
+        }
     }
 
     connectedCallback() {
@@ -79,28 +95,32 @@ export default class extends HTMLElement {
                 throw error;
             }
         }
+
+        const fetchURL = this.endpointURL || event.detail?.[this.eventEndpointPropertyName];
+        if (!fetchURL) throw new Error(`The property ${this.eventEndpointPropertyName} either has no value or was not found in the payload of the "${this.triggerEventName}" Event`);
+
         // If content should only be loaded once, return if fetch request was started or succeeded
         const requestIsLoadingOrLoaded = [this.#loadingStates.loading, this.#loadingStates.loaded]
             .includes(this.#loadingStatus);
         if (this.loadOnce && requestIsLoadingOrLoaded) return;
-        this.#fetchData();
+        this.#fetchData(fetchURL);
     }
 
-    async #fetchData() {
+    async #fetchData(fetchURL) {
         this.#loadingStatus = this.#loadingStates.loading;
         this.#displayTemplate('[data-loading-template]');
         try {
-            const response = await fetch(this.endpointURL);
+            const response = await fetch(fetchURL);
             if (!response.ok) {
-                this.#handleError(`Status ${response.status}`);
+                this.#handleError(`Status ${response.status}`, fetchURL);
             } else {
                 const content = await response.text();
-                this.#dispatchStatusEvent();
+                this.#dispatchStatusEvent(fetchURL);
                 this.#loadingStatus = this.#loadingStates.loaded;
                 this.#getContentContainer().innerHTML = content;
             }
         } catch (error) {
-            this.#handleError(error.message);
+            this.#handleError(error.message, fetchURL);
             // Do not prevent error from being handled correctly; JSDOM displays an "Unhandled
             // rejection" error, therefore ignore it for now
             // throw error;
@@ -115,9 +135,9 @@ export default class extends HTMLElement {
         return container;
     }
 
-    #handleError(message) {
+    #handleError(message, fetchURL) {
         this.#loadingStates = this.#loadingStates.failed;
-        this.#dispatchStatusEvent(true);
+        this.#dispatchStatusEvent(fetchURL, true);
         this.#displayTemplate('[data-error-template]', { message });
     }
 
@@ -153,12 +173,12 @@ export default class extends HTMLElement {
         return replaced;
     }
 
-    #dispatchStatusEvent(failed = false) {
+    #dispatchStatusEvent(fetchURL, failed = false) {
         const type = failed ? 'asyncLoaderFail' : 'asyncLoaderSuccess';
         const payload = {
             bubbles: true,
             detail: {
-                url: this.endpointURL,
+                url: fetchURL,
                 element: this,
             },
         };

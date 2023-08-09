@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.1.1...@joinbox/async-loader@1.2.0) (2023-08-09)
+
+
+### Features
+
+* **async-loader:** add functionality to get endpoint url from event payload ([5e12095](https://github.com/joinbox/ui-components/commit/5e12095614307ed3fa44fb11f0798dd9332efa19))
+* **async-loader:** add functionality to get endpoint url from event payload ([a2a1523](https://github.com/joinbox/ui-components/commit/a2a1523fc72e7fd20cfe8b625ff4fa0dcd65ba0b))
+* **async-loader:** add functionality to get endpoint url from event payload ([56e7e73](https://github.com/joinbox/ui-components/commit/56e7e7360a54d12251389df7d16bc1137b7d46c5))
+* **async-loader:** build file ([27da0bf](https://github.com/joinbox/ui-components/commit/27da0bf05c471c20e132db928954b7bec6d58aed))
+* **async-loader:** refactor after code review ([fd5bad9](https://github.com/joinbox/ui-components/commit/fd5bad93550412c1881b766958216677195acab8))
+* **async-loader:** refactor after code review ([bb419d9](https://github.com/joinbox/ui-components/commit/bb419d9fc52e38ed3a07a935938962a744e48189))
+* **async-loader:** refactor after code review ([b22dbce](https://github.com/joinbox/ui-components/commit/b22dbce4cab18435ef7ae429a3b3284d654c41bf))
+
+
+
+
+
 ## [1.1.1](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.1.0...@joinbox/async-loader@1.1.1) (2023-07-03)
 
 

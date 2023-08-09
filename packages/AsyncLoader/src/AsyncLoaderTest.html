@@ -50,6 +50,25 @@
         </script>
 
 
+        <h1>Dynamic Endpoint Content</h1>
+        <div>
+            <async-loader
+                data-event-endpoint-property-name="endPointUrl"
+                data-trigger-event-name="loadDynamicEndpointContent"
+            >
+                <div data-content-container>Initial Content</div>
+                <template data-loading-template>Loading ...</template>
+                <template data-error-template>Error: {{message}}</template>
+            </async-loader>
+            <button class="dynamicEndpointContentButton">Load</button>
+        </div>
+        <script>
+            document.querySelector('.dynamicEndpointContentButton').addEventListener('click', () => {
+                this.dispatchEvent(new CustomEvent('loadDynamicEndpointContent', { bubbles: true, detail: { endPointUrl: '/packages/AsyncLoader/src/testContent.html' } }));
+            });
+        </script>
+
+
         <script type="module" src="./AsyncLoaderElement.js"></script>
 
     </body>

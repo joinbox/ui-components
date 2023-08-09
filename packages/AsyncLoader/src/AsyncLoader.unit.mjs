@@ -48,7 +48,7 @@ test('throws on missing parameters', async(t) => {
         </async-loader>`);
     document.body.appendChild(loader);
     t.is(errors.length, 1);
-    t.is(errors[0].message.includes('Attribute data-endpoint-url does'), true);
+    t.is(errors[0].message.includes('Expected attribute data-trigger-event-name'), true);
 });
 
 
@@ -218,3 +218,47 @@ test('dispatches fail event if loading content failed', async(t) => {
     t.is(errors.length, 0);
 });
 
+test('loads data from endpoint url passed in event payload', async(t) => {
+    const { document, window, errors } = await setup(true);
+    window.fetch = polyfillFetch(200, '<h2>Test</h2>');
+    const loader = createElement(document,
+        `<async-loader
+            data-event-endpoint-property-name="endPointUrl"
+            data-trigger-event-name="loadData"
+        >
+            <div data-content-container>Initial</div>
+            <template data-error-template>Error: {{message}}</template>
+        </async-loader>`);
+    document.body.appendChild(loader);
+    const container = loader.querySelector('[data-content-container]');
+    t.is(container.innerHTML, 'Initial');
+
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true, detail: { endPointUrl: 'testContent.html' } }));
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(container.innerHTML, '<h2>Test</h2>');
+    t.is(errors.length, 0);
+});
+
+
+test('Attribute data-endpoint-url overrides data-event-endpoint-property-name if both are set', async(t) => {
+    const { document, window, errors } = await setup(true);
+    window.fetch = polyfillFetch(200, '<h2>Test</h2>', false, 'testContent.html');
+    const loader = createElement(document,
+    `<async-loader
+            data-endpoint-url="testContent.html"
+            data-event-endpoint-property-name="endPointUrl"
+            data-trigger-event-name="loadData"
+        >
+            <div data-content-container>Initial</div>
+            <template data-error-template>Error: {{message}}</template>
+        </async-loader>`);
+    document.body.appendChild(loader);
+    const container = loader.querySelector('[data-content-container]');
+    t.is(container.innerHTML, 'Initial');
+
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true, detail: { endPointUrl: 'wrongTestContent.html' } }));
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(errors.length, 0);
+});
