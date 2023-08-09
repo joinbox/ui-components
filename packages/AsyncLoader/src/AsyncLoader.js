@@ -115,7 +115,7 @@ export default class extends HTMLElement {
                 this.#handleError(`Status ${response.status}`, fetchURL);
             } else {
                 const content = await response.text();
-                this.#dispatchStatusEvent(false, fetchURL);
+                this.#dispatchStatusEvent(fetchURL);
                 this.#loadingStatus = this.#loadingStates.loaded;
                 this.#getContentContainer().innerHTML = content;
             }
@@ -137,7 +137,7 @@ export default class extends HTMLElement {
 
     #handleError(message, fetchURL) {
         this.#loadingStates = this.#loadingStates.failed;
-        this.#dispatchStatusEvent(true, fetchURL);
+        this.#dispatchStatusEvent(fetchURL, true);
         this.#displayTemplate('[data-error-template]', { message });
     }
 
@@ -173,7 +173,7 @@ export default class extends HTMLElement {
         return replaced;
     }
 
-    #dispatchStatusEvent(failed = false, fetchURL) {
+    #dispatchStatusEvent(fetchURL, failed = false) {
         const type = failed ? 'asyncLoaderFail' : 'asyncLoaderSuccess';
         const payload = {
             bubbles: true,

@@ -191,9 +191,6 @@ test('dispatches success event if content was loaded successfully', async(t) => 
     loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true }));
     await new Promise((resolve) => setTimeout(resolve, 0));
     t.is(succeeded.length, 1);
-    console.log('---------------------------------');
-    console.log(succeeded[0].detail);
-    console.log('---------------------------------');
     t.is(succeeded[0].detail.url, 'testContent.html');
     t.is(succeeded[0].detail.element, loader);
     t.is(errors.length, 0);
@@ -230,7 +227,6 @@ test('loads data from endpoint url passed in event payload', async(t) => {
             data-trigger-event-name="loadData"
         >
             <div data-content-container>Initial</div>
-            <template data-loading-template>Loading ...</template>
             <template data-error-template>Error: {{message}}</template>
         </async-loader>`);
     document.body.appendChild(loader);
@@ -238,7 +234,30 @@ test('loads data from endpoint url passed in event payload', async(t) => {
     t.is(container.innerHTML, 'Initial');
 
     loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true, detail: { endPointUrl: 'testContent.html' } }));
-    t.is(container.innerHTML, 'Loading ...');
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(container.innerHTML, '<h2>Test</h2>');
+    t.is(errors.length, 0);
+});
+
+
+test('Attribute data-endpoint-url overrides data-event-endpoint-property-name if both are set', async(t) => {
+    const { document, window, errors } = await setup(true);
+    window.fetch = polyfillFetch(200, '<h2>Test</h2>', false, 'testContent.html');
+    const loader = createElement(document,
+    `<async-loader
+            data-endpoint-url="testContent.html"
+            data-event-endpoint-property-name="endPointUrl"
+            data-trigger-event-name="loadData"
+        >
+            <div data-content-container>Initial</div>
+            <template data-error-template>Error: {{message}}</template>
+        </async-loader>`);
+    document.body.appendChild(loader);
+    const container = loader.querySelector('[data-content-container]');
+    t.is(container.innerHTML, 'Initial');
+
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true, detail: { endPointUrl: 'wrongTestContent.html' } }));
 
     await new Promise((resolve) => setTimeout(resolve, 0));
     t.is(container.innerHTML, '<h2>Test</h2>');

@@ -36,7 +36,7 @@ Component that fetches contents asynchronously and displays it when ready:
 
 #### Attributes
 - `data-endpoint-url` (required if `data-event-endpoint-property-name` is not set): URL that should be fetched.
-Can be omitted `data-event-endpoint-property-name` is set.
+If both `data-endpoint-url` and `data-event-endpoint-property-name` are provided, `data-endpoint-url` will be preferred.
 - `data-trigger-event-name` (required): Name of the event that causes content to be loaded; it will
 be listened to on `window`.
 - `data-event-endpoint-property-name` (required if `data-endpoint-url` is not set): Name of the property 
