@@ -91,6 +91,26 @@ test('displays error if request fails', async(t) => {
 });
 
 
+test('displays specifi error for status code if request fails', async(t) => {
+    const { document, window, errors } = await setup(true);
+    window.fetch = polyfillFetch(404, 'notFound');
+    const loader = createElement(document,
+        `<async-loader
+            data-endpoint-url="testContent.html"
+            data-trigger-event-name="loadData"
+        >
+            <div data-content-container>Initial</div>
+            <template data-error-template>Error: {{message}}</template>
+            <template data-error-404-template>404 Not Found: {{message}}</template>
+        </async-loader>`);
+    document.body.appendChild(loader);
+    const container = loader.querySelector('[data-content-container]');
+    loader.dispatchEvent(new window.CustomEvent('loadData', { bubbles: true }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(container.innerHTML, '404 Not Found: Status 404');
+    t.is(errors.length, 0);
+});
+
 test('displays error if request cannot be parsed', async(t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, 'test', true);
@@ -106,7 +126,6 @@ test('displays error if request cannot be parsed', async(t) => {
     t.is(container.innerHTML, 'Error: text() failed');
     t.is(errors.length, 0);
 });
-
 
 test('filters trigger event', async(t) => {
     const { document, window, errors } = await setup(true);
@@ -205,6 +224,7 @@ test('dispatches fail event if loading content failed', async(t) => {
             data-trigger-event-name="loadData"
         >
             <div data-content-container>Original</div>
+            <template data-error-template>Error: {{message}}</template>
         </async-loader>`);
     document.body.appendChild(loader);
     const failed = [];
