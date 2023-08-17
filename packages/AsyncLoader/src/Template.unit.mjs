@@ -16,7 +16,7 @@ const createElement = (document, html) => {
     return container;
 };
 
-test.only('replaces content of container with content of a template', async(t) => {
+test('replaces content of container with content of a template', async(t) => {
     const { document, errors } = await setup(true);
 
     const content = createElement(document,
@@ -34,7 +34,7 @@ test.only('replaces content of container with content of a template', async(t) =
     t.is(errors.length, 0);
 });
 
-test.only('replaces content of container with content of first template that matches selectors', async(t) => {
+test('replaces content of container with content of first template that matches selectors', async(t) => {
     const { document, errors } = await setup(true);
 
     const content = createElement(document,
@@ -53,7 +53,7 @@ test.only('replaces content of container with content of first template that mat
     t.is(errors.length, 0);
 });
 
-test.only('replaces content of container with content', async(t) => {
+test('replaces content of container with content', async(t) => {
     const { document, errors } = await setup(true);
 
     const content = createElement(document,
