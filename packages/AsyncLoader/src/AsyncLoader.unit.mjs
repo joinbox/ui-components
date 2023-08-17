@@ -91,7 +91,7 @@ test('displays error if request fails', async(t) => {
 });
 
 
-test('displays specifi error for status code if request fails', async(t) => {
+test('displays specific error for status code if request fails', async(t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(404, 'notFound');
     const loader = createElement(document,

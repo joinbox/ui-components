@@ -1,13 +1,27 @@
+
+/**
+ * Helper class for AsyncLoader to find template content and display it in a designated container
+ */
 export default class Template {
 
     #rootElement;
     #contentContainer;
 
+    /**
+     * @param element
+     * @param contentContainerSelector
+     */
     constructor(element, contentContainerSelector) {
         this.#rootElement = element;
         this.#contentContainer = this.#getContentContainer(contentContainerSelector);
     }
 
+    /**
+     * Searches and returns a child element of "rootElement" using a css selector
+     * to be used as the container for the content.
+     * @param selector
+     * @return {HTMLElement}
+     */
     #getContentContainer(selector) {
         const container = this.#rootElement.querySelector(selector);
         if (!container) {
@@ -19,8 +33,8 @@ export default class Template {
     /**
      * Finds first matching element using an array of css selectors
      *
+     * @param {string[]} selectors
      * @return {HTMLElement|null}
-     * @param selectors
      */
     #getTemplate(selectors) {
         return selectors.reduce((previousMatch, selector) => (
@@ -30,6 +44,10 @@ export default class Template {
 
     /**
      * Replaces content in a template; see generateContent method
+     *
+     * @param {string} template
+     * @param {Object.<string, string>} replacements
+     * @return {string}
      */
     #replaceTemplateContent(template, replacements) {
         return Array.from(Object.entries(replacements))
@@ -49,11 +67,10 @@ export default class Template {
      *                                                two curly braces (key 'message' will look for
      *                                                '{{message}}' to be replaced)
      * @param throwIfNotFound                         Specify to throw an error if template is not
-     *                                                found. Used for optional templates.
+     *                                                found. Used for mandatory templates.
      */
     generateContent(selectors, replacements = null, throwIfNotFound = false) {
         const template = this.#getTemplate(selectors);
-
         if (!template) {
             if (throwIfNotFound) {
                 throw new Error(`Could not find child element that matches any selector ${selectors}.`);
@@ -62,13 +79,18 @@ export default class Template {
             }
         }
         const templateContent = template.innerHTML;
-        this.#contentContainer.innerHTML = (
+        this.setContent(
             replacements
                 ? this.#replaceTemplateContent(templateContent, replacements)
                 : templateContent
         );
     }
 
+    /**
+     * Puts passed content string in "contentContainer"
+     *
+     * @param content
+     */
     setContent(content) {
         this.#contentContainer.innerHTML = content;
     }

@@ -16,7 +16,7 @@ const createElement = (document, html) => {
     return container;
 };
 
-test('replaces content of container with content of a template', async(t) => {
+test('replaces content of container with content of the provided template', async(t) => {
     const { document, errors } = await setup(true);
 
     const content = createElement(document,
@@ -24,8 +24,9 @@ test('replaces content of container with content of a template', async(t) => {
         <template data-loading-template>Loading ...</template>`);
     document.body.appendChild(content);
 
-    const template = new Template(content, '[data-content-container]');
-    const container = document.querySelector('[data-content-container]');
+    const containerSelector = '[data-content-container]';
+    const template = new Template(content, containerSelector);
+    const container = document.querySelector(containerSelector);
     t.is(container.innerHTML, 'Initial');
 
     template.generateContent(['[data-loading-template]']);
@@ -43,8 +44,9 @@ test('replaces content of container with content of first template that matches 
         <template data-second-content-template>Second Content</template>`);
     document.body.appendChild(content);
 
-    const template = new Template(content, '[data-content-container]');
-    const container = document.querySelector('[data-content-container]');
+    const containerSelector = '[data-content-container]';
+    const template = new Template(content, containerSelector);
+    const container = document.querySelector(containerSelector);
     t.is(container.innerHTML, 'Initial');
 
     template.generateContent(['[data-second-content-template]', '[data-first-content-template]']);
@@ -53,15 +55,16 @@ test('replaces content of container with content of first template that matches 
     t.is(errors.length, 0);
 });
 
-test('replaces content of container with content', async(t) => {
+test('puts provided content in container', async(t) => {
     const { document, errors } = await setup(true);
 
     const content = createElement(document,
         `<div data-content-container>Initial</div>`);
     document.body.appendChild(content);
 
-    const template = new Template(content, '[data-content-container]');
-    const container = document.querySelector('[data-content-container]');
+    const containerSelector = '[data-content-container]';
+    const template = new Template(content, containerSelector);
+    const container = document.querySelector(containerSelector);
     t.is(container.innerHTML, 'Initial');
 
     template.setContent('New Content');
@@ -70,7 +73,27 @@ test('replaces content of container with content', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('throws errors if container and template are not found', async(t) => {
+test('replaces placeholders in template content with provided replacement values', async(t) => {
+    const { document, errors } = await setup(true);
+
+    const content = createElement(document,
+        `<div data-content-container>Initial</div>
+        <template data-content-template>{{Hello}} {{message}}</template>`);
+    document.body.appendChild(content);
+
+    const containerSelector = '[data-content-container]';
+    const template = new Template(content, containerSelector);
+    const container = document.querySelector(containerSelector);
+    t.is(container.innerHTML, 'Initial');
+
+    template.generateContent(['[data-content-template]'], {'message': 'World', 'anotherValue': 'thatHasNowhereToGo'});
+    t.is(container.innerHTML, '{{Hello}} World');
+
+    t.is(errors.length, 0);
+});
+
+
+test('throws errors if container or template are not found', async(t) => {
     const { document } = await setup(true);
 
     const content = createElement(document,
@@ -85,5 +108,5 @@ test('throws errors if container and template are not found', async(t) => {
 
     t.throws(() => {
         template.generateContent(['[data-loading-template]'], null, true);
-    }, { message: /'Could not find child element that'/ });
+    }, { message: /Could not find child element that/ });
 });
