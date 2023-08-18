@@ -33,7 +33,79 @@
         return () => element.removeEventListener(eventName, handler);
     };
 
-    /* global HTMLElement, window , CustomEvent*/
+    class Template {
+
+        #rootElement;
+        #contentContainer;
+
+        constructor(element, contentContainerSelector) {
+            this.#rootElement = element;
+            this.#contentContainer = this.#getContentContainer(contentContainerSelector);
+        }
+
+        #getContentContainer(selector) {
+            const container = this.#rootElement.querySelector(selector);
+            if (!container) {
+                throw new Error(`Could not find container to place content within; no child element matches selector ${selector}.`);
+            }
+            return container;
+        }
+
+        /**
+         * Finds first matching element using an array of css selectors
+         *
+         * @return {HTMLElement|null}
+         * @param selectors
+         */
+        #getTemplate(selectors) {
+            return selectors.reduce((previousMatch, selector) => (
+                previousMatch || this.#rootElement.querySelector(selector)
+            ), null);
+        }
+
+        /**
+         * Replaces content in a template; see generateContent method
+         */
+        #replaceTemplateContent(template, replacements) {
+            return Array.from(Object.entries(replacements))
+                .reduce((prev, [key, value]) => (
+                    prev.replaceAll(`{{${key}}}`, value)
+                ), template);
+        }
+
+        /**
+         * Gets a child template that matches selector, replaces its content and displays it
+         *
+         * @param {string[]} selectors                    Array CSS selectors.
+         *                                                Finds the first matching template
+         * @param {Object.<string, string>} replacements  Object of entries that should be replaced
+         *                                                in the template's content. Key is the
+         *                                                variables name which will be surrounded by
+         *                                                two curly braces (key 'message' will look for
+         *                                                '{{message}}' to be replaced)
+         * @param throwIfNotFound                         Specify to throw an error if template is not
+         *                                                found. Used for optional templates.
+         */
+        generateContent(selectors, replacements = null, throwIfNotFound = false) {
+            const template = this.#getTemplate(selectors);
+
+            if (!template && throwIfNotFound) {
+                throw new Error(`Could not find child element that matches any selector ${selectors}.`);
+            }
+            const templateContent = template.innerHTML;
+            this.#contentContainer.innerHTML = (
+                replacements
+                    ? this.#replaceTemplateContent(templateContent, replacements)
+                    : templateContent
+            );
+        }
+
+        setContent(content) {
+            this.#contentContainer.innerHTML = content;
+        }
+    }
+
+    /* global HTMLElement, window, CustomEvent */
 
     /**
      * Custom element that loads content through XHR. Displays error messages if such are encountered.
@@ -51,6 +123,8 @@
 
         #loadingStatus = this.#loadingStates.initial;
 
+        #template;
+
         constructor() {
             super();
 
@@ -65,7 +139,7 @@
                 {
                     validate: (value) => !!value,
                     expectation: 'a non-empty string',
-                }
+                },
             );
 
             this.eventEndpointPropertyName = readAttribute(
@@ -75,7 +149,7 @@
 
             this.triggerEventFilter = readAttribute(
                 this,
-                'data-trigger-event-filter'
+                'data-trigger-event-filter',
             );
 
             this.loadOnce = readAttribute(
@@ -83,12 +157,14 @@
                 'data-load-once',
                 {
                     transform: (value) => value === '',
-                }
+                },
             );
 
             if (!(this.endpointURL || this.eventEndpointPropertyName)) {
-                throw new Error(`The attributes "data-endpoint-url" or "data-event-endpoint-property-name" were not found but one of them needs to be set.`);
+                throw new Error('The attributes "data-endpoint-url" or "data-event-endpoint-property-name" were not found but one of them needs to be set.');
             }
+
+            this.#template = new Template(this, '[data-content-container]');
         }
 
         connectedCallback() {
@@ -140,16 +216,17 @@
 
         async #fetchData(fetchURL) {
             this.#loadingStatus = this.#loadingStates.loading;
-            this.#displayTemplate('[data-loading-template]');
+            this.#template.generateContent(['[data-loading-template]']);
+
             try {
                 const response = await fetch(fetchURL);
                 if (!response.ok) {
                     this.#handleError(`Status ${response.status}`, fetchURL);
                 } else {
                     const content = await response.text();
-                    this.#dispatchStatusEvent(fetchURL);
                     this.#loadingStatus = this.#loadingStates.loaded;
-                    this.#getContentContainer().innerHTML = content;
+                    this.#template.setContent(content);
+                    this.#dispatchStatusEvent(fetchURL);
                 }
             } catch (error) {
                 this.#handleError(error.message, fetchURL);
@@ -159,50 +236,10 @@
             }
         }
 
-        #getContentContainer() {
-            const container = this.querySelector('[data-content-container]');
-            if (!container) {
-                throw new Error('AsyncLoader: Could not find container to place content within; no child element matches selector [data-content-container].');
-            }
-            return container;
-        }
-
         #handleError(message, fetchURL) {
-            this.#loadingStates = this.#loadingStates.failed;
+            this.#loadingStatus = this.#loadingStates.failed;
             this.#dispatchStatusEvent(fetchURL, true);
-            this.#displayTemplate('[data-error-template]', { message });
-        }
-
-        /**
-         * Gets a child template that matches selector, replaces its content and displays it
-         * @param {string} selector                       CSS selector of the template to use
-         * @param {Object.<string, string>} replacements  Object of entries that should be replaced
-         *                                                in the template's content. Key is the
-         *                                                variables name which will be surrounded by
-         *                                                two curly braces (key 'message' will look for
-         *                                                '{{message}}' to be replaced)
-         */
-        #displayTemplate(selector, replacements = {}) {
-            const template = this.querySelector(selector);
-            if (!template) {
-                console.warn(`AsyncLoader: Could not find child element that matches selector ${selector}.`);
-                return;
-            }
-            const templateContent = template.innerHTML;
-            const content = this.#replaceContent(templateContent, replacements);
-            this.#getContentContainer().innerHTML = content;
-
-        }
-
-        /**
-         * Replaces content in a template; see #displayTemplate method
-         */
-        #replaceContent(template, replacements) {
-            const replaced = Array.from(Object.entries(replacements))
-                .reduce((prev, [key, value]) => (
-                    prev.replaceAll(`{{${key}}}`, value)
-                ), template);
-            return replaced;
+            this.#template.generateContent(['[data-error-template]'], { message }, true);
         }
 
         #dispatchStatusEvent(fetchURL, failed = false) {
