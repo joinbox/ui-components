@@ -1,7 +1,8 @@
 import readAttribute from '../../tools/src/readAttribute.mjs';
 import createListener from '../../../src/shared/createListener.mjs';
+import Template from './Template.mjs';
 
-/* global HTMLElement, window , CustomEvent*/
+/* global HTMLElement, window, CustomEvent */
 
 /**
  * Custom element that loads content through XHR. Displays error messages if such are encountered.
@@ -19,6 +20,8 @@ export default class extends HTMLElement {
 
     #loadingStatus = this.#loadingStates.initial;
 
+    #template;
+
     constructor() {
         super();
 
@@ -33,7 +36,7 @@ export default class extends HTMLElement {
             {
                 validate: (value) => !!value,
                 expectation: 'a non-empty string',
-            }
+            },
         );
 
         this.eventEndpointPropertyName = readAttribute(
@@ -43,7 +46,7 @@ export default class extends HTMLElement {
 
         this.triggerEventFilter = readAttribute(
             this,
-            'data-trigger-event-filter'
+            'data-trigger-event-filter',
         );
 
         this.loadOnce = readAttribute(
@@ -51,12 +54,14 @@ export default class extends HTMLElement {
             'data-load-once',
             {
                 transform: (value) => value === '',
-            }
+            },
         );
 
         if (!(this.endpointURL || this.eventEndpointPropertyName)) {
-            throw new Error(`The attributes "data-endpoint-url" or "data-event-endpoint-property-name" were not found but one of them needs to be set.`);
+            throw new Error('The attributes "data-endpoint-url" or "data-event-endpoint-property-name" were not found but one of them needs to be set.');
         }
+
+        this.#template = new Template(this, '[data-content-container]');
     }
 
     connectedCallback() {
@@ -108,16 +113,16 @@ export default class extends HTMLElement {
 
     async #fetchData(fetchURL) {
         this.#loadingStatus = this.#loadingStates.loading;
-        this.#displayTemplate('[data-loading-template]');
+        this.#template.generateContent(['[data-loading-template]']);
         try {
             const response = await fetch(fetchURL);
             if (!response.ok) {
-                this.#handleError(`Status ${response.status}`, fetchURL);
+                this.#handleError(`Status ${response.status}`, fetchURL, response.status);
             } else {
                 const content = await response.text();
-                this.#dispatchStatusEvent(fetchURL);
                 this.#loadingStatus = this.#loadingStates.loaded;
-                this.#getContentContainer().innerHTML = content;
+                this.#template.setContent(content);
+                this.#dispatchStatusEvent(fetchURL);
             }
         } catch (error) {
             this.#handleError(error.message, fetchURL);
@@ -127,50 +132,16 @@ export default class extends HTMLElement {
         }
     }
 
-    #getContentContainer() {
-        const container = this.querySelector('[data-content-container]');
-        if (!container) {
-            throw new Error('AsyncLoader: Could not find container to place content within; no child element matches selector [data-content-container].');
-        }
-        return container;
-    }
-
-    #handleError(message, fetchURL) {
-        this.#loadingStates = this.#loadingStates.failed;
+    #handleError(message, fetchURL, statusCode = null) {
+        this.#loadingStatus = this.#loadingStates.failed;
         this.#dispatchStatusEvent(fetchURL, true);
-        this.#displayTemplate('[data-error-template]', { message });
-    }
 
-    /**
-     * Gets a child template that matches selector, replaces its content and displays it
-     * @param {string} selector                       CSS selector of the template to use
-     * @param {Object.<string, string>} replacements  Object of entries that should be replaced
-     *                                                in the template's content. Key is the
-     *                                                variables name which will be surrounded by
-     *                                                two curly braces (key 'message' will look for
-     *                                                '{{message}}' to be replaced)
-     */
-    #displayTemplate(selector, replacements = {}) {
-        const template = this.querySelector(selector);
-        if (!template) {
-            console.warn(`AsyncLoader: Could not find child element that matches selector ${selector}.`);
-            return;
+        const errorTemplateSelectors = ['[data-error-template]'];
+        if (statusCode) {
+            errorTemplateSelectors.unshift(`[data-error-${statusCode}-template]`);
         }
-        const templateContent = template.innerHTML;
-        const content = this.#replaceContent(templateContent, replacements);
-        this.#getContentContainer().innerHTML = content;
 
-    }
-
-    /**
-     * Replaces content in a template; see #displayTemplate method
-     */
-    #replaceContent(template, replacements) {
-        const replaced = Array.from(Object.entries(replacements))
-            .reduce((prev, [key, value]) => (
-                prev.replaceAll(`{{${key}}}`, value)
-            ), template);
-        return replaced;
+        this.#template.generateContent(errorTemplateSelectors, { message }, true);
     }
 
     #dispatchStatusEvent(fetchURL, failed = false) {
