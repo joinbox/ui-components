@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.2.0...@joinbox/async-loader@1.4.0) (2023-08-18)
+
+
+### Features
+
+* **async-loader:** implement custom error template functionality ([bc4440b](https://github.com/joinbox/ui-components/commit/bc4440b78fe89b8ddf4b90213581b8ffb39663c8))
+* **async-loader:** refactor after code review ([f3c9955](https://github.com/joinbox/ui-components/commit/f3c995524802bddf4a6ea1df5922534fc6961921))
+* **async-loader:** refactor after code review ([27230e8](https://github.com/joinbox/ui-components/commit/27230e8a3fdb7ad274f0252edd2b2aaee04e9b22))
+* **async-loader:** remove only properties in tests ([2c60127](https://github.com/joinbox/ui-components/commit/2c60127478e3394a3a80b74825ab7c38c372ebc9))
+
+
+
+
+
 # [1.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.2.0...@joinbox/async-loader@1.3.0) (2023-08-18)
 
 
