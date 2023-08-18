@@ -21,6 +21,7 @@ changes since their last release; versions are created automatically based on
 most recent Git tag, therefore this step is essential.
 1. Push to master with --tags
 1. Run `npm run release` to publish packages
+1. Merge master into develop
 
 
 ## Use
