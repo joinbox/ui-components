@@ -33,16 +33,29 @@
         return () => element.removeEventListener(eventName, handler);
     };
 
+    /**
+     * Helper class for AsyncLoader to find template content and display it in a designated container
+     */
     class Template {
 
         #rootElement;
         #contentContainer;
 
+        /**
+         * @param {HTMLElement} element
+         * @param {string} contentContainerSelector
+         */
         constructor(element, contentContainerSelector) {
             this.#rootElement = element;
             this.#contentContainer = this.#getContentContainer(contentContainerSelector);
         }
 
+        /**
+         * Searches and returns a child element of "rootElement" using a css selector
+         * to be used as the container for the content.
+         * @param {string} selector
+         * @return {HTMLElement}
+         */
         #getContentContainer(selector) {
             const container = this.#rootElement.querySelector(selector);
             if (!container) {
@@ -54,8 +67,8 @@
         /**
          * Finds first matching element using an array of css selectors
          *
+         * @param {string[]} selectors
          * @return {HTMLElement|null}
-         * @param selectors
          */
         #getTemplate(selectors) {
             return selectors.reduce((previousMatch, selector) => (
@@ -65,6 +78,10 @@
 
         /**
          * Replaces content in a template; see generateContent method
+         *
+         * @param {string} template
+         * @param {Object.<string, string>} replacements
+         * @return {string}
          */
         #replaceTemplateContent(template, replacements) {
             return Array.from(Object.entries(replacements))
@@ -83,23 +100,31 @@
          *                                                variables name which will be surrounded by
          *                                                two curly braces (key 'message' will look for
          *                                                '{{message}}' to be replaced)
-         * @param throwIfNotFound                         Specify to throw an error if template is not
-         *                                                found. Used for optional templates.
+         * @param {boolean} throwIfNotFound               Specify to throw an error if template is not
+         *                                                found. Used for mandatory templates.
          */
         generateContent(selectors, replacements = null, throwIfNotFound = false) {
             const template = this.#getTemplate(selectors);
-
-            if (!template && throwIfNotFound) {
-                throw new Error(`Could not find child element that matches any selector ${selectors}.`);
+            if (!template) {
+                if (throwIfNotFound) {
+                    throw new Error(`Could not find child element that matches any selector ${selectors}.`);
+                } else {
+                    return;
+                }
             }
             const templateContent = template.innerHTML;
-            this.#contentContainer.innerHTML = (
+            this.setContent(
                 replacements
                     ? this.#replaceTemplateContent(templateContent, replacements)
                     : templateContent
             );
         }
 
+        /**
+         * Puts passed content string in "contentContainer"
+         *
+         * @param {string} content
+         */
         setContent(content) {
             this.#contentContainer.innerHTML = content;
         }
@@ -217,11 +242,10 @@
         async #fetchData(fetchURL) {
             this.#loadingStatus = this.#loadingStates.loading;
             this.#template.generateContent(['[data-loading-template]']);
-
             try {
                 const response = await fetch(fetchURL);
                 if (!response.ok) {
-                    this.#handleError(`Status ${response.status}`, fetchURL);
+                    this.#handleError(`Status ${response.status}`, fetchURL, response.status);
                 } else {
                     const content = await response.text();
                     this.#loadingStatus = this.#loadingStates.loaded;
@@ -236,10 +260,16 @@
             }
         }
 
-        #handleError(message, fetchURL) {
+        #handleError(message, fetchURL, statusCode = null) {
             this.#loadingStatus = this.#loadingStates.failed;
             this.#dispatchStatusEvent(fetchURL, true);
-            this.#template.generateContent(['[data-error-template]'], { message }, true);
+
+            const errorTemplateSelectors = ['[data-error-template]'];
+            if (statusCode) {
+                errorTemplateSelectors.unshift(`[data-error-${statusCode}-template]`);
+            }
+
+            this.#template.generateContent(errorTemplateSelectors, { message }, true);
         }
 
         #dispatchStatusEvent(fetchURL, failed = false) {

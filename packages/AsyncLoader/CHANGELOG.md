@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.4.0...@joinbox/async-loader@1.5.0) (2023-08-18)
+
+
+### Features
+
+* **async-loader:** build file ([19c05ce](https://github.com/joinbox/ui-components/commit/19c05ce136df924be2df53e0cca52672bfa3f914))
+
+
+
+
+
 # [1.4.0](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.2.0...@joinbox/async-loader@1.4.0) (2023-08-18)
 
 

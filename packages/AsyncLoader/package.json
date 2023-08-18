@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/async-loader",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Custom element that loads content through XHR",
   "main": "AsyncLoaderElement.js",
   "scripts": {
