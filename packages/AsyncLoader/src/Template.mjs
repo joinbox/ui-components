@@ -8,8 +8,8 @@ export default class Template {
     #contentContainer;
 
     /**
-     * @param element
-     * @param contentContainerSelector
+     * @param {HTMLElement} element
+     * @param {string} contentContainerSelector
      */
     constructor(element, contentContainerSelector) {
         this.#rootElement = element;
@@ -19,7 +19,7 @@ export default class Template {
     /**
      * Searches and returns a child element of "rootElement" using a css selector
      * to be used as the container for the content.
-     * @param selector
+     * @param {string} selector
      * @return {HTMLElement}
      */
     #getContentContainer(selector) {
@@ -66,7 +66,7 @@ export default class Template {
      *                                                variables name which will be surrounded by
      *                                                two curly braces (key 'message' will look for
      *                                                '{{message}}' to be replaced)
-     * @param throwIfNotFound                         Specify to throw an error if template is not
+     * @param {boolean} throwIfNotFound               Specify to throw an error if template is not
      *                                                found. Used for mandatory templates.
      */
     generateContent(selectors, replacements = null, throwIfNotFound = false) {
@@ -89,7 +89,7 @@ export default class Template {
     /**
      * Puts passed content string in "contentContainer"
      *
-     * @param content
+     * @param {string} content
      */
     setContent(content) {
         this.#contentContainer.innerHTML = content;
