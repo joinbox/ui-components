@@ -136,10 +136,10 @@ export default class extends HTMLElement {
         this.#loadingStatus = this.#loadingStates.failed;
         this.#dispatchStatusEvent(fetchURL, true);
 
-        const errorTemplateSelectors = ['[data-error-template]'];
-        if (statusCode) {
-            errorTemplateSelectors.unshift(`[data-error-${statusCode}-template]`);
-        }
+        const errorTemplateSelectors = [
+            ...(statusCode ? [`[data-error-${statusCode}-template]`] : []),
+            '[data-error-template]',
+        ];
 
         this.#template.generateContent(errorTemplateSelectors, { message }, true);
     }
