@@ -109,3 +109,35 @@ will be stored on the provided `element`
 ### Returns
 
 `undefined`
+
+
+# measureElement
+
+### Description
+Gets dimensions of an element (by calling `getBoundingClientRect()`) on load, window resize
+and (optionally) intersection. Returns them as an object that updates its values whenever any of
+the events described happens.
+
+### Usage
+
+```
+import { measureElement } from '@joinbox/ui-tools';
+
+const element = document.querySelector('div.className');
+const dimensions = measureElement({ element, updateOnIntersection: true });
+```
+
+### Arguments
+
+Syntax: `measureElement({ element, updateOnIntersection })`;
+
+- `element` (`HTMLElement`, required): Element to measure
+- `updateOnIntersection` (`boolean`, optional): If true, dimensions will update whenever the
+  element becomes visible
+
+### Returns
+`object`: Object with same properties as [`DOMRect`](https://developer.mozilla.org/en-US/docs/Web/API/DOMRect)
+with values that reflect the element's current dimensions.
+
+### Errors
+No specific errors
