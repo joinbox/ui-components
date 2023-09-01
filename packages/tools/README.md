@@ -24,12 +24,12 @@ Syntax: `readAttribute(element, attribute, additionalArguments)`;
 - `attribute` (`string`, required): Name of the attribute to read
 - `additionalArguments` (`object`, optional): Object with properties
     - `transform` (`function`, optional), takes `value` as its only parameter and should return the 
-    transformed value
+    transformed value. Defaults to `(value) => value`.
     - `validate` (`function`, optional), takes `value` as its only parameter (that is the
     attribute's value *after* the `transform` function has been applied) and should return `true`
-    if the value is valid, else `false`
+    if the value is valid, else `false`. Defaults to `(value) => value`.
     - `expectation` (`string`, optional): expected value for the (transformed) value; will be
-    printed in the error message if `validate` returns `false`
+    printed in the error message if `validate` returns `false`.
 
 ### Returns
 `*`: Transformed and validated value
@@ -132,8 +132,8 @@ const dimensions = measureElement({ element, updateOnIntersection: true });
 Syntax: `measureElement({ element, updateOnIntersection })`;
 
 - `element` (`HTMLElement`, required): Element to measure
-- `updateOnIntersection` (`boolean`, optional): If true, dimensions will update whenever the
-  element becomes visible
+- `updateOnIntersection` (`boolean`, optional): If `true`, dimensions will update whenever the
+  element becomes visible. Defaults to `false`.
 
 ### Returns
 `object`: Object with same properties as [`DOMRect`](https://developer.mozilla.org/en-US/docs/Web/API/DOMRect)

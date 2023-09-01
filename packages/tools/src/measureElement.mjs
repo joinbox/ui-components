@@ -38,7 +38,7 @@ export default ({ element, updateOnIntersection = false } = {}) => {
     // dimensions may only be resolved once the images are loaded
     if (updateOnIntersection) {
         const observer = new IntersectionObserver(measure);
-        observer.observe();
+        observer.observe(element);
     }
 
     return dimensions;
