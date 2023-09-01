@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/ui-tools@1.0.2...@joinbox/ui-tools@1.1.0) (2023-09-01)
+
+
+### Bug Fixes
+
+* **measureElement:** Fixes from code review ([b458839](https://github.com/joinbox/ui-components/commit/b4588398ef56751f43d44124803a6cd0e01485b7))
+
+
+### Features
+
+* **measureElement:** add measureElement function ([504d225](https://github.com/joinbox/ui-components/commit/504d225ef0a01438512218c4ca0065b2c6e8b82f))
+
+
+
+
+
 ## [1.0.2](https://github.com/joinbox/ui-components/compare/@joinbox/ui-tools@1.0.1...@joinbox/ui-tools@1.0.2) (2023-07-18)
 
 **Note:** Version bump only for package @joinbox/ui-tools
