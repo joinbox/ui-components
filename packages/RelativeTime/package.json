@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/relative-time",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Custom element that displays localized relative time (e.g. '4 days ago')",
   "main": "RelativeTimeElement.js",
   "scripts": {

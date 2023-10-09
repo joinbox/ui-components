@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/joinbox/ui-components/compare/@joinbox/relative-time@1.1.0...@joinbox/relative-time@1.1.1) (2023-10-09)
+
+
+### Features
+
+* **relative-time:** build file ([ad169f5](https://github.com/joinbox/ui-components/commit/ad169f595995f31bdca7803d33b1965bf0337c06))
+* **relative-time:** fix rollup config ([0e3a343](https://github.com/joinbox/ui-components/commit/0e3a343cd91f1cb761c47ba50cfa94ddb9a77936))
+
+
+
+
+
 # 1.1.0 (2023-10-09)
 
 
