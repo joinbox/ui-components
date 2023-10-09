@@ -1,6 +1,6 @@
 import createRollupConfig from '../../createRollupConfig.mjs';
 
 const components = [
-    'RelativeTime.js',
+    'RelativeTimeElement.js',
 ];
 export default createRollupConfig(components);
