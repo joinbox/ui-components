@@ -28,5 +28,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": ["relative date", "relative time", "time ago", "months a go", "days ago", "weeks ago", "years ago", "custom element", "web component", "date format", "time format"]
 }

@@ -1,4 +1,6 @@
-import { debounce } from '../main.mjs';
+import debounce from './debounce.mjs';
+
+/* global window, DOMRectReadOnly, IntersectionObserver */
 
 /**
  * Measures an element's dimensions initially, on resize and visibility change; stores values
@@ -19,8 +21,8 @@ export default ({ element, updateOnIntersection = false } = {}) => {
         const newDimensions = element.getBoundingClientRect();
         // See https://stackoverflow.com/questions/39417566/how-best-to-convert-a-clientrect-domrect-into-a-plain-object
         const keys = Object.keys(DOMRectReadOnly.prototype);
-        [...keys].forEach((key) => dimensions[key] = newDimensions[key]);
-    }
+        [...keys].forEach((key) => { dimensions[key] = newDimensions[key]; });
+    };
 
     measure();
 
@@ -36,11 +38,22 @@ export default ({ element, updateOnIntersection = false } = {}) => {
     // Update element whenever it comes into the viewport; if the element contains an image
     // without fixed height/width or its position (x/y) depends on an image above, the
     // dimensions may only be resolved once the images are loaded
+    let observer;
     if (updateOnIntersection) {
-        const observer = new IntersectionObserver(measure);
+        observer = new IntersectionObserver(measure);
         observer.observe(element);
     }
 
+    const destroy = () => {
+        window.removeEventListener('resize', debouncedMeasure);
+        if (observer) observer.disconnect();
+    };
+
+    // Add methods; we do not return a meta object (with props dimensions, update and destroy)
+    // to not break the API (as this module has been published earlier without those methods)
+    dimensions.update = measure;
+    dimensions.destroy = destroy;
+
     return dimensions;
 
-}
+};
