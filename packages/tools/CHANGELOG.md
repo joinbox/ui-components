@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/ui-tools@1.1.0...@joinbox/ui-tools@1.2.0) (2023-10-12)
+
+
+### Features
+
+* **measureElement:** add update and destroy methods ([b4e7d8f](https://github.com/joinbox/ui-components/commit/b4e7d8f664aa24bcc41bb5cf7b76f3778ad6ae65))
+
+
+
+
+
 # [1.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/ui-tools@1.0.2...@joinbox/ui-tools@1.1.0) (2023-09-01)
 
 
