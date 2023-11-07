@@ -58,25 +58,33 @@ overlay.addEventListener('closeOverlay', enableBodyScroll);
 `<overlay-component></overlay-component>`
 
 #### Attributes
-- `data-name`: Names the overlay; the name must exactly match attribute `data-overlay-name` on
-`overlay-button-component` to be opened/closed by it.
-- `data-visible-class-name`: Contains the class name that will be added to the overlay when it is
-opened and removed when it is closed.
-- `data-background-selector`: Takes any CSS selector and defines the element that will receive
-`data-background-visible-class-name` when the overlay opens.
-- `data-background-visible-class-name`. Defines the class that will be added to the background
-element when the overlay is opened and removed when the overlay is closed.
-- `data-disable-esc`: Prevents the overlay from being closed when users press the ESC key. Defaults
-to false.
-- `data-disable-click-outside`: Prevents the overlay from being closed when users click with their
-mouse outside of the overlay. Defaults to false.
+- `data-name` (required, `String`): Names the overlay; the name must exactly match attribute
+`data-overlay-name` on `overlay-button-component` to be opened/closed by it.
+- `data-visible-class-name` (required, `String`): Contains the class name that will be added to the
+overlay when it is opened and removed when it is closed.
+- `data-background-selector` (optional, `String`): Takes any CSS selector and defines the element
+that will receive `data-background-visible-class-name` when the overlay opens.
+- `data-background-visible-class-name` (optional, `String`). Defines the class that will be added to
+the background element when the overlay is opened and removed when the overlay is closed.
+- `data-disable-esc` (optional, `Boolean` i.e. can be set without attribute or not at all):
+Prevents the overlay from being closed when users press the ESC key. Defaults to false.
+- `data-disable-click-outside` (optional, `Boolean`  i.e. can be set without attribute or not at
+all): Prevents the overlay from being closed when users click with their mouse outside of the
+overlay. Defaults to false.
 
 #### Events
-- `openOverlay`: Dispatched after an overlay is opened; bubbles and has a `details` object with
+
+The overlay emits the following events:
+- `overlayOpened`: Dispatched after an overlay is opened; bubbles and has a `detail` object with
 a `name` property that corresponds to the overlay's `data-name` attribute value.
-- `closeOverlay`: Dispatched after an overlay is closed; bubbles and has a `details` object with
+- `overlayClosed`: Dispatched after an overlay is closed; bubbles and has a `detail` object with
 a `name` property that corresponds to the overlay's `data-name` attribute value.
 
+The overlay listens to the following events (on `window`):
+- `openOverlay`: Open an overlay; must contain a `detail` object with a `name` property that
+corresponds to the overlay's name.
+- `closeOverlay`: Close an overlay; must contain a `detail` object with a `name` property that
+corresponds to the overlay's name.
 
 
 ### Overlay Button

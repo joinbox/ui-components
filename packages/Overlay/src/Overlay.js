@@ -53,6 +53,7 @@ export default class Overlay extends HTMLElement {
         this.registerAnnouncements();
         this.setupModelListeners();
         this.updateDOM();
+        this.setupDOMListeners();
     }
 
     connectedCallback() {
@@ -85,6 +86,15 @@ export default class Overlay extends HTMLElement {
         this.model.on('change', this.updateDOM.bind(this));
     }
 
+    setupDOMListeners() {
+        window.addEventListener('openOverlay', (event) => {
+            if (event.detail.name === this.name) this.model.open();
+        });
+        window.addEventListener('closeOverlay', (event) => {
+            if (event.detail.name === this.name) this.model.close();
+        });
+    }
+
     updateDOM() {
         window.requestAnimationFrame(() => {
             const visible = this.model.isOpen;
@@ -96,7 +106,10 @@ export default class Overlay extends HTMLElement {
                 }
                 // Legacy event (naming not clear enough); remove on next breaking change
                 this.dispatchEvent(new CustomEvent('open', eventPayload));
+                // Legacy event (naming clashes with event that actually opens the overlay);
+                // remove on next breaking change
                 this.dispatchEvent(new CustomEvent('openOverlay', eventPayload));
+                this.dispatchEvent(new CustomEvent('overlayOpened', eventPayload));
             } else {
                 this.classList.remove(this.visibleClassName);
                 if (this.background && this.backgroundVisibleClassName) {
@@ -104,7 +117,10 @@ export default class Overlay extends HTMLElement {
                 }
                 // Legacy event (naming not clear enough); remove on next breaking change
                 this.dispatchEvent(new CustomEvent('close', eventPayload));
+                // Legacy event (naming clashes with event that actually opens the overlay);
+                // remove on next breaking change
                 this.dispatchEvent(new CustomEvent('closeOverlay', eventPayload));
+                this.dispatchEvent(new CustomEvent('overlayClosed', eventPayload));
             }
         });
 

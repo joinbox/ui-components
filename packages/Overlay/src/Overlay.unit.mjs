@@ -61,7 +61,7 @@ test('closes on esc', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('dispatch open and close events', async(t) => {
+test('dispatch opened and closed events', async(t) => {
     const { window, document, errors } = await setup(true);
     window.requestAnimationFrame = cb => cb();
     const elements = createElement(
@@ -77,8 +77,8 @@ test('dispatch open and close events', async(t) => {
     overlay.addEventListener('close', (ev) => { legacyEvents.push(ev); });
     // Current events; check if they bubble
     const outerElement = document.querySelector('.bubbler');
-    outerElement.addEventListener('openOverlay', (ev) => { events.push(ev); });
-    outerElement.addEventListener('closeOverlay', (ev) => { events.push(ev); });
+    outerElement.addEventListener('overlayOpened', (ev) => { events.push(ev); });
+    outerElement.addEventListener('overlayClosed', (ev) => { events.push(ev); });
     overlay.model.open();
     overlay.model.close();
     overlay.model.open();
@@ -86,7 +86,7 @@ test('dispatch open and close events', async(t) => {
     t.deepEqual(legacyEvents.map(ev => ev.type), ['open', 'close', 'open']);
     // Detail contains a name property with the overlay's name
     t.deepEqual(legacyEvents.map(ev => ev.detail.name), Array.from({ length: 3 }).fill('test'));
-    t.deepEqual(events.map(ev => ev.type), ['openOverlay', 'closeOverlay', 'openOverlay']);
+    t.deepEqual(events.map(ev => ev.type), ['overlayOpened', 'overlayClosed', 'overlayOpened']);
     // Detail contains a name property with the overlay's name
     t.deepEqual(events.map(ev => ev.detail.name), Array.from({ length: 3 }).fill('test'));
 
@@ -110,3 +110,22 @@ test('closes on click outside', async(t) => {
     t.is(errors.length, 0);
 });
 
+
+test.only('opens and closes on corresponding events', async (t) => {
+    const { window, document, errors } = await setup(true);
+    window.requestAnimationFrame = cb => cb();
+    const overlay = createElement(document, '<overlay-component data-visible-class-name="visible" data-name="test"></overlay-component>');
+    document.body.appendChild(overlay);
+    // Wrong name
+    window.dispatchEvent(new window.CustomEvent('openOverlay', { detail: { name: 'wrong' } }));
+    t.is(overlay.model.isOpen, false);
+    window.dispatchEvent(new window.CustomEvent('openOverlay', { detail: { name: 'test' } }));
+    t.is(overlay.model.isOpen, true);
+    // Wrong name
+    window.dispatchEvent(new window.CustomEvent('closeOverlay', { detail: { name: 'wrong' } }));
+    t.is(overlay.model.isOpen, true);
+    window.dispatchEvent(new window.CustomEvent('closeOverlay', { detail: { name: 'test' } }));
+    // await new Promise(resolve => setTimeout(resolve));
+    t.is(overlay.model.isOpen, false);
+    t.is(errors.length, 0);
+});
