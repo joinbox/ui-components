@@ -103,3 +103,10 @@ the overlay is opened.
 - `data-closed-class-name` (optional, `String`): Class name that will be added to the button when
 the overlay is closed.
 
+
+## Migration
+
+## From v1 to v2
+- Events `openOverlay` and `closeOverlay` (emitted **after** the overlay is opened or closed)
+are renamed to `overlayOpened` and `overlayClosed` (because the original events are now used to
+open or close the overlay, not to communicate its state change retrospectively)
