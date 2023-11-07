@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.1.4...@joinbox/overlay@2.0.0) (2023-11-07)
+
+
+### Bug Fixes
+
+* **overlay:** remove legacy events ([0e6803e](https://github.com/joinbox/ui-components/commit/0e6803e5715ecd930f446fcb2002b93bcf8a9c77))
+
+
+### Features
+
+* **overlay:** listen to openOverlay and closeOverlay events ([e89bf1c](https://github.com/joinbox/ui-components/commit/e89bf1cae2157e0a7a5c7c5a19287229477ce7bb))
+
+
+### BREAKING CHANGES
+
+* **overlay:** Events openOverlay and closeOverlay are renamed to overlayOpened and overlayClosed
+
+
+
+
+
 ## [1.1.4](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@1.1.3...@joinbox/overlay@1.1.4) (2023-07-18)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/ui-tools@1.2.0...@joinbox/ui-tools@1.3.0) (2023-11-07)
+
+
+### Features
+
+* **slide:** add onEnd callback ([7148e84](https://github.com/joinbox/ui-components/commit/7148e84ba734daf24d457d773e1008fd201b8ac6))
+
+
+
+
+
 # [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/ui-tools@1.1.0...@joinbox/ui-tools@1.2.0) (2023-10-12)
 
 
