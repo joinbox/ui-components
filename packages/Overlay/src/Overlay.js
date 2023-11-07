@@ -20,7 +20,7 @@ export default class Overlay extends HTMLElement {
             this,
             canReadAttributes([{
                 name: 'data-name',
-                validate: value => !!value,
+                validate: (value) => !!value,
                 property: 'name',
             }, {
                 name: 'data-background-selector',
@@ -30,17 +30,17 @@ export default class Overlay extends HTMLElement {
                 property: 'backgroundVisibleClassName',
             }, {
                 name: 'data-visible-class-name',
-                validate: value => !!value,
+                validate: (value) => !!value,
                 property: 'visibleClassName',
             }, {
                 name: 'data-disable-esc',
                 property: 'disableEsc',
                 // Create bool
-                transform: value => !!value,
+                transform: (value) => !!value,
             }, {
                 name: 'data-disable-click-outside',
                 property: 'disableClickOutside',
-                transform: value => !!value,
+                transform: (value) => !!value,
             }]),
             canRegisterElements({
                 eventType: 'overlay-button',

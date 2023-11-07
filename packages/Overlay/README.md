@@ -93,11 +93,13 @@ corresponds to the overlay's name.
 `<overlay-button-component></overlay-button-component>`
 
 #### Attributes
-- `data-overlay-name`: Contains the name of the overlay that should be opened or closed. Make sure
-it exactly matches the attribute `data-name` on `overlay-component`.
-- `data-type` is either `close`, if the button shall only close the overlay, `open` if the button
-shall only open the overlay or `toggle` if the button shall toggle the overlay. Defaults to
-`toggle`.
-- `data-open-class-name`: Class name that will be added to the button when the overlay is opened.
-- `data-closed-class-name`: Class name that will be added to the button when the overlay is closed.
+- `data-overlay-name` (required, `String`): Contains the name of the overlay that should be opened
+or closed. Make sure it exactly matches the attribute `data-name` on `overlay-component`.
+- `data-type` (required, `String`): Is either `close`, if the button shall only close the overlay,
+`open` if the button shall only open the overlay or `toggle` if the button shall toggle the
+overlay. Defaults to `toggle`.
+- `data-open-class-name` (optional, `String`): Class name that will be added to the button when
+the overlay is opened.
+- `data-closed-class-name` (optional, `String`): Class name that will be added to the button when
+the overlay is closed.
 
