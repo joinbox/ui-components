@@ -21,7 +21,7 @@ slide({ element, targetSize: 200, dimension: 'x' });
 ## Details
 
 1. Sets height/width of the element to its current offset height/width
-2. Afterwards sets height/width of element to the desired target height/width; if no `targetSize``
+2. Afterwards sets height/width of element to the desired target height/width; if no `targetSize`
 is specified, uses scroll height/width instead.
 3. If the final (offset) height/width (on `transitionend`) corresponds to the element's scroll
 height/width, its height/width is reset to 'auto' (to stay responsive)
@@ -29,8 +29,9 @@ height/width, its height/width is reset to 'auto' (to stay responsive)
 ### Arguments
 Pass all arguments as an object.
 
-- `element` The HTML element whose height/width should be updated
-- `dimension` (optional): Either 'x' (to update the element's width) or 'y' (to update the element's
-height). Defaults to 'y'.
-- `targetSize`(optional): A number; will be used to set the element's height/width to the provided
-size. If argument is not passed, the element's scroll width/height will be used.
+- `element` (required, `HTMLElement`): The HTML element whose height/width should be updated
+- `dimension` (optional, `String`): Either `'x'` (to update the element's width) or `'y'` (to
+update the element's height). Defaults to `'y'`.
+- `targetSize` (optional, `Number`): A number; will be used to set the element's height/width to the
+provided size. If argument is not passed, the element's scroll width/height will be used.
+- `onEnd` (optional, `Function`): Function that will be called once the transition ends.

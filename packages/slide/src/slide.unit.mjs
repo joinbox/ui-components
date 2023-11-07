@@ -3,12 +3,12 @@ import { fileURLToPath } from 'url';
 import test from 'ava';
 import getDOM from '../../../src/testHelpers/getDOM.mjs';
 
-const setup = async(hideErrors) => {
+const setup = async (hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
     return getDOM({ basePath, scripts: ['slide.export.js'], hideErrors });
 };
 
-test('fails with invalid element', async(t) => {
+test('fails with invalid element', async (t) => {
     const { document, errors } = await setup(true);
     const script = document.createElement('script');
     script.textContent = 'slide();';
@@ -17,7 +17,7 @@ test('fails with invalid element', async(t) => {
     t.is(errors[0].message.includes('be a HTMLElement'), true);
 });
 
-test('fails with invalid dimension', async(t) => {
+test('fails with invalid dimension', async (t) => {
     const { document, errors } = await setup(true);
     const script = document.createElement('script');
     script.textContent = `
@@ -28,7 +28,7 @@ test('fails with invalid dimension', async(t) => {
     t.is(errors[0].message.includes('\'x\' or \'y\''), true);
 });
 
-test.only('adjusts dimensions', async(t) => {
+test('adjusts dimensions', async (t) => {
     const { document, errors, window } = await setup(true);
 
     const widthDiv = document.createElement('div');
@@ -43,7 +43,7 @@ test.only('adjusts dimensions', async(t) => {
 
     Object.defineProperty(window.HTMLElement.prototype, 'scrollWidth', { value: 40 });
     Object.defineProperty(window.HTMLElement.prototype, 'scrollHeight', { value: 50 });
-    window.requestAnimationFrame = cb => cb();
+    window.requestAnimationFrame = (cb) => cb();
 
     const script = document.createElement('script');
     script.textContent = `
@@ -52,7 +52,7 @@ test.only('adjusts dimensions', async(t) => {
     `;
     document.body.appendChild(script);
 
-    await new Promise(resolve => setTimeout(resolve));
+    await new Promise((resolve) => setTimeout(resolve));
 
     t.is(heightDiv.style.height, '50px');
     t.is(widthDiv.style.width, '40px');
@@ -69,7 +69,7 @@ test.only('adjusts dimensions', async(t) => {
     widthTransitionEndEvent.propertyName = 'width';
     widthDiv.dispatchEvent(widthTransitionEndEvent);
 
-    await new Promise(resolve => setTimeout(resolve));
+    await new Promise((resolve) => setTimeout(resolve));
 
     t.is(widthDiv.style.width, 'auto');
     t.is(heightDiv.style.height, 'auto');
@@ -84,5 +84,33 @@ test.only('adjusts dimensions', async(t) => {
     t.is(widthDiv.style.width, '0px');
     t.is(heightDiv.style.height, '0px');
 
+    t.is(errors.length, 0);
+});
+
+
+test('calls onEnd', async (t) => {
+    const { document, errors, window } = await setup(true);
+
+    const heightDiv = document.createElement('div');
+    document.body.appendChild(heightDiv);
+
+    // Mock missing JSDOM window methods
+    Object.defineProperty(window.HTMLElement.prototype, 'scrollHeight', { value: 50 });
+    window.requestAnimationFrame = (cb) => cb();
+
+    const script = document.createElement('script');
+    script.textContent = `
+        slide({ element: document.querySelector('div'), onEnd: () => { window.slideOnEndCalled = true; } });
+    `;
+    document.body.appendChild(script);
+    t.is(window.slideOnEndCalled, undefined);
+
+    await new Promise((resolve) => setTimeout(resolve));
+
+    const heightTransitionEndEvent = new window.CustomEvent('transitionend');
+    heightTransitionEndEvent.propertyName = 'height';
+    heightDiv.dispatchEvent(heightTransitionEndEvent);
+
+    t.is(window.slideOnEndCalled, true);
     t.is(errors.length, 0);
 });

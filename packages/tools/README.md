@@ -24,7 +24,8 @@ Syntax: `readAttribute(element, attribute, additionalArguments)`;
 - `attribute` (`string`, required): Name of the attribute to read
 - `additionalArguments` (`object`, optional): Object with properties
     - `transform` (`function`, optional), takes `value` as its only parameter and should return the 
-    transformed value. Defaults to `(value) => value`.
+    transformed value. Defaults to `(value) => value`. In order to check if a boolean attribute
+    is present, use `(value) => value !== null`.
     - `validate` (`function`, optional), takes `value` as its only parameter (that is the
     attribute's value *after* the `transform` function has been applied) and should return `true`
     if the value is valid, else `false`. Defaults to `(value) => value`.
