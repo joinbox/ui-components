@@ -28,5 +28,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "37bc896983b222763b559c3df55697e720866be7"
+  "gitHead": "37bc896983b222763b559c3df55697e720866be7",
+  "dependencies": {
+    "@joinbox/ui-tools": "^1.3.0"
+  }
 }
