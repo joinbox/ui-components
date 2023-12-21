@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.4](https://github.com/joinbox/ui-components/compare/@joinbox/dynamicpageloader@0.3.3...@joinbox/dynamicpageloader@0.3.4) (2023-12-21)
+
+
+### Bug Fixes
+
+* **dpl:** fix invalid dependency ([2e339df](https://github.com/joinbox/ui-components/commit/2e339df2ff33958bfafbf057c9e2ad6fff5bb1be))
+
+
+
+
+
 ## [0.3.3](https://github.com/joinbox/ui-components/compare/@joinbox/dynamicpageloader@0.3.2...@joinbox/dynamicpageloader@0.3.3) (2023-07-18)
 
 
