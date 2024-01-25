@@ -14,20 +14,19 @@ const createElement = (document, html) => {
     return container.firstChild;
 };
 
-test('loads API on mouseenter', async(t) => {
+test('loads API on mouseenter', async (t) => {
     const { window, document, errors } = await setup(true);
-    window.requestAnimationFrame = cb => cb();
     const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-loading-class-name="loading"></youtube-player-compoent>');
     document.body.appendChild(player);
     player.dispatchEvent(new window.MouseEvent('mouseenter'));
-    t.is(player.player instanceof window.Promise, true);
+    await player.video;
+    // Awaiting the video should not timeout here; that's all we need to test for as the
+    // YouTube API won't be loading without the mouseenter event
     t.is(errors.length, 0);
 });
 
-
-test('adds loading class on click', async(t) => {
+test('adds loading class on click', async (t) => {
     const { window, document, errors } = await setup(true);
-    window.requestAnimationFrame = cb => cb();
     const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-loading-class-name="loading"></youtube-player-compoent>');
     document.body.appendChild(player);
     player.dispatchEvent(new window.MouseEvent('click'));
@@ -35,9 +34,8 @@ test('adds loading class on click', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('replaces player when ready', async(t) => {
+test('replaces player when ready', async (t) => {
     const { window, document, errors } = await setup(true);
-    window.requestAnimationFrame = cb => cb();
     const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-loading-class-name="loading"></youtube-player-compoent>');
     document.body.appendChild(player);
     player.dispatchEvent(new window.MouseEvent('click'));
@@ -48,9 +46,8 @@ test('replaces player when ready', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('uses player variables', async(t) => {
+test('uses player variables', async (t) => {
     const { window, document, errors } = await setup(true);
-    window.requestAnimationFrame = cb => cb();
     const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-player-variables=\'{"controls": 0}\' data-loading-class-name="loading"></youtube-player-compoent>');
     document.body.appendChild(player);
     player.dispatchEvent(new window.MouseEvent('click'));
@@ -60,3 +57,16 @@ test('uses player variables', async(t) => {
     t.is(errors.length, 0);
 });
 
+test('exposes player', async (t) => {
+    const { window, document, errors } = await setup(true);
+    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4"></youtube-player-compoent>');
+    document.body.appendChild(player);
+    player.dispatchEvent(new window.MouseEvent('click'));
+    t.is(player.player instanceof window.Promise, true);
+    const playerProperty = await player.player;
+    // We cannot really test for YouTube Player, as there are no good public properties/methods
+    // while it's still loading (and JSDOM does never execute onReady); just check if it's an
+    // object.
+    t.is(typeof playerProperty, 'object');
+    t.is(errors.length, 0);
+});
