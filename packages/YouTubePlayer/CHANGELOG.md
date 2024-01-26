@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.1.5...@joinbox/youtubeplayer@1.2.0) (2024-01-26)
+
+
+### Bug Fixes
+
+* **youtube-player:** fixes after code review ([8ebf5b1](https://github.com/joinbox/ui-components/commit/8ebf5b1efd40ca2a7305f86c00400bc352ce543e))
+
+
+### Features
+
+* **youtube-player:** expose player as property ([4b9a938](https://github.com/joinbox/ui-components/commit/4b9a9386935bba1b70532eb95e312aedeaeb8d01))
+
+
+
+
+
 ## [1.1.5](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.1.4...@joinbox/youtubeplayer@1.1.5) (2023-07-18)
 
 
