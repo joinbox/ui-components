@@ -2,50 +2,23 @@
     'use strict';
 
     /**
-     * Simplifies watching attributes; pass in a config and this mixin will automatically store
-     * attribute values in a component to reduce DOM reads and simplify validation.
-     * IMPORTANT: We might want to use observable attributes in the future; we did not do so now,
-     * because
-     * a) it's hard to add the static method to he class that consumes the mixin
-     * b) there is no JSDOM support for observable attributes, which makes testing a pain
-     * @param {object[]} config     Attribute config; each entry may consist of the following
-     *                              properties:
-     *                              - name (string, mandatory): Name of the attribute to watch
-     *                              - validate (function, optional): Validation function; return a
-     *                                falsy value if validation is not passed
-     *                              - property (string, optional): Class property that the value
-     *                                should be stored in; if not set, name will be used instead
-     *                              - transform (function): Transforms value before it is saved as a
-     *                                property
+     * Reads, transforms and validates an attribute from an HTML element.
      */
-    var canReadAttributes = (config) => {
-
-        if (!config.every(item => item.name)) {
-            throw new Error(`canReadAttribute: Every config entry must be an object with property name; you passed ${JSON.stringify(config)} instead.`);
+    var readAttribute = (
+        element,
+        attributeName,
+        {
+            transform = (value) => value,
+            validate = () => true,
+            expectation = '(expectation not provided)',
+        } = {},
+    ) => {
+        const value = element.getAttribute(attributeName);
+        const transformedValue = transform(value);
+        if (!validate(transformedValue)) {
+            throw new Error(`Expected attribute ${attributeName} of element ${element.outerHTML} to be ${expectation}; got ${transformedValue} instead (${value} before the transform function was applied).`);
         }
-
-        return {
-            readAttributes() {
-                config.forEach((attributeConfig) => {
-                    const {
-                        name,
-                        validate,
-                        property,
-                        transform,
-                    } = attributeConfig;
-                    // Use getAttribute instead of dataset, as attribute is not guaranteed to start
-                    // with data-
-                    const value = this.getAttribute(name);
-                    if (typeof validate === 'function' && !validate(value)) {
-                        throw new Error(`canWatchAttribute: Attribute ${name} does not match validation rules`);
-                    }
-                    const transformFunction = transform || (initialValue => initialValue);
-                    const propertyName = property || name;
-                    this[propertyName] = transformFunction(value);
-                });
-            },
-        };
-
+        return transformedValue;
     };
 
     /**
@@ -96,76 +69,110 @@
      */
     class YouTubePlayer extends HTMLElement {
 
-        /**
-         * Player instance or, if not ready, promise
-         */
-        player = undefined;
+        #disconnectMouseEnter;
+        #disconnectClick;
+
+        // Attributes read from DOM
+        #loadingClass;
+        #playerVars;
+        #videoId;
 
         /**
-         * Player's current status. Either null, 'loading' or 'ready';
+         * YouTube player for the current video; is exposed publicly for outside code to be
+         * able to interact with the video through pause/play (e.g. when the video plays
+         * in an overlay and should be paused once the overlay is closed)
+         * @public
+         * @type {Promise}
          */
-        status = null;
+        player
+
+        /**
+         * Function to resolve the YouTube player
+         * @type {Function}
+         */
+        #resolvePlayer
+
+        /**
+         * Promise that resolves once the YouTube API is ready. Undefined if the player hasn't started
+         * loading
+         * @type {undefined|Promise}
+         */
+        #youTubeAPI;
 
         constructor() {
             super();
-            Object.assign(
-                this,
-                canReadAttributes([{
-                    name: 'data-video-id',
-                    validate: value => !!value,
-                    property: 'videoID',
-                }, {
-                    name: 'data-player-variables',
-                    property: 'playerVars',
-                    transform: value => JSON.parse(value),
-                }, {
-                    name: 'data-loading-class-name',
-                    property: 'loadingClass',
-                }]),
-            );
-            this.readAttributes();
+            this.#readAttributes();
+            this.#preparePlayerPromise();
         }
 
-        /**
-         * @private
-         */
         connectedCallback() {
-            this.disconnectMouseEnter = createListener(
+            // Preload YouTube API as soon as a user might play the video (by hovering the video
+            // with the mouse)
+            this.#disconnectMouseEnter = createListener(
                 this,
                 'mouseenter',
-                this.handleMouseEnter.bind(this),
+                this.#loadYouTubeAPI.bind(this),
             );
-            this.disconnectClick = createListener(
+            this.#disconnectClick = createListener(
                 this,
                 'click',
-                this.handleClick.bind(this),
+                this.#handleClick.bind(this),
+            );
+        }
+
+        disconnectedCallback() {
+            this.#disconnectMouseEnter();
+            this.#disconnectClick();
+        }
+
+        #readAttributes() {
+            this.#videoId = readAttribute(
+                this,
+                'data-video-id',
+                {
+                    validate: (value) => !!value,
+                    expectation: 'a non-empty string',
+                },
+            );
+            this.#playerVars = readAttribute(
+                this,
+                'data-player-variables',
+                {
+                    // JSON.parse is gonna throw if invalid; no need for a dedicated validation
+                    transform: (value) => JSON.parse(value),
+                },
+            );
+            this.#loadingClass = readAttribute(
+                this,
+                'data-loading-class-name',
             );
         }
 
         /**
-         * @private
+         * Creates a promise for this.player that can be resolved from the outside
          */
-        disconnectedCallback() {
-            this.disconnectMouseEnter();
-        }
-
-        /**
-         * Preload YouTube API when mouse enters player
-         * @private
-         */
-        handleMouseEnter() {
-            this.player = loadYouTubeAPI();
+        #preparePlayerPromise() {
+            this.player = new Promise((resolve) => {
+                this.#resolvePlayer = resolve;
+            });
         }
 
         /**
          * @private
          */
-        async handleClick(event) {
+        async #handleClick(event) {
             event.preventDefault();
             if (!this.player) this.player = loadYouTubeAPI();
             this.status = 'loading';
-            this.updateDOM();
+            this.#updateDOM();
             this.play();
+        }
+
+        #loadYouTubeAPI() {
+            if (!this.#youTubeAPI) {
+                this.#youTubeAPI = loadYouTubeAPI();
+            }
+            return this.#youTubeAPI;
         }
 
         /**
@@ -174,37 +181,30 @@
          * @private
          */
         async play() {
-            const Player = await this.player;
-            this.status = 'ready';
-            await this.updateDOM();
+            const Player = await this.#loadYouTubeAPI();
+            this.#updateDOM(true);
             // Don't replace current element, add the video as a child
-            new Player(this.querySelector('div'), {
-                playerVars: this.playerVars,
-                videoId: this.videoID,
+            const player = new Player(this.querySelector('div'), {
+                playerVars: this.#playerVars,
+                videoId: this.#videoId,
                 events: {
-                    onReady: ev => ev.target.playVideo(),
+                    onReady: ({ target }) => target.playVideo(),
                 },
             });
+            this.#resolvePlayer(player);
         }
 
         /**
-         * Updates DOM; returns a promise that resolves as soon as the update was executed. Needed as
-         * we can only initialize the YouTube player with an element that is part of the document.
-         * @private
+         * Updates DOM according to status passed
          */
-        updateDOM() {
-            return new Promise((resolve) => {
-                window.requestAnimationFrame(() => {
-                    if (this.status === 'loading') {
-                        this.classList.add(this.loadingClass);
-                    } else if (this.status === 'ready') {
-                        // Remove content (preview image and play button)
-                        this.innerHTML = '<div></div>';
-                        this.classList.remove(this.loadingClass);
-                    }
-                    resolve();
-                });
-            });
+        #updateDOM(loaded = false) {
+            if (!loaded) {
+                this.classList.add(this.#loadingClass);
+            } else {
+                // Remove content (preview image and play button)
+                this.innerHTML = '<div></div>';
+                this.classList.remove(this.#loadingClass);
+            }
         }
 
     }
