@@ -35,3 +35,7 @@ window.YT or existing script tag first).
 the YouTube player (script) is loading.
 - `data-player-variables`: [Player parameters](https://developers.google.com/youtube/player_parameters.html?playerVersion=HTML5)
 for YouTube.
+
+#### Properties
+- Exposes a `player` property on the custom element that corresponds to the instance of YT.Player
+for the current video
