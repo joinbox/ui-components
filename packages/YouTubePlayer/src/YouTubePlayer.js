@@ -99,7 +99,6 @@ export default class YouTubePlayer extends HTMLElement {
 
     #handleClick(event) {
         event.preventDefault();
-        this.#loadYouTubeAPI();
         this.#updateDOM();
         this.#play();
     }
