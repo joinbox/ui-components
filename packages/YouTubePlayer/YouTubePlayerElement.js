@@ -84,13 +84,13 @@
          * @public
          * @type {Promise}
          */
-        player
+        player;
 
         /**
          * Function to resolve the YouTube player
          * @type {Function}
          */
-        #resolvePlayer
+        #resolvePlayer;
 
         /**
          * Promise that resolves once the YouTube API is ready. Undefined if the player hasn't started
@@ -157,17 +157,16 @@
             });
         }
 
-        /**
-         * @private
-         */
-        async #handleClick(event) {
+        #handleClick(event) {
             event.preventDefault();
-            if (!this.player) this.player = loadYouTubeAPI();
-            this.status = 'loading';
             this.#updateDOM();
-            this.play();
+            this.#play();
         }
 
+        /**
+         * Loads the YouTube API, if not already loading
+         * @type {Promise}
+         */
         #loadYouTubeAPI() {
             if (!this.#youTubeAPI) {
                 this.#youTubeAPI = loadYouTubeAPI();
@@ -178,19 +177,21 @@
         /**
          * Wait for YouTube player to be ready, create player and add it to a newly created child
          * div.
-         * @private
          */
-        async play() {
-            const Player = await this.#loadYouTubeAPI();
+        async #play() {
+            const YTPlayer = await this.#loadYouTubeAPI();
             this.#updateDOM(true);
             // Don't replace current element, add the video as a child
-            const player = new Player(this.querySelector('div'), {
+            // eslint-disable-next-line no-new
+            const player = new YTPlayer(this.querySelector('div'), {
                 playerVars: this.#playerVars,
                 videoId: this.#videoId,
                 events: {
                     onReady: ({ target }) => target.playVideo(),
                 },
             });
+            // Resolve a bit early (instead of onReady) as JSDOM cannot load YouTube Player and we
+            //  would not be able to test if we relied on onReady which will never fire
             this.#resolvePlayer(player);
         }
 
