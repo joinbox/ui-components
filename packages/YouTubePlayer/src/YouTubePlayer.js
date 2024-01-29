@@ -99,6 +99,12 @@ export default class YouTubePlayer extends HTMLElement {
 
     #handleClick(event) {
         event.preventDefault();
+        // If the video is part of an overlay and the user clicks the play video button,
+        // the preview image and play button will be removed (via #updateDOM); this click would
+        // then propagate to the overlay where we check if the click happened on a child of the
+        // overlay. As in that moment, the play button is not a child any more, the overlay
+        // will close (as it thinks the user clicked outside of it).
+        event.stopPropagation();
         this.#updateDOM();
         this.#play();
     }
