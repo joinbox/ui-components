@@ -9,6 +9,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * **youtube-player:** stop propagation of click event ([1bb0e63](https://github.com/joinbox/ui-components/commit/1bb0e63f46034223460fbdd06e91c79324cfa235))
+**Note:** Version bump only for package @joinbox/youtubeplayer
 
 
 
