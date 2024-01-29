@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.2.0...@joinbox/youtubeplayer@1.2.1) (2024-01-29)
+
+
+### Bug Fixes
+
+* **youtube-player:** stop propagation of click event ([1bb0e63](https://github.com/joinbox/ui-components/commit/1bb0e63f46034223460fbdd06e91c79324cfa235))
+
+
+
+
+
 # [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.1.5...@joinbox/youtubeplayer@1.2.0) (2024-01-26)
 
 
