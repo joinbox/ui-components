@@ -52,7 +52,7 @@ export default class Overlay extends HTMLElement {
         this.readAttributes();
         this.registerAnnouncements();
         this.setupModelListeners();
-        this.updateDOM();
+        this.updateDOM(true);
         this.setupDOMListeners();
     }
 
@@ -95,7 +95,13 @@ export default class Overlay extends HTMLElement {
         });
     }
 
-    updateDOM() {
+    /**
+     * @param {boolean} isInitialUpdate     If the function is called from the constructor, we
+     *                                      should not dispatch the overlayOpened/Closed events
+     *                                      because the overlay is not opened or closed at this
+     *                                      moment
+     */
+    updateDOM(isInitialUpdate = false) {
         window.requestAnimationFrame(() => {
             const visible = this.model.isOpen;
             const eventPayload = { bubbles: true, detail: { name: this.name } };
@@ -104,13 +110,15 @@ export default class Overlay extends HTMLElement {
                 if (this.background && this.backgroundVisibleClassName) {
                     this.background.classList.add(this.backgroundVisibleClassName);
                 }
-                this.dispatchEvent(new CustomEvent('overlayOpened', eventPayload));
             } else {
                 this.classList.remove(this.visibleClassName);
                 if (this.background && this.backgroundVisibleClassName) {
                     this.background.classList.remove(this.backgroundVisibleClassName);
                 }
-                this.dispatchEvent(new CustomEvent('overlayClosed', eventPayload));
+            }
+            if (!isInitialUpdate) {
+                const eventName = visible ? 'overlayOpened' : 'overlayClosed';
+                this.dispatchEvent(new CustomEvent(eventName, eventPayload));
             }
         });
 

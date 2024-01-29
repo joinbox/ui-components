@@ -64,28 +64,22 @@ test('closes on esc', async (t) => {
 test('dispatch opened and closed events', async (t) => {
     const { window, document, errors } = await setup(true);
     window.requestAnimationFrame = (cb) => cb();
+    const events = [];
+    // Listen to overlayOpened and overlayClosed on window so that we can also test if the events
+    // are *not* fired when the overlay is created.
+    window.addEventListener('overlayOpened', (ev) => { events.push(ev); });
+    window.addEventListener('overlayClosed', (ev) => { events.push(ev); });
     const elements = createElement(
         document,
         '<div class="bubbler"><overlay-component data-visible-class-name="visible" data-name="test"></overlay-component><div class="bubbler">',
     );
     document.body.appendChild(elements);
     const overlay = document.querySelector('overlay-component');
-    const events = [];
-    const legacyEvents = [];
-    // Legacy events
-    overlay.addEventListener('open', (ev) => { legacyEvents.push(ev); });
-    overlay.addEventListener('close', (ev) => { legacyEvents.push(ev); });
     // Current events; check if they bubble
-    const outerElement = document.querySelector('.bubbler');
-    outerElement.addEventListener('overlayOpened', (ev) => { events.push(ev); });
-    outerElement.addEventListener('overlayClosed', (ev) => { events.push(ev); });
     overlay.model.open();
     overlay.model.close();
     overlay.model.open();
-    t.is(legacyEvents.length, 3);
-    t.deepEqual(legacyEvents.map((ev) => ev.type), ['open', 'close', 'open']);
-    // Detail contains a name property with the overlay's name
-    t.deepEqual(legacyEvents.map((ev) => ev.detail.name), Array.from({ length: 3 }).fill('test'));
+    t.is(events.length, 3);
     t.deepEqual(events.map((ev) => ev.type), ['overlayOpened', 'overlayClosed', 'overlayOpened']);
     // Detail contains a name property with the overlay's name
     t.deepEqual(events.map((ev) => ev.detail.name), Array.from({ length: 3 }).fill('test'));
@@ -111,7 +105,7 @@ test('closes on click outside', async (t) => {
 });
 
 
-test.only('opens and closes on corresponding events', async (t) => {
+test('opens and closes on corresponding events', async (t) => {
     const { window, document, errors } = await setup(true);
     window.requestAnimationFrame = (cb) => cb();
     const overlay = createElement(document, '<overlay-component data-visible-class-name="visible" data-name="test"></overlay-component>');
