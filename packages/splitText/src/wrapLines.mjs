@@ -7,7 +7,7 @@ export default (element, wrapLine) => {
 
     const elementOffsets = new Map();
 
-    // If wrapLetters is set, every childNode will be a children (HTMLElement) – there's no need
+    // If wrapLetters is set, every childNode will be a child (HTMLElement) – there's no need
     // to wrap them in an additional HTMLElement as they will not be raw text nodes.
     for (const child of element.children) {
         const { top } = child.getBoundingClientRect();
@@ -17,7 +17,7 @@ export default (element, wrapLine) => {
 
     const wrappedInLines = Array.from(elementOffsets.values())
         .map((content, index) => {
-            const lineAsHTML = content.map(html => html.outerHTML).join('');
+            const lineAsHTML = content.map((html) => html.outerHTML).join('');
             return wrapLine(lineAsHTML, index);
         })
         .join('');
