@@ -1,3 +1,6 @@
+/* global HTMLElement */
+
+import splitIntoWords from './splitIntoWords.mjs';
 import wrapLetters from './wrapLetters.mjs';
 import wrapLines from './wrapLines.mjs';
 
@@ -5,7 +8,7 @@ import wrapLines from './wrapLines.mjs';
  * Splits content of a single HTML element into multiple sub-elements. Does all the 'footwork' for
  * splitText and implements its basic functionality.
 */
-export default({
+export default ({
     element,
     wrapLetter = (content, index) => `<span data-letter-index="${index}" class="letter">${content}</span>`,
     wrapWord = (content, index) => `<span data-word-index="${index}" class="word">${content}</span>`,
@@ -26,26 +29,25 @@ export default({
 
     const { textContent } = element;
 
+    // In HTML, spaces may occur before and after a string, but they won't be displayed in the
+    // browser. Remove those.
+    const trimmed = textContent.trim();
+
     const indices = {
         word: 0,
         letter: 0,
         line: 0,
     };
 
-    const wrappedInLettersAndWords = textContent
-        // Wrap every word first as we must split at word boundaries which are hard to detect
-        // if we split at letters first.
-        // A word consists of word-like characters, followed by everything else until the next
-        // word-like thing is discovered; if we'd only wrap words (and not spaces or special
-        // characters) as a word, those would stand alone as characters and not be animated
-        // (especially bad for special characters).
-        .split(/\b(?=\w)/)
+    // Wrap every word first as we must split at word boundaries which are hard to detect
+    // if we split at letters first.
+    const wrappedInLettersAndWords = splitIntoWords(trimmed)
         .map((part) => {
 
             // Wrap single part into letters if wrapLetter is set
             let wrappedInLetters = part;
             if (wrapLetter) {
-                const { result, index } = wrapLetters(part, wrapLetter, indices.letter);
+                const { result, index } = wrapLetters(part, wrapLetter, indices.letter, '&nbsp;');
                 indices.letter = index;
                 wrappedInLetters = result;
             }

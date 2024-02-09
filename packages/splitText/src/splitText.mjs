@@ -1,7 +1,7 @@
+/* global HTMLElement, window */
+
 import splitTextContent from './splitTextContent.mjs';
 import debounce from '../../tools/src/debounce.mjs';
-
-/* global HTMLElement, window */
 
 /**
  * Provides a simple interface to split the textContent of a HTML element into single blocks where
@@ -14,7 +14,6 @@ export default ({
     wrapWord,
     wrapLine,
 } = {}) => {
-
     if (!(element instanceof HTMLElement)) {
         throw new Error(`SplitText: argument element must be of type HTMLElement, is ${element} instead.`);
     }
