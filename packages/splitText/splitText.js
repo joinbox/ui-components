@@ -1,4 +1,22 @@
-var wrapLetters = (text, wrapLetter, startIndex) => {
+// Hypothesis: A word consists of non-space characters, followed by space characters.
+// Use a positive lookbehind to combine this logic with split().
+var splitIntoWords = (text) => text.split(/(?<=\S+\s+)/);
+
+/**
+ * Wraps a single letter within the wrapLetter function provided.
+ *
+ * @param {string} text                 Text to be wrapped.
+ * @param {function} wrapLetter         Function to wrap each letter with; takes two arguments,
+ *                                      letter (string) and index (int) and is expected to return a
+ *                                      string, e.g.
+ *                                      wrapLetter = (letter, index) => `
+ *                                      <span data-index="${index}">${letter}</span>`.
+ * @param {int=0} startIndex            The index to start with when calling wrapLetter
+ * @param {string=false} replaceSpaces  The string to replace spaces (regex \s) with; needed as
+ *                                      to preserve spaces in a text, we must use &nbsp; within
+ *                                      elements.
+ */
+var wrapLetters = (text, wrapLetter, startIndex = 0, replaceSpaces = false) => {
 
     let index = startIndex;
 
@@ -6,7 +24,8 @@ var wrapLetters = (text, wrapLetter, startIndex) => {
     const wrapped = text
         .split('')
         .map((letter) => {
-            const lettered = wrapLetter(letter, index);
+            const adjustedLetter = replaceSpaces && letter.match(/\s/) ? replaceSpaces : letter;
+            const lettered = wrapLetter(adjustedLetter, index);
             index++;
             return lettered;
         })
@@ -25,7 +44,7 @@ var wrapLines = (element, wrapLine) => {
 
     const elementOffsets = new Map();
 
-    // If wrapLetters is set, every childNode will be a children (HTMLElement) – there's no need
+    // If wrapLetters is set, every childNode will be a child (HTMLElement) – there's no need
     // to wrap them in an additional HTMLElement as they will not be raw text nodes.
     for (const child of element.children) {
         const { top } = child.getBoundingClientRect();
@@ -35,7 +54,7 @@ var wrapLines = (element, wrapLine) => {
 
     const wrappedInLines = Array.from(elementOffsets.values())
         .map((content, index) => {
-            const lineAsHTML = content.map(html => html.outerHTML).join('');
+            const lineAsHTML = content.map((html) => html.outerHTML).join('');
             return wrapLine(lineAsHTML, index);
         })
         .join('');
@@ -43,6 +62,9 @@ var wrapLines = (element, wrapLine) => {
     return wrappedInLines;
 
 };
+
+/* global HTMLElement */
+
 
 /**
  * Splits content of a single HTML element into multiple sub-elements. Does all the 'footwork' for
@@ -69,26 +91,25 @@ var splitTextContent = ({
 
     const { textContent } = element;
 
+    // In HTML, spaces may occur before and after a string, but they won't be displayed in the
+    // browser. Remove those.
+    const trimmed = textContent.trim();
+
     const indices = {
         word: 0,
         letter: 0,
         line: 0,
     };
 
-    const wrappedInLettersAndWords = textContent
-        // Wrap every word first as we must split at word boundaries which are hard to detect
-        // if we split at letters first.
-        // A word consists of word-like characters, followed by everything else until the next
-        // word-like thing is discovered; if we'd only wrap words (and not spaces or special
-        // characters) as a word, those would stand alone as characters and not be animated
-        // (especially bad for special characters).
-        .split(/\b(?=\w)/)
+    // Wrap every word first as we must split at word boundaries which are hard to detect
+    // if we split at letters first.
+    const wrappedInLettersAndWords = splitIntoWords(trimmed)
         .map((part) => {
 
             // Wrap single part into letters if wrapLetter is set
             let wrappedInLetters = part;
             if (wrapLetter) {
-                const { result, index } = wrapLetters(part, wrapLetter, indices.letter);
+                const { result, index } = wrapLetters(part, wrapLetter, indices.letter, '&nbsp;');
                 indices.letter = index;
                 wrappedInLetters = result;
             }
@@ -127,6 +148,7 @@ var debounce = (callback, offset) => {
 
 /* global HTMLElement, window */
 
+
 /**
  * Provides a simple interface to split the textContent of a HTML element into single blocks where
  * every block represents a letter, a word or a line. Updates blocks on resize.
@@ -138,7 +160,6 @@ var splitText = ({
     wrapWord,
     wrapLine,
 } = {}) => {
-
     if (!(element instanceof HTMLElement)) {
         throw new Error(`SplitText: argument element must be of type HTMLElement, is ${element} instead.`);
     }
