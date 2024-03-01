@@ -54,6 +54,12 @@ export default ({
 
             let wrapedInWords = wrappedInLetters;
             if (wrapWord) {
+                // If content was not wrapped into letters, spaces won't be converted to &nbsp;
+                // therefore, this has to be done here or spaces will disappear (when they
+                // are the last character in an element).
+                if (!wrapLetter) {
+                    wrappedInLetters = wrappedInLetters.replace(/\s$/g, '&nbsp;');
+                }
                 wrapedInWords = wrapWord(wrappedInLetters, indices.word);
                 indices.word++;
             }

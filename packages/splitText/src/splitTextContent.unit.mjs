@@ -59,8 +59,8 @@ test('splits words', async(t) => {
         wrapLine: false,
     });
     const { children } = div;
-    // Use different regex than in code
-    const words = ['Test ', '– ', 'words ', 'are! ', 'Words.'];
+    // All words ending with a space will get a &nbsp; appended
+    const words = ['Test&nbsp;', '–&nbsp;', 'words&nbsp;', 'are!&nbsp;', 'Words.'];
     t.is(children.length, words.length);
     Array.from(children).forEach((child, index) => {
         t.is(child.getAttribute('data-word-index'), `${index}`);
