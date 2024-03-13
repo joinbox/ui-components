@@ -10,18 +10,16 @@
 - Link packages if necessary (`lerna bootstrap` is deprecated)
 
 ### Release
-1. Checkout develop and merge feature branch
 1. Run `npm run test` in the **root directory** to run all tests in all packages
 1. Run `npm run build`, then commit generated files
+1. Checkout main and merge feature branch
 1. Run `npm run createVersion` in the root directory to create new versions for all packages with
 changes since their last release; versions are created automatically based on 
 [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) and on the previous Git tag
-1. Checkout master and merge develop
 1. Create a Git tag; when versioning, conventional commits are compared to to the
 most recent Git tag, therefore this step is essential.
-1. Push to master with --tags
+1. Push tags to server `git push origin <tag-name>`
 1. Run `npm run release` to publish packages
-1. Merge master into develop
 
 
 ## Use
