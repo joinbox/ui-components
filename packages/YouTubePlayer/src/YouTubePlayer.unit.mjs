@@ -32,7 +32,7 @@ const createElement = (document, html) => {
 
 test('loads API on mouseenter', async (t) => {
     const { window, document, errors } = await setup(true);
-    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-loading-class-name="loading"></youtube-player-compoent>');
+    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-loading-class-name="loading"></youtube-player-component>');
     document.body.appendChild(player);
     player.dispatchEvent(new window.MouseEvent('mouseenter'));
     await player.video;
@@ -43,7 +43,7 @@ test('loads API on mouseenter', async (t) => {
 
 test('adds loading class on click', async (t) => {
     const { window, document, errors } = await setup(true);
-    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-loading-class-name="loading"></youtube-player-compoent>');
+    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-loading-class-name="loading"></youtube-player-component>');
     document.body.appendChild(player);
     player.dispatchEvent(new window.MouseEvent('click'));
     t.is(player.classList.contains('loading'), true);
@@ -52,7 +52,7 @@ test('adds loading class on click', async (t) => {
 
 test('replaces player when ready', async (t) => {
     const { window, document, errors } = await setup(true);
-    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-loading-class-name="loading"></youtube-player-compoent>');
+    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-loading-class-name="loading"></youtube-player-component>');
     document.body.appendChild(player);
     player.dispatchEvent(new window.MouseEvent('click'));
     await player.player;
@@ -64,7 +64,7 @@ test('replaces player when ready', async (t) => {
 
 test('uses player variables', async (t) => {
     const { window, document, errors } = await setup(true);
-    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-player-variables=\'{"controls": 0}\' data-loading-class-name="loading"></youtube-player-compoent>');
+    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-player-variables=\'{"controls": 0}\' data-loading-class-name="loading"></youtube-player-component>');
     document.body.appendChild(player);
     player.dispatchEvent(new window.MouseEvent('click'));
     await player.player;
@@ -75,7 +75,7 @@ test('uses player variables', async (t) => {
 
 test('exposes player', async (t) => {
     const { window, document, errors } = await setup(true);
-    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4"></youtube-player-compoent>');
+    const player = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4"></youtube-player-component>');
     document.body.appendChild(player);
     player.dispatchEvent(new window.MouseEvent('click'));
     t.is(player.player instanceof window.Promise, true);
@@ -91,7 +91,7 @@ test('respects cookie choice', async (t) => {
     const requests = [];
     const { window, document, errors } = await setup(true, requests);
     // Test embedding with cookies
-    const cookiePlayer = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-use-cookies></youtube-player-compoent>');
+    const cookiePlayer = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4" data-use-cookies></youtube-player-component>');
     document.body.appendChild(cookiePlayer);
     cookiePlayer.dispatchEvent(new window.MouseEvent('click'));
     await cookiePlayer.player;
@@ -99,7 +99,7 @@ test('respects cookie choice', async (t) => {
     // Every requests should go to youtube.com
     t.is(requestsWithCookies.length, requests.length);
     // Test embedding without cookies
-    const noCookiePlayer = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4"></youtube-player-compoent>');
+    const noCookiePlayer = createElement(document, '<youtube-player-component data-video-id="m7MtIv9a0A4"></youtube-player-component>');
     document.body.appendChild(noCookiePlayer);
     noCookiePlayer.dispatchEvent(new window.MouseEvent('click'));
     await noCookiePlayer.player;
