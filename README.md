@@ -11,7 +11,8 @@
 
 ### Release
 1. Run `npm run test` in the **root directory** to run all tests in all packages
-1. Run `npm run build`, then commit generated files
+1. Run `npm run build`
+1. Commit and push the generated files
 1. Checkout main and merge feature branch
 1. Run `npm run createVersion` in the root directory to create new versions for all packages with
 changes since their last release; versions are created automatically based on 
