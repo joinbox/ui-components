@@ -2,7 +2,7 @@ import { readAttribute } from '../../tools/main.mjs';
 import createListener from '../../../src/shared/createListener.mjs';
 import loadYouTubeAPI from './loadYouTubeAPI.js';
 
-/* global HTMLElement, window, document */
+/* global HTMLElement */
 
 /**
  * Replaces content on click with YouTube movie that auto-plays.
@@ -16,6 +16,7 @@ export default class YouTubePlayer extends HTMLElement {
     #loadingClass;
     #playerVars;
     #videoId;
+    #useCookies;
 
     /**
      * YouTube player for the current video; is exposed publicly for outside code to be
@@ -86,6 +87,13 @@ export default class YouTubePlayer extends HTMLElement {
             this,
             'data-loading-class-name',
         );
+        this.#useCookies = readAttribute(
+            this,
+            'data-use-cookies',
+            {
+                transform: (value) => value !== null,
+            },
+        );
     }
 
     /**
@@ -121,6 +129,14 @@ export default class YouTubePlayer extends HTMLElement {
     }
 
     /**
+     * Returns the domain from which we should load the YouTube API, depending on the value of
+     * data-use-cookies.
+     */
+    #getYouTubeHost() {
+        return `https://www.youtube${this.#useCookies ? '' : '-nocookie'}.com`;
+    }
+
+    /**
      * Wait for YouTube player to be ready, create player and add it to a newly created child
      * div.
      */
@@ -132,6 +148,7 @@ export default class YouTubePlayer extends HTMLElement {
         const player = new YTPlayer(this.querySelector('div'), {
             playerVars: this.#playerVars,
             videoId: this.#videoId,
+            host: this.#getYouTubeHost(),
             events: {
                 onReady: ({ target }) => target.playVideo(),
             },

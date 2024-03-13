@@ -15,13 +15,12 @@ const { JSDOM } = jsdom;
  *                                            using history.pushState)
  * @return {object}
  */
-export default async({
+export default async ({
     basePath,
     scripts,
     hideErrors,
     jsdomOptions,
 } = {}) => {
-
     const errors = [];
     const virtualConsole = new jsdom.VirtualConsole();
     // dirname prefixes paths with file:/// which are not understood by rollup. Remove prefix.
