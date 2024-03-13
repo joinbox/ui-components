@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.2.2...@joinbox/youtubeplayer@1.3.0) (2024-03-13)
+
+
+### Bug Fixes
+
+* **youtube-player:** fixes from code review ([c297ae2](https://github.com/joinbox/ui-components/commit/c297ae27e8f132799ca272918905c538315791c2))
+
+
+### Features
+
+* **youtube-player:** add cookie/no-cookie option ([595590c](https://github.com/joinbox/ui-components/commit/595590c1188d379c126aa038cbef156f182485bf))
+
+
+
+
+
 ## [1.2.2](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.2.1...@joinbox/youtubeplayer@1.2.2) (2024-01-29)
 
 
