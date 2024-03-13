@@ -10,6 +10,8 @@ Supports:
 - indices on all types of parts (letters, words and lines)
 - restoring to original content
 - restore on resize and updated split after a certain debounce
+- content that contains nested elements; in order for them to work with `wrapLine` make sure
+that they are `display: inline-block`
 
 By default, all types are wrapped into a `span` with class `letter`, `word` or `line` and an 
 attribute `data-letter-index`, `data-word-index` or `data-line-index` with the corresponding
