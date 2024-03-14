@@ -7,9 +7,18 @@ export default (element, wrapLine) => {
 
     const elementOffsets = new Map();
 
+    // If there are no children (because the content is not wrapped in letters nor words), just
+    // return one line: We cannot measure the y position of children that don't exist
+    const { children } = element;
+
+    if (!children.length) {
+        console.warn('In order for wrapLine to work, you must also apply wrapWord.');
+        return wrapLine(element.innerHTML, 0);
+    }
+
     // If wrapLetters is set, every childNode will be a child (HTMLElement) – there's no need
     // to wrap them in an additional HTMLElement as they will not be raw text nodes.
-    for (const child of element.children) {
+    for (const child of children) {
         const { top } = child.getBoundingClientRect();
         if (!elementOffsets.has(top)) elementOffsets.set(top, []);
         elementOffsets.get(top).push(child);
