@@ -8,5 +8,5 @@ export default (files, format = 'iife') => files.map((file) => ({
         // Convert file endings to .js in dist folder
         file: file.replace(/\.mjs$/, '.js'),
         format,
-    }
+    },
 }));

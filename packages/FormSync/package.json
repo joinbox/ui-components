@@ -1,11 +1,11 @@
 {
   "name": "@joinbox/formsync",
-  "version": "2.0.2",
+  "version": "2.3.2",
   "description": "Synchronizes forms and elements between an original form (e.g. one created by Drupal) and another form (e.g. freely created as a template based on mockups).",
   "main": "FormSyncElement.js",
   "scripts": {
     "test": "npx ava --verbose",
-    "build": "npx rollup --c rollup.config.js"
+    "build": "npx rollup --c rollup.config.mjs"
   },
   "author": "Felix Steiner <felix@joinbox.com>",
   "license": "ISC",
@@ -19,12 +19,12 @@
     ]
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.17.0",
-    "@joinbox/eslint-config-joinbox": "^1.0.10",
-    "ava": "^4.2.0",
-    "jsdom": "^19.0.0",
-    "lerna": "^4.0.0",
-    "rollup": "^2.70.1"
+    "@babel/eslint-parser": "^7.22.5",
+    "@joinbox/eslint-config-joinbox": "^1.0.11",
+    "ava": "^5.3.1",
+    "jsdom": "^22.1.0",
+    "lerna": "^7.1.0",
+    "rollup": "^3.25.3"
   },
   "publishConfig": {
     "access": "public"

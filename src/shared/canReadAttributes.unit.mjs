@@ -56,3 +56,14 @@ test('validates properties', async(t) => {
     t.is(errors[0].message.includes('Attribute test does not match'), true);
 });
 
+test('works with boolean attributes', async(t) => {
+    const { window, document, errors } = await setup(true);
+    window.createWatcher([{
+        name: 'test',
+        // A boolean set attribute has a value of ''
+        transform: (value) => value === ''
+    }]);
+    const watcher = createElement(document, '<test-watcher test></test-watcher>');
+    t.is(watcher.test, true);
+    t.is(errors.length, 0);
+});

@@ -197,4 +197,4 @@
         window.customElements.define('vimeo-player', VimeoPlayer);
     }
 
-}());
+})();

@@ -1,11 +1,11 @@
 {
   "name": "@joinbox/youtubepreviewimage",
-  "version": "1.0.0",
+  "version": "1.1.4",
   "description": "YouTube preview image custom element",
   "main": "YouTubePreviewImageElement.js",
   "scripts": {
     "test": "npx ava --verbose",
-    "build": "npx rollup --c rollup.config.js"
+    "build": "npx rollup --c rollup.config.mjs"
   },
   "author": "Felix Steiner <felix@joinbox.com>",
   "license": "ISC",
@@ -19,11 +19,12 @@
     ]
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.17.0",
-    "@joinbox/eslint-config-joinbox": "^1.0.10",
-    "ava": "^4.2.0",
-    "jsdom": "^19.0.0",
-    "lerna": "^4.0.0"
+    "@babel/eslint-parser": "^7.22.5",
+    "@joinbox/eslint-config-joinbox": "^1.0.11",
+    "ava": "^5.3.1",
+    "canvas": "^2.11.2",
+    "jsdom": "^22.1.0",
+    "lerna": "^7.1.0"
   },
   "publishConfig": {
     "access": "public"

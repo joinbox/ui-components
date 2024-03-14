@@ -1,7 +1,7 @@
-import splitTextContent from './splitTextContent.mjs';
-import createDebounce from '../../../src/shared/createDebounce.mjs';
-
 /* global HTMLElement, window */
+
+import splitTextContent from './splitTextContent.mjs';
+import debounce from '../../tools/src/debounce.mjs';
 
 /**
  * Provides a simple interface to split the textContent of a HTML element into single blocks where
@@ -14,7 +14,6 @@ export default ({
     wrapWord,
     wrapLine,
 } = {}) => {
-
     if (!(element instanceof HTMLElement)) {
         throw new Error(`SplitText: argument element must be of type HTMLElement, is ${element} instead.`);
     }
@@ -40,10 +39,10 @@ export default ({
     };
 
     if (updateOnResize) {
-        const debounce = createDebounce();
+        const debouncedUpdate = debounce(split, 500);
         window.addEventListener('resize', () => {
             if (wasSplit) restore();
-            debounce(split, 500);
+            debouncedUpdate();
         });
     }
 

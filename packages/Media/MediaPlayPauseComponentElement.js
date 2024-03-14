@@ -122,4 +122,4 @@
         window.customElements.define('media-play-pause-component', MediaPlayPauseButton);
     }
 
-}());
+})();

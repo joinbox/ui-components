@@ -79,14 +79,11 @@
     };
 
     /**
-     * Simple debounce implementation. Use:
-     * import { createDebounce } from '@joinbox/ui-components;
-     * const debounce = createDebounce();
-     * debounce(() => {}), 500);
+     * Simple debounce implementation. See README.
     */
-    var createDebounce = () => {
+    var debounce = (callback, offset) => {
         let timeout;
-        return (callback, offset) => {
+        return () => {
             if (timeout) clearTimeout(timeout);
             timeout = setTimeout(callback, offset);
         };
@@ -105,16 +102,20 @@
          * @param {HTMLElement} originalElement Element to sync changes from and to. This is, where the
          *                                      original form is.
          * @param {HTMLElement} clonedElement   Element to sync changes from and to
-         * @param {string} property             Property to watch (e.g. 'value', 'checked')
+         * @param {string} originalProperty     Property of original element to watch (e.g. 'value', 'checked')
+         * @param {string} clonedProperty       Property of cloned element to watch (e.g. 'value', 'checked')
          * @param {string[]} autoSubmit         If original form should be submitted when the input
-                                                value changes: Provide all events that, if fired
-                                                on the input, cause a submit on the original form.
+         *                                      value changes: Provide all events that, if fired
+         *                                      on the input, cause a submit on the original form.
+         * @param submitOnEnter
          */
         setup({
             originalElement,
             clonedElement,
-            property = 'checked',
+            originalProperty = 'checked',
+            clonedProperty = originalProperty,
             autoSubmit = [],
+            submitOnEnter = false,
         } = {}) {
             if (!(originalElement instanceof HTMLElement)) {
                 throw new Error(`InputSync: Expected originalElement to be instance of HTMLElement, is ${originalElement} instead.`);
@@ -128,11 +129,14 @@
             this.originalElement = originalElement;
             this.clonedElement = clonedElement;
             this.autoSubmit = autoSubmit;
-            this.property = property;
+            this.submitOnEnter = submitOnEnter;
+            this.originalProperty = originalProperty;
+            this.clonedProperty = clonedProperty;
             this.setupOriginalWatcher();
             this.setupClonedWatcher();
             this.syncOriginalToCloned();
             this.setupAutoSubmitWatcher();
+            this.setupEnterWatcher();
         }
 
         getOriginalForm() {
@@ -152,10 +156,13 @@
         }
 
         setupOriginalWatcher() {
-            this.originalElement.addEventListener('change', () => {
-                // Don't auto submit if original form changed
-                this.clonedElement[this.property] = this.originalElement[this.property];
-            });
+            // When syncing select options to radios, the change event of the original element is fired
+            // on the select element not the option element.
+            if (this.originalElement.tagName === 'OPTION') {
+                this.originalElement.parentElement.addEventListener('change', this.syncOriginalToCloned.bind(this));
+            }else {
+                this.originalElement.addEventListener('change', this.syncOriginalToCloned.bind(this));
+            }
         }
 
         setupClonedWatcher() {
@@ -165,19 +172,26 @@
             this.clonedElement.addEventListener('change', this.syncClonedElementToOriginal.bind(this));
         }
 
+        setupEnterWatcher() {
+            if (!this.submitOnEnter) return;
+            this.clonedElement.addEventListener('keyup', (ev) => {
+                if (ev.key === 'Enter') this.submitOriginalForm();
+            });
+        }
+
         /**
          * On init, sync original to cloned; also syncing backwards would not make any sense as
          * we'd sync originalElement's initial state back to originalElement.
          */
         syncOriginalToCloned() {
-            this.clonedElement[this.property] = this.originalElement[this.property];
+            this.clonedElement[this.clonedProperty] = this.originalElement[this.originalProperty];
         }
 
         /**
          * Synchronizes data of cloned element to original element.
          */
         syncClonedElementToOriginal() {
-            this.originalElement[this.property] = this.clonedElement[this.property];        
+            this.originalElement[this.originalProperty] = this.clonedElement[this.clonedProperty];
         }
 
         /**
@@ -187,12 +201,7 @@
             for (const { eventName, debounceTime } of this.autoSubmit) {
                 let submitHandler = this.submitOriginalForm.bind(this);
                 if (debounceTime) {
-                    const debounce = createDebounce();
-                    submitHandler = debounce.bind(
-                        null,
-                        this.submitOriginalForm.bind(this),
-                        debounceTime,
-                    );
+                    submitHandler = debounce(this.submitOriginalForm.bind(this), debounceTime);
                 }
                 this.clonedElement.addEventListener(eventName, submitHandler);
             }
@@ -264,6 +273,10 @@
                             ...(debounceTime ? { debounceTime: parseFloat(debounceTime) } : {}),
                         }))
                     ),
+                }, {
+                    name: 'data-submit-on-enter',
+                    property: 'submitOnEnter',
+                    transform: value => (value === null || value === undefined) ? false : true,
                 }]),
             );
             this.readAttributes();
@@ -295,6 +308,7 @@
         getInputProperty(input) {
             if (input.tagName === 'TEXTAREA') return 'value';
             if (input.tagName === 'SELECT') return 'value';
+            if (input.tagName === 'OPTION') return 'selected';
             if (input.tagName === 'INPUT') {
                 const type = input.getAttribute('type');
                 if (['radio', 'checkbox'].includes(type)) return 'checked';
@@ -326,6 +340,7 @@
 
                 this.copyLabel(inputConfig.label, cloneLabel);
                 this.copySelectOptions(inputConfig.input, cloneInput);
+                this.copySelectOptionLabel(inputConfig.input, cloneLabel);
                 this.syncInput(inputConfig.input, cloneInput);
                 this.copyPlaceholder(inputConfig.input, cloneInput);
                 this.copyDisabled(inputConfig.input, cloneInput);
@@ -422,6 +437,20 @@
         }
 
         /**
+         * Copies text of a select option to the cloned input to the cloned inputs label
+         * @param {HTMLElement} originalInput
+         * @param {HTMLElement} clonedLabel
+         */
+        copySelectOptionLabel(originalInput, clonedLabel) {
+            if (originalInput.tagName === 'OPTION') {
+                if (!clonedLabel) {
+                    throw new Error(`FormSync: If you want to sync select options, you must provide a template that contains an element with data-label to sync the label; you provided ${clonedLabel.outerHTML} instead.`);
+                }
+                clonedLabel.innerText = originalInput.innerText;
+            }
+        }
+
+        /**
          * Multiple original radio button sets might be linked to one single cloned radio button set.
          * When **one** cloned radio button is changed, we might therefore have to change multiple
          * original radio inputs. Do so by syncing the whole form.
@@ -464,16 +493,44 @@
                 return;
             }
             const sync = new InputSync();
+
+            // If we are cloning select options to a checkbox we need to use different properties
+            const isSelectOptionClonedToInput =
+                this.checkSelectOptionCloneCompatibility(originalInput, clonedInput);
+
+            const originalProperty = this.getInputProperty(originalInput);
+
             sync.setup({
                 originalElement: originalInput,
                 clonedElement: clonedInput,
                 autoSubmit: this.autoSubmit,
-                property: this.getInputProperty(originalInput),
+                originalProperty,
+                clonedProperty: isSelectOptionClonedToInput
+                                ? this.getInputProperty(clonedInput)
+                                : originalProperty,
+                submitOnEnter: this.submitOnEnter,
             });
             // Store sync instance on element to update it later (see radio workaround above)
             clonedInput.inputSync = sync;
         }
 
+
+        /**
+         * Checks if select option is being cloned to a checkbox and if it is compatible
+         * @param {HTMLElement} originalInput
+         * @param {HTMLInputElement} clonedInput
+         */
+        checkSelectOptionCloneCompatibility(originalInput, clonedInput) {
+            const isSelectOptionClonedToInput = originalInput.tagName === 'OPTION' && originalInput.tagName !== clonedInput.tagName;
+
+            if (isSelectOptionClonedToInput
+                && (clonedInput.type !== 'checkbox' || originalInput.parentElement.multiple === false)
+            ) {
+                throw new Error('FormSync: Can\'t sync select element without attribute multiple to checkbox!');
+            }
+
+            return true;
+        }
     }
 
     /* global window */
@@ -481,4 +538,4 @@
         window.customElements.define('form-sync', FormSync);
     }
 
-}());
+})();

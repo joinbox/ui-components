@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import test from 'ava';
 import getDOM from '../../../src/testHelpers/getDOM.mjs';
 
-const setup = async(hideErrors) => {
+const setup = async (hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
     return getDOM({ basePath, scripts: ['splitTextContent.window.js'], hideErrors });
 };
@@ -59,13 +59,14 @@ test('splits words', async(t) => {
         wrapLine: false,
     });
     const { children } = div;
-    t.is(children.length, 4);
-    const words = [...content.matchAll(/\w+/g)];
+    // All words ending with a space will get a &nbsp; appended
+    const words = ['Test&nbsp;', '–&nbsp;', 'words&nbsp;', 'are!&nbsp;', 'Words.'];
+    t.is(children.length, words.length);
     Array.from(children).forEach((child, index) => {
         t.is(child.getAttribute('data-word-index'), `${index}`);
         t.is(child.tagName, 'SPAN');
         t.is(child.classList.contains('word'), true);
-        t.is(child.innerHTML, words[index][0]);
+        t.is(child.innerHTML, words[index]);
     });
     t.is(errors.length, 0);
 });
@@ -76,9 +77,9 @@ test('splits lines (and letters)', async(t) => {
     const content = 'Test – words are! Words.';
     div.textContent = content;
     let boundingClientIndex = 0;
-    window.HTMLElement.prototype.getBoundingClientRect = function() {
-        // Increase top with every space
-        if (this.innerHTML === ' ') boundingClientIndex++;
+    window.HTMLElement.prototype.getBoundingClientRect = function () {
+        // Increase top with every space (that has already been converted to &nbsp; at this stage)
+        if (this.innerHTML === '&nbsp;') boundingClientIndex++;
         return {
             top: boundingClientIndex,
         };
@@ -88,7 +89,7 @@ test('splits lines (and letters)', async(t) => {
         wrapWord: false,
     });
     const { children } = div;
-    t.is(children.length, content.split(/\s/g).length);
+    t.is(children.length, 5);
     Array.from(children).forEach((child, index) => {
         t.is(child.getAttribute('data-line-index'), `${index}`);
         t.is(child.tagName, 'SPAN');
@@ -100,8 +101,8 @@ test('splits lines (and letters)', async(t) => {
 test('uses custom functions passed in', async(t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');
-    const content = 'Test – for Lines, Letters and Words.';
-    div.textContent = content;
+    const text = 'Test – for Lines, Letters and Words.';
+    div.textContent = text;
     const indices = {
         word: [],
         letter: [],
@@ -128,11 +129,24 @@ test('uses custom functions passed in', async(t) => {
     t.deepEqual(indices.line, [0]);
     t.deepEqual(
         indices.letter,
-        Array.from({ length: content.length }).map((value, index) => index),
+        Array.from({ length: text.length }).map((value, index) => index),
     );
     t.deepEqual(
         indices.word,
-        Array.from({ length: [...content.matchAll(/\w+/g)].length }).map((value, index) => index),
+        Array.from({ length: 7 }).map((value, index) => index),
     );
     t.is(errors.length, 0);
 });
+
+test('trims spaces', async (t) => {
+    const { document, errors, window } = await setup(true);
+    const div = document.createElement('div');
+    const text = '   Test with spaces.   ';
+    div.textContent = text;
+    window.splitTextContent({ element: div });
+    const letters = [...div.querySelectorAll('.letter')];
+    t.is(letters.at(0).innerHTML, 'T');
+    t.is(letters.at(-1).innerHTML, '.');
+    t.is(errors.length, 0);
+});
+

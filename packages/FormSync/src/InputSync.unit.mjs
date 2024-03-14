@@ -130,7 +130,7 @@ test('Syncs other properties', async(t) => {
     // Sync'em
     const script = createScript(document, `
         const sync = new InputSync();
-        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), property: 'value' });
+        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), originalProperty: 'value' });
     `);
     document.body.appendChild(script);
 
@@ -240,5 +240,46 @@ test('Respects debounce for auto-submit', async(t) => {
     await new Promise(resolve => setTimeout(resolve, 550));
     t.is(submitted, 2);
 
+    t.is(errors.length, 0);
+});
+
+
+
+test('Submits on enter if provided', async(t) => {
+    const { document, errors, window } = await setup(true);
+    // Create source
+    const source = document.createElement('input');
+    source.setAttribute('type', 'text');
+    source.setAttribute('id', 'source');
+
+    const sourceForm = document.createElement('form');
+
+    const sourceSubmitButton = document.createElement('input');
+    sourceSubmitButton.setAttribute('type', 'submit');
+    let submitted = 0;
+    sourceSubmitButton.click = () => submitted++;
+
+    sourceForm.appendChild(source);
+    sourceForm.appendChild(sourceSubmitButton);
+    document.body.appendChild(sourceForm);
+
+    // Create target
+    const target = document.createElement('input');
+    target.setAttribute('type', 'text');
+    target.setAttribute('id', 'target');
+    document.body.appendChild(target);
+
+    // Sync'em
+    const script = createScript(document, `
+        const sync = new InputSync();
+        sync.setup({ originalElement: document.querySelector('#source'), clonedElement: document.querySelector('#target'), submitOnEnter: true });
+    `);
+    document.body.appendChild(script);
+
+    t.is(submitted, 0);
+
+    // Regular submit
+    target.dispatchEvent(new window.KeyboardEvent('keyup', { key: 'Enter' }));
+    t.is(submitted, 1);
     t.is(errors.length, 0);
 });

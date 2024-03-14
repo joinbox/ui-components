@@ -6,21 +6,21 @@
 - This is a monorepo that uses lerna to publish the components as individual packages
 
 ### Init
-- Run `npm run bootstrap` to initialize the whole repo locally (install NPM modules and link them)
-- Run `npx lerna exec npm install` to install package specific `node_module`s
+- Run `npm i && npx lerna exec --npm i` to initialize the whole repo locally (install node modules)
+- Link packages if necessary (`lerna bootstrap` is deprecated)
 
 ### Release
 1. Run `npm run test` in the **root directory** to run all tests in all packages
 1. Run `npm run build`
-1. Merge develop into master
+1. Commit and push the generated files
+1. Checkout main and merge feature branch
 1. Run `npm run createVersion` in the root directory to create new versions for all packages with
 changes since their last release; versions are created automatically based on 
 [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) and on the previous Git tag
-1. Push to master
+1. Create a Git tag; when versioning, conventional commits are compared to to the
+most recent Git tag, therefore this step is essential.
+1. Push tags to server `git push origin <tag-name>`
 1. Run `npm run release` to publish packages
-1. Make sure to create a Git tag; when versioning, conventional commits are compared to to the
-most recent Git tag.
-
 
 
 ## Use
@@ -45,11 +45,11 @@ and import it before the elements via `import 'regenerator-runtime/runtime.js';`
 
 
 ## Tools
+- [readAttribute](./packages/tools/README.md)
 - [Split Text](./packages/splitText/README.md)
-- ~~[Dynamic Page Loader](./DynamicPageLoader/README.md)~~ – use [barba.js](https://barba.js.org/) instead!
-- [once](./src/shared/once.mjs), import as `import { once } from '@joinbox/ui-components'`
+- [once](./packages/tools/README.md)
 - [slide](./packages/slide/README.md), import as `import { slide } from '@joinbox/ui-components'`
-- [createDebounce](./src/shared/createDebounce.mjs), import as `import { createDebounce } from '@joinbox/ui-components'`
+- [createDebounce](./packages/tools/README.md)
 
 ## Tests
 `npm i && npm test`

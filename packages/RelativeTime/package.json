@@ -1,0 +1,46 @@
+{
+  "name": "@joinbox/relative-time",
+  "version": "1.2.1",
+  "description": "Custom element that displays localized relative time (e.g. '4 days ago')",
+  "main": "RelativeTimeElement.js",
+  "scripts": {
+    "test": "npx ava --verbose",
+    "build": "npx rollup --c rollup.config.mjs"
+  },
+  "author": "Felix Steiner <felix@joinbox.com>",
+  "license": "ISC",
+  "ava": {
+    "files": [
+      "**/*.unit.mjs",
+      "**/*.integration.mjs"
+    ],
+    "nodeArguments": [
+      "--experimental-modules"
+    ]
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.22.5",
+    "@joinbox/eslint-config-joinbox": "^1.0.11",
+    "ava": "^5.3.1",
+    "jsdom": "^22.1.0",
+    "lerna": "^7.1.0",
+    "rollup": "^3.25.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "relative date",
+    "relative time",
+    "time ago",
+    "months a go",
+    "days ago",
+    "weeks ago",
+    "years ago",
+    "custom element",
+    "web component",
+    "date format",
+    "time format"
+  ],
+  "gitHead": "f2b560246089e8ab05b16f4fa517bdc138b35dd1"
+}

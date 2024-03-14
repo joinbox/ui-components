@@ -4,7 +4,12 @@
  * Slides an element up/down or left/right by setting its height explicitly. Only explicit heights
  * can be transitioned through CSS.
  */
-var slide = ({ element, targetSize, dimension = 'y' } = {}) => {
+var slide = ({
+    element,
+    targetSize,
+    dimension = 'y',
+    onEnd = () => {},
+} = {}) => {
 
     if (!(element instanceof HTMLElement)) {
         throw new Error(`slide: expected parameter element to be a HTMLElement, got ${element} instead.`);
@@ -15,13 +20,15 @@ var slide = ({ element, targetSize, dimension = 'y' } = {}) => {
 
     const dimensionName = dimension === 'x' ? 'Width' : 'Height';
     const initialSize = element[`offset${dimensionName}`];
-    targetSize = targetSize ?? element[`scroll${dimensionName}`];
-    
+    const size = targetSize ?? element[`scroll${dimensionName}`];
+
     requestAnimationFrame(() => {
+        /* eslint-disable no-param-reassign */
         element.style[dimensionName.toLowerCase()] = `${initialSize}px`;
         requestAnimationFrame(() => {
-            element.style[dimensionName.toLowerCase()] = `${targetSize}px`;
+            element.style[dimensionName.toLowerCase()] = `${size}px`;
         });
+        /* eslint-enable */
     });
 
     // If element's height is set to its scrollHeight, reset numerical value to 'auto' at the
@@ -31,11 +38,16 @@ var slide = ({ element, targetSize, dimension = 'y' } = {}) => {
         if (propertyName !== dimensionName.toLowerCase()) return;
         element.removeEventListener('transitionend', handleTransitionEnd);
         if (element[`offset${dimensionName}`] === element[`scroll${dimensionName}`]) {
-            requestAnimationFrame(() => element.style[dimensionName.toLowerCase()] = 'auto');
+            requestAnimationFrame(() => {
+                /* eslint-disable no-param-reassign */
+                element.style[dimensionName.toLowerCase()] = 'auto';
+                /* eslint-enable */
+            });
         }
+        onEnd();
     };
     element.addEventListener('transitionend', handleTransitionEnd);
 
 };
 
-export default slide;
+export { slide as default };

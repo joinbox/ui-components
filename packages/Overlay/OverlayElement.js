@@ -202,7 +202,7 @@
                 this,
                 canReadAttributes([{
                     name: 'data-name',
-                    validate: value => !!value,
+                    validate: (value) => !!value,
                     property: 'name',
                 }, {
                     name: 'data-background-selector',
@@ -212,17 +212,17 @@
                     property: 'backgroundVisibleClassName',
                 }, {
                     name: 'data-visible-class-name',
-                    validate: value => !!value,
+                    validate: (value) => !!value,
                     property: 'visibleClassName',
                 }, {
                     name: 'data-disable-esc',
                     property: 'disableEsc',
                     // Create bool
-                    transform: value => !!value,
+                    transform: (value) => !!value,
                 }, {
                     name: 'data-disable-click-outside',
                     property: 'disableClickOutside',
-                    transform: value => !!value,
+                    transform: (value) => !!value,
                 }]),
                 canRegisterElements({
                     eventType: 'overlay-button',
@@ -234,7 +234,8 @@
             this.readAttributes();
             this.registerAnnouncements();
             this.setupModelListeners();
-            this.updateDOM();
+            this.updateDOM(true);
+            this.setupDOMListeners();
         }
 
         connectedCallback() {
@@ -267,7 +268,22 @@
             this.model.on('change', this.updateDOM.bind(this));
         }
 
-        updateDOM() {
+        setupDOMListeners() {
+            window.addEventListener('openOverlay', (event) => {
+                if (event.detail.name === this.name) this.model.open();
+            });
+            window.addEventListener('closeOverlay', (event) => {
+                if (event.detail.name === this.name) this.model.close();
+            });
+        }
+
+        /**
+         * @param {boolean} isInitialUpdate     If the function is called from the constructor, we
+         *                                      should not dispatch the overlayOpened/Closed events
+         *                                      because the overlay is not opened or closed at this
+         *                                      moment
+         */
+        updateDOM(isInitialUpdate = false) {
             window.requestAnimationFrame(() => {
                 const visible = this.model.isOpen;
                 const eventPayload = { bubbles: true, detail: { name: this.name } };
@@ -276,17 +292,15 @@
                     if (this.background && this.backgroundVisibleClassName) {
                         this.background.classList.add(this.backgroundVisibleClassName);
                     }
-                    // Legacy event (naming not clear enough); remove on next breaking change
-                    this.dispatchEvent(new CustomEvent('open', eventPayload));
-                    this.dispatchEvent(new CustomEvent('openOverlay', eventPayload));
                 } else {
                     this.classList.remove(this.visibleClassName);
                     if (this.background && this.backgroundVisibleClassName) {
                         this.background.classList.remove(this.backgroundVisibleClassName);
                     }
-                    // Legacy event (naming not clear enough); remove on next breaking change
-                    this.dispatchEvent(new CustomEvent('close', eventPayload));
-                    this.dispatchEvent(new CustomEvent('closeOverlay', eventPayload));
+                }
+                if (!isInitialUpdate) {
+                    const eventName = visible ? 'overlayOpened' : 'overlayClosed';
+                    this.dispatchEvent(new CustomEvent(eventName, eventPayload));
                 }
             });
 
@@ -311,4 +325,4 @@
         window.customElements.define('overlay-component', Overlay);
     }
 
-}());
+})();

@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.8](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.7...@joinbox/tableofcontents@1.1.8) (2023-07-18)
+
+
+
+# 3.4.0 (2021-07-14)
+
+
+
+# 3.3.0 (2021-07-14)
+
+**Note:** Version bump only for package @joinbox/tableofcontents
+
+
+
+
+
+## [1.1.4](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.3...@joinbox/tableofcontents@1.1.4) (2021-07-14)
+## [1.1.7](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.6...@joinbox/tableofcontents@1.1.7) (2023-07-03)
+
+
+### Bug Fixes
+
+* update rollup configs to reflect version update ([0f9c450](https://github.com/joinbox/ui-components/commit/0f9c4504fd607c325aa0f337c1b36c46f2d48496))
+* update rollup configs to reflect version update ([446b3f7](https://github.com/joinbox/ui-components/commit/446b3f7a6718d277efd7194345a23b90083026cb))
+
+
+
+
+
+## [1.1.6](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.5...@joinbox/tableofcontents@1.1.6) (2022-07-04)
+
+**Note:** Version bump only for package @joinbox/tableofcontents
+
+
+
+
+
+## [1.1.3](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.2...@joinbox/tableofcontents@1.1.3) (2021-07-14)
+## [1.1.5](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.2...@joinbox/tableofcontents@1.1.5) (2022-04-27)
+
+
+### Bug Fixes
+
+* Fix main files in package.json ([1bd07b2](https://github.com/joinbox/ui-components/commit/1bd07b28a92881f499edac71e25453010bb2fe6c))
+* fix versions in package.json (to match latest release) ([77137df](https://github.com/joinbox/ui-components/commit/77137df6758b2d39ee06941ba3e6a062c1f5b9e4))
+
+
+
+## 3.1.2 (2021-06-16)
+
+
+
+
+
 ## [1.1.2](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.1...@joinbox/tableofcontents@1.1.2) (2021-06-16)
 
 

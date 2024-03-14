@@ -10,6 +10,7 @@ Features:
 - supports auto submit on cloned form elements
 - clones placeholder from original to cloned inputs (if not already set on cloned input)
 - sets for attribute on label and id attribute on input (if not already set on cloned input)
+- can clone select options to checkbox inputs
 
 
 ## Polyfills
@@ -105,8 +106,11 @@ e.g. `"blur,input"`. If you want to auto-submit with a debounce, add the debounc
 ms, e.g. `"input:50,blur"` (for a debounce of 50ms after an input). To submit the form, the
 component will trigger a click on the original element's `button` or `input` with `type="submit"`
 (this is required in order to work with Drupal's AJAX based forms). 
-- data-form-elements-selector: CSS selector for all input elements that should be cloned and synced
+- `data-form-elements-selector`: CSS selector for all input elements that should be cloned and synced
 between the original and the cloned input.
+- `data-submit-on-enter` (optional, boolean attribute): Submit original form if user presses enter
+while the input is focused. Make sure the cloned form is not wrapped in a <form> element or it will
+be submitted at the same time (and reload the page if not prevented).
 
 #### Content
 - Use any content you like with the following exceptions:
@@ -149,7 +153,8 @@ const sync = new InputSync();
 sync.setup({
     originalElement: document.querySelector('#source'),
     clonedElement: document.querySelector('#target'),
-    property: 'value',
+    originalProperty: 'value',
+    clonedProperty: 'value',
     autoSubmit: ['change', 'input'],
 });
 ```

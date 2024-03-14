@@ -132,7 +132,9 @@
 
         /**
          * Tests if a given image URL returns a valid image. YouTube falls back to a 120px wide default
-         * imag if provided resolution is not found; therefore treat 120px wide images as invalid.
+         * image if provided resolution is not found; therefore treat 120px wide images as inexistent.
+         * This happens if a video exists but not all preview resolutions were generated (opposed
+         * to a video which does not exist at all which will call the error handler).
          * @param {string} url
          * @returns {Promise}       Resolves to true if image is valid, else to false
          */
@@ -155,4 +157,4 @@
         window.customElements.define('youtube-preview-image', YouTubePreviewImage);
     }
 
-}());
+})();

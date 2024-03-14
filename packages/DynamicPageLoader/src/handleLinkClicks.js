@@ -1,4 +1,4 @@
-import once from './once.mjs';
+import { once } from '@joinbox/ui-tools';
 
 /* global window, CustomEvent */
 
