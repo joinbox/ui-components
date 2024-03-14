@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.1.8...@joinbox/splittext@1.2.0) (2024-03-14)
+
+
+### Bug Fixes
+
+* **splittext:** fixes from code review ([06170ee](https://github.com/joinbox/ui-components/commit/06170eea62c5db15f57e1e213422e830fdc720ef))
+
+
+### Features
+
+* **splitText:** add support for nested tags ([be0fab8](https://github.com/joinbox/ui-components/commit/be0fab80071993fe421bc271e6e39c794aa54ffb))
+
+
+
+
+
 ## [1.1.8](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.1.7...@joinbox/splittext@1.1.8) (2024-03-01)
 
 
