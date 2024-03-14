@@ -39,11 +39,11 @@ export default ({
         // In HTML, spaces may occur before and after a string, but they won't be displayed in the
         // browser. Remove those as every single one would be wrapped in a letter span (if
         // wrapLetter is set) and take their place.
-        const trimmed = text.trim();
+        const trimmedText = text.trim();
 
         // Wrap words first as we must split at word boundaries which are hard to detect
         // if we split at letters first.
-        return splitIntoWords(trimmed)
+        return splitIntoWords(trimmedText)
             // Variable is called part (and not word) because we won't split into words if
             // wrapWord is false
             .map((part) => {

@@ -1,7 +1,7 @@
 import splitTags from './splitTags.mjs';
 import test from 'ava';
 
-test('splits html', (t) => {
+test('splits html starting and ending with text', (t) => {
     const htmlString = '1 2 <a>3</a> 4';
     const result = splitTags(htmlString);
     t.deepEqual(result, [
@@ -11,10 +11,12 @@ test('splits html', (t) => {
         { type: 'tag', value: '</a>' },
         { type: 'text', value: ' 4' },
     ]);
-    // Also works if html string begins and ends with tags
-    const htmlStringWrappedInTags = '<a>3</a>';
-    const resultWrappedInTags = splitTags(htmlStringWrappedInTags);
-    t.deepEqual(resultWrappedInTags, [
+});
+
+test('splits html starting and ending with tags', (t) => {
+    const htmlString = '<a>3</a>';
+    const result = splitTags(htmlString);
+    t.deepEqual(result, [
         { type: 'tag', value: '<a>' },
         { type: 'text', value: '3' },
         { type: 'tag', value: '</a>' },
