@@ -11,8 +11,11 @@ const { JSDOM } = jsdom;
  * @param {boolean} options.hideErrors        If true, jsdomError will only be added to errors but
  *                                            not displayed (good to test if exceptions are thrown
  *                                            as console is not cluttered)
- * @param {object} jsdomOptions               Additional JSDOM options, e.g. to test an URL (if
- *                                            using history.pushState)
+ * @param {function} jsdomOptions             Additional JSDOM options, e.g. to test an URL (if
+ *                                            using history.pushState) or to use a custom
+ *                                            ResourceLoader; argument: current JSDOM instance;
+ *                                            return: an object with properties that may be passed
+ *                                            to JSDOM constructor.
  * @return {object}
  */
 export default async ({
@@ -33,7 +36,7 @@ export default async ({
         resources: 'usable',
         // Add requestAnimationFrame support
         pretendToBeVisual: true,
-        ...jsdomOptions,
+        ...jsdomOptions(jsdom),
     });
     const { document } = window;
 

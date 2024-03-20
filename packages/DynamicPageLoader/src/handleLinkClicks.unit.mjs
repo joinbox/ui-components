@@ -3,13 +3,18 @@ import { fileURLToPath } from 'url';
 import test from 'ava';
 import getDOM from '../../../src/testHelpers/getDOM.mjs';
 
-const setup = async(hideErrors) => {
+const setup = async (hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
-    const jsdomOptions = { url: 'https://joinbox.com' };
-    return getDOM({ basePath, scripts: ['handleLinkClicks.window.js'], hideErrors, jsdomOptions });
+    const jsdomOptions = () => ({ url: 'https://joinbox.com' });
+    return getDOM({
+        basePath,
+        scripts: ['handleLinkClicks.window.js'],
+        hideErrors,
+        jsdomOptions,
+    });
 };
 
-test('dispatches urlchange event and updates state', async(t) => {
+test('dispatches urlchange event and updates state', async (t) => {
     const { window, document, errors } = await setup(true);
     const link = document.createElement('a');
     link.setAttribute('href', '/test');
@@ -31,7 +36,7 @@ test('dispatches urlchange event and updates state', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('uses link element and link target for checkLink hook', async(t) => {
+test('uses link element and link target for checkLink hook', async (t) => {
     const { window, document, errors } = await setup(true);
     const link = document.createElement('a');
     link.setAttribute('href', '/test');
@@ -49,7 +54,7 @@ test('uses link element and link target for checkLink hook', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('respects checkLink hook', async(t) => {
+test('respects checkLink hook', async (t) => {
     const { window, document, errors } = await setup(true);
     const link = document.createElement('a');
     link.setAttribute('href', '/test');

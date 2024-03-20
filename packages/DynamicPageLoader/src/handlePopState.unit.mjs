@@ -3,9 +3,9 @@ import { fileURLToPath } from 'url';
 import test from 'ava';
 import getDOM from '../../../src/testHelpers/getDOM.mjs';
 
-const setup = async(hideErrors) => {
+const setup = async (hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
-    const jsdomOptions = { url: 'https://joinbox.com' };
+    const jsdomOptions = () => ({ url: 'https://joinbox.com' });
     return getDOM({
         basePath,
         scripts: ['handlePopState.window.js'],
@@ -14,7 +14,7 @@ const setup = async(hideErrors) => {
     });
 };
 
-test('dispatches urlchange event on popstate', async(t) => {
+test('dispatches urlchange event on popstate', async (t) => {
     const { window, document, errors } = await setup(true);
     const script = document.createElement('script');
     script.textContent = `
@@ -32,7 +32,7 @@ test('dispatches urlchange event on popstate', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('does not fail if url property in state is missing', async(t) => {
+test('does not fail if url property in state is missing', async (t) => {
     const { window, document, errors } = await setup(true);
     const script = document.createElement('script');
     script.textContent = `

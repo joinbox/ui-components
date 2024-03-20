@@ -2,19 +2,18 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import test from 'ava';
 import getDOM from '../../../src/testHelpers/getDOM.mjs';
-import jsdom from 'jsdom';
 
 const setup = async (hideErrors, requests = []) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
-    // Use a custom resource loader to track requests; needed to check nocookie domain
-    class CustomResourceLoader extends jsdom.ResourceLoader {
-        fetch(url, options) {
-            requests.push(url);
-            return super.fetch(url, options);
+    const jsdomOptions = (jsdom) => {
+        // Use a custom resource loader to track requests; needed to check nocookie domain
+        class CustomResourceLoader extends jsdom.ResourceLoader {
+            fetch(url, options) {
+                requests.push(url);
+                return super.fetch(url, options);
+            }
         }
-    }
-    const jsdomOptions = {
-        resources: new CustomResourceLoader(),
+        return { resources: new CustomResourceLoader() };
     };
     return getDOM({
         basePath,
