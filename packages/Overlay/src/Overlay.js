@@ -82,7 +82,7 @@ export default class Overlay extends HTMLElement {
      * Listens to events emitted by the model
      */
     #setupModelListeners() {
-        this.model.on('change', this.updateDOM.bind(this));
+        this.model.on('change', this.#updateDOM.bind(this));
     }
 
     /**
