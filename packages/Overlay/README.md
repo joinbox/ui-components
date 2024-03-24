@@ -47,7 +47,7 @@ overlay.addEventListener('closeOverlay', enableBodyScroll);
 
 <!-- Import all components you use -->
 <script src="@joinbox/overlay/OverlayElement.js"></script>
-<script src="@joinbox/overlay/OverlayButtonElement"></script>
+<script src="@joinbox/overlay/OverlayButtonElement.js"></script>
 ````
 
 ## Components
@@ -102,6 +102,19 @@ overlay. Defaults to `toggle`.
 the overlay is opened.
 - `data-closed-class-name` (optional, `String`): Class name that will be added to the button when
 the overlay is closed.
+
+### Overlay (Class)
+
+The original `Overlay` class is exposed in order to extend it.
+
+#### Usage
+```
+import Overlay from '@joinbox/overlay/Overlay.js'
+
+class CustomOverlay extends Overlay {
+    …
+}
+```
 
 
 ## Migration

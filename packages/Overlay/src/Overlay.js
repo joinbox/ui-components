@@ -51,9 +51,9 @@ export default class Overlay extends HTMLElement {
         );
         this.readAttributes();
         this.registerAnnouncements();
-        this.setupModelListeners();
-        this.updateDOM(true);
-        this.setupDOMListeners();
+        this.#setupModelListeners();
+        this.#updateDOM(true);
+        this.#setupDOMListeners();
     }
 
     connectedCallback() {
@@ -66,11 +66,11 @@ export default class Overlay extends HTMLElement {
         this.background = null;
     }
 
-    handleKeyDown(event) {
+    #handleKeyDown(event) {
         if (event.keyCode === 27 && !this.disableEsc) this.model.close();
     }
 
-    handleClickOutside(event) {
+    #handleClickOutside(event) {
         if (this.disableClickOutside) return;
         const { target } = event;
         // Test if target is a child of overlay
@@ -79,14 +79,16 @@ export default class Overlay extends HTMLElement {
     }
 
     /**
-     * Listens to model
-     * @private
+     * Listens to events emitted by the model
      */
-    setupModelListeners() {
+    #setupModelListeners() {
         this.model.on('change', this.updateDOM.bind(this));
     }
 
-    setupDOMListeners() {
+    /**
+     * Listens to events emitted by the UI (i.e. the user)
+     */
+    #setupDOMListeners() {
         window.addEventListener('openOverlay', (event) => {
             if (event.detail.name === this.name) this.model.open();
         });
@@ -101,7 +103,7 @@ export default class Overlay extends HTMLElement {
      *                                      because the overlay is not opened or closed at this
      *                                      moment
      */
-    updateDOM(isInitialUpdate = false) {
+    #updateDOM(isInitialUpdate = false) {
         window.requestAnimationFrame(() => {
             const visible = this.model.isOpen;
             const eventPayload = { bubbles: true, detail: { name: this.name } };
@@ -126,8 +128,8 @@ export default class Overlay extends HTMLElement {
             if (this.model.isOpen) {
                 // Only add esc/click on open or click on open button will at the same time close
                 // the overlay
-                this.disconnectEsc = createListener(window, 'keydown', this.handleKeyDown.bind(this));
-                this.disconnectClick = createListener(window, 'click', this.handleClickOutside.bind(this));
+                this.disconnectEsc = createListener(window, 'keydown', this.#handleKeyDown.bind(this));
+                this.disconnectClick = createListener(window, 'click', this.#handleClickOutside.bind(this));
             } else {
                 if (this.disconnectEsc) this.disconnectEsc();
                 if (this.disconnectClick) this.disconnectClick();
