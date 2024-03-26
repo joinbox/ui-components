@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.5.1...@joinbox/async-loader@1.6.0) (2024-03-26)
+
+
+### Features
+
+* **async-loader:** emit original response in success/fail events ([9e2624c](https://github.com/joinbox/ui-components/commit/9e2624c188fae7dba76fd2596eb7693a9db40389))
+
+
+
+
+
 ## [1.5.1](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.5.0...@joinbox/async-loader@1.5.1) (2023-08-21)
 
 **Note:** Version bump only for package @joinbox/async-loader

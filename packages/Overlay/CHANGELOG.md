@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@2.0.1...@joinbox/overlay@2.1.0) (2024-03-26)
+
+
+### Bug Fixes
+
+* **async-loader:** remove unwanted changes from commit ([10c7423](https://github.com/joinbox/ui-components/commit/10c7423c79d0345ca925e2ccf132d4a2e44170d1))
+* **async-loader:** remove unwanted files from commit ([1873077](https://github.com/joinbox/ui-components/commit/18730777f13471f7a03e53028845acd4f2328d89))
+* **overlay:** fix call of newly private method ([566b2c1](https://github.com/joinbox/ui-components/commit/566b2c17fe4d74c9c9b7157848e64fd5f50ef1b4))
+
+
+### Features
+
+* **overlay:** expose overlay ([a4a513b](https://github.com/joinbox/ui-components/commit/a4a513b25332f8151d5ee66e39ec8c88d68455a7))
+
+
+
+
+
 ## [2.0.1](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@2.0.0...@joinbox/overlay@2.0.1) (2024-01-29)
 
 
