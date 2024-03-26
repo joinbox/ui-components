@@ -47,7 +47,7 @@ overlay.addEventListener('closeOverlay', enableBodyScroll);
 
 <!-- Import all components you use -->
 <script src="@joinbox/overlay/OverlayElement.js"></script>
-<script src="@joinbox/overlay/OverlayButtonElement"></script>
+<script src="@joinbox/overlay/OverlayButtonElement.js"></script>
 ````
 
 ## Components

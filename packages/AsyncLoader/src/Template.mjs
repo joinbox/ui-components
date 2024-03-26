@@ -82,7 +82,7 @@ export default class Template {
         this.setContent(
             replacements
                 ? this.#replaceTemplateContent(templateContent, replacements)
-                : templateContent
+                : templateContent,
         );
     }
 

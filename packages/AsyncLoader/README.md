@@ -62,5 +62,6 @@ displayed within `[data-content-container]` if loading data fails; you may use a
 ### Events
 - Dispatches `asyncLoaderFail` event if loading content fails (bubbles).
 - Dispatches `asyncLoaderSuccess` event if loading content succeeds (bubbles).
-- Both events carry a `detail` object with properties `url` (`String`) and `element`
+- Both events carry a `detail` object with properties `url` (`String`, deprecated), `response`
+(instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)) and `element`
 (`HTMLElement` that matches the dispatching `AsyncLoader`).

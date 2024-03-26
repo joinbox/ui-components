@@ -117,12 +117,12 @@ export default class extends HTMLElement {
         try {
             const response = await fetch(fetchURL);
             if (!response.ok) {
-                this.#handleError(`Status ${response.status}`, fetchURL, response.status);
+                this.#handleError(`Status ${response.status}`, response, response.status);
             } else {
                 const content = await response.text();
                 this.#loadingStatus = this.#loadingStates.loaded;
                 this.#template.setContent(content);
-                this.#dispatchStatusEvent(fetchURL);
+                this.#dispatchStatusEvent(response);
             }
         } catch (error) {
             this.#handleError(error.message, fetchURL);
@@ -132,9 +132,15 @@ export default class extends HTMLElement {
         }
     }
 
-    #handleError(message, fetchURL, statusCode = null) {
+    /**
+     * @param {string} message
+     * @param {Response} response - Instance of Response
+     *                              (https://developer.mozilla.org/en-US/docs/Web/API/Response)
+     * @param {number?} statusCode
+     */
+    #handleError(message, response, statusCode = null) {
         this.#loadingStatus = this.#loadingStates.failed;
-        this.#dispatchStatusEvent(fetchURL, true);
+        this.#dispatchStatusEvent(response, true);
 
         const errorTemplateSelectors = [
             ...(statusCode ? [`[data-error-${statusCode}-template]`] : []),
@@ -144,12 +150,15 @@ export default class extends HTMLElement {
         this.#template.generateContent(errorTemplateSelectors, { message }, true);
     }
 
-    #dispatchStatusEvent(fetchURL, failed = false) {
+    #dispatchStatusEvent(response, failed = false) {
         const type = failed ? 'asyncLoaderFail' : 'asyncLoaderSuccess';
         const payload = {
             bubbles: true,
             detail: {
-                url: fetchURL,
+                // Property url is deprecated; remove with next major release; is replaced by
+                // response.url
+                url: response.url,
+                response,
                 element: this,
             },
         };

@@ -52,7 +52,7 @@ test('throws on missing parameters', async(t) => {
 });
 
 
-test('displays valid content indicator', async(t) => {
+test('displays successfully fetched content', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, '<h2>Test</h2>');
     const loader = createElement(document,
@@ -74,7 +74,7 @@ test('displays valid content indicator', async(t) => {
 });
 
 
-test('displays error if request fails', async(t) => {
+test('displays error if request fails', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(404);
     const loader = createElement(document,
@@ -91,7 +91,7 @@ test('displays error if request fails', async(t) => {
 });
 
 
-test('displays specific error for status code if request fails', async(t) => {
+test('displays specific error for status code if request fails', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(404, 'notFound');
     const loader = createElement(document,
@@ -111,7 +111,7 @@ test('displays specific error for status code if request fails', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('displays error if request cannot be parsed', async(t) => {
+test('displays error if request cannot be parsed', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, 'test', true);
     const loader = createElement(document,
@@ -127,7 +127,7 @@ test('displays error if request cannot be parsed', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('filters trigger event', async(t) => {
+test('filters trigger event', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, 'allGood');
     const loader = createElement(document,
@@ -153,7 +153,7 @@ test('filters trigger event', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('loads data only multiple times if once is not used', async(t) => {
+test('loads data only multiple times if once is not used', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, 'onceTest');
     const loader = createElement(document,
@@ -173,7 +173,7 @@ test('loads data only multiple times if once is not used', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('loads data only once if specified', async(t) => {
+test('loads data only once if specified', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, 'onceTest');
     const loader = createElement(document,
@@ -194,7 +194,7 @@ test('loads data only once if specified', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('dispatches success event if content was loaded successfully', async(t) => {
+test('dispatches success event if content was loaded successfully', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, 'allGood');
     const loader = createElement(document,
@@ -212,10 +212,12 @@ test('dispatches success event if content was loaded successfully', async(t) => 
     t.is(succeeded.length, 1);
     t.is(succeeded[0].detail.url, 'testContent.html');
     t.is(succeeded[0].detail.element, loader);
+    t.is(typeof succeeded[0].detail.response, 'object');
+    t.is(succeeded[0].detail.response.status, 200);
     t.is(errors.length, 0);
 });
 
-test('dispatches fail event if loading content failed', async(t) => {
+test('dispatches fail event if loading content failed', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(404, 'notFound');
     const loader = createElement(document,
@@ -235,10 +237,12 @@ test('dispatches fail event if loading content failed', async(t) => {
     t.is(failed.length, 1);
     t.is(failed[0].detail.url, 'testContent.html');
     t.is(failed[0].detail.element, loader);
+    t.is(typeof failed[0].detail.response, 'object');
+    t.is(failed[0].detail.response.status, 404);
     t.is(errors.length, 0);
 });
 
-test('loads data from endpoint url passed in event payload', async(t) => {
+test('loads data from endpoint url passed in event payload', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, '<h2>Test</h2>');
     const loader = createElement(document,
@@ -261,18 +265,20 @@ test('loads data from endpoint url passed in event payload', async(t) => {
 });
 
 
-test('Attribute data-endpoint-url overrides data-event-endpoint-property-name if both are set', async(t) => {
+test('Attribute data-endpoint-url overrides data-event-endpoint-property-name if both are set', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, '<h2>Test</h2>', false, 'testContent.html');
-    const loader = createElement(document,
-    `<async-loader
-            data-endpoint-url="testContent.html"
-            data-event-endpoint-property-name="endPointUrl"
-            data-trigger-event-name="loadData"
-        >
-            <div data-content-container>Initial</div>
-            <template data-error-template>Error: {{message}}</template>
-        </async-loader>`);
+    const loader = createElement(
+        document,
+        `<async-loader
+                data-endpoint-url="testContent.html"
+                data-event-endpoint-property-name="endPointUrl"
+                data-trigger-event-name="loadData"
+            >
+                <div data-content-container>Initial</div>
+                <template data-error-template>Error: {{message}}</template>
+            </async-loader>`,
+    );
     document.body.appendChild(loader);
     const container = loader.querySelector('[data-content-container]');
     t.is(container.innerHTML, 'Initial');
