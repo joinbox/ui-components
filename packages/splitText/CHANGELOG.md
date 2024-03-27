@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.2.0...@joinbox/splittext@1.3.0) (2024-03-27)
+
+
+### Features
+
+* **splitText:** do not split letters within a HTML entity (e.g. &nbsp;) ([225ec68](https://github.com/joinbox/ui-components/commit/225ec6831856a0c0093de51b70040a6a92fba322))
+
+
+
+
+
 # [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.1.8...@joinbox/splittext@1.2.0) (2024-03-14)
 
 
