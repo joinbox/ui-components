@@ -23,7 +23,7 @@ test('throws errors if arguments are not valid', async (t) => {
 test('splits letters, words and lines', async (t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');
-    div.textContent = 'Test – letters';
+    div.innerHTML = 'Test – l&nbsp;tters';
     window.splitText({
         element: div,
     });

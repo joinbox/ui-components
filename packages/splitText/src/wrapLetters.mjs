@@ -18,7 +18,12 @@ export default (text, wrapLetter, startIndex = 0, replaceSpaces = false) => {
 
     // Wrap every single letter within the current part
     const wrapped = text
-        .split('')
+        // Split at every letter, but keep HTML entities as one pseudo-character together
+        .split(/(&[^;]+;|)/)
+        // The split RegEx above returns the dividers as well (as we need to keep the HTML
+        // entities); this includes empty strings (for all regular splits happening between
+        // letters); filter them out as they're superfluous and would be wrapped as well.
+        .filter((letter) => letter !== '')
         .map((letter) => {
             const adjustedLetter = replaceSpaces && letter.match(/\s/) ? replaceSpaces : letter;
             const lettered = wrapLetter(adjustedLetter, index);
@@ -28,6 +33,5 @@ export default (text, wrapLetter, startIndex = 0, replaceSpaces = false) => {
         .join('');
 
     return { index, result: wrapped };
-
 };
 
