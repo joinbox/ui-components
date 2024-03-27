@@ -21,3 +21,8 @@ test('replaces spaces', (t) => {
     const result = wrapLetters('a b  c', (letter) => `|${letter}|`, 0, '&nbsp;');
     t.is(result.result, '|a||&nbsp;||b||&nbsp;||&nbsp;||c|');
 });
+
+test('does not split within html character entities', (t) => {
+    const result = wrapLetters('a&nbsp;c', (letter) => `|${letter}|`);
+    t.is(result.result, '|a||&nbsp;||c|');
+});
