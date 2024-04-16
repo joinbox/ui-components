@@ -144,7 +144,10 @@
             loaded: 'loaded',
         };
 
-        #teardownTriggerEventListener
+        /**
+         * @type {string[]}
+         */
+        #teardownTriggerEventListeners
 
         #loadingStatus = this.#loadingStates.initial;
 
@@ -158,14 +161,26 @@
                 'data-endpoint-url',
             );
 
-            this.triggerEventName = readAttribute(
+            /**
+             * @deprecated Use data-trigger-event-names instead
+             */
+            const triggerEventName = readAttribute(
                 this,
                 'data-trigger-event-name',
+            );
+
+            const triggerEventNames = readAttribute(
+                this,
+                'data-trigger-event-names',
                 {
-                    validate: (value) => !!value,
-                    expectation: 'a non-empty string',
+                    transform: (value) => (value ? value.split(/\s*,\s*/) : []),
+                    validate: (value) => value.length > 0 || triggerEventName,
+                    expectation: 'a comma-separated list of event names',
                 },
             );
+
+            // Merge deprecated value with new value
+            this.triggerEventNames = [triggerEventName, ...triggerEventNames];
 
             this.eventEndpointPropertyName = readAttribute(
                 this,
@@ -197,24 +212,26 @@
         }
 
         disconnectedCallback() {
-            this.#teardownTriggerEventListener();
+            this.#teardownTriggerEventListeners.forEach((teardown) => teardown());
         }
 
         /**
-         * Listen to event specified in data-trigger-event-name
+         * Listen to event specified in data-trigger-event-names
          */
         #setupTriggerEventListener() {
-            this.#teardownTriggerEventListener = createListener(
-                window,
-                this.triggerEventName,
-                this.#handleTiggerEvent.bind(this),
+            this.#teardownTriggerEventListeners = this.triggerEventNames.map(
+                (eventName) => createListener(
+                    window,
+                    eventName,
+                    this.#handleTriggerEvent.bind(this),
+                ),
             );
         }
 
         /**
          * Tests if event dispatched passes filter in case trigger-event-filter was provided
          */
-        #handleTiggerEvent(event) {
+        #handleTriggerEvent(event) {
             if (this.triggerEventFilter) {
                 // Do not use eval to limit scope of variables that can be accessed; still use JS in the
                 // attribute to allow for maximum flexibility.
@@ -230,7 +247,7 @@
             }
 
             const fetchURL = this.endpointURL || event.detail?.[this.eventEndpointPropertyName];
-            if (!fetchURL) throw new Error(`The property ${this.eventEndpointPropertyName} either has no value or was not found in the payload of the "${this.triggerEventName}" Event`);
+            if (!fetchURL) throw new Error(`The property ${this.eventEndpointPropertyName} either has no value or was not found in the payload of the "${event.type}" Event`);
 
             // If content should only be loaded once, return if fetch request was started or succeeded
             const requestIsLoadingOrLoaded = [this.#loadingStates.loading, this.#loadingStates.loaded]
