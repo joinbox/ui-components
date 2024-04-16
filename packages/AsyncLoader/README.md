@@ -10,7 +10,7 @@ Component that fetches contents asynchronously and displays it when ready:
 <async-loader
     data-endpoint-url="/testContent.html"
     data-trigger-event-names="loadData1,loadData2"
-    data-trigger-event-filter="event.type == 'loadData1' && event.detail.loadAsync === true"
+    data-trigger-event-filter="(event.type === 'loadData1' && event.detail.loadAsync === true) || event.type === 'loadData2'"
 >
     <div data-content-container>Initial Content</div>
     <template data-loading-template>Loading ...</template>
@@ -39,7 +39,7 @@ Component that fetches contents asynchronously and displays it when ready:
 If both `data-endpoint-url` and `data-event-endpoint-property-name` are provided, `data-endpoint-url` will be preferred.
 - ~~`data-trigger-event-name`~~ (deprecated): Name of the event that causes content to be loaded; it will
 be listened to on `window`.
-- `data-trigger-event-names` (required): Comma seperated Names of the events which will trigger the fetching of the content; they will
+- `data-trigger-event-names` (required): Comma separated names of the events which will trigger the fetching of the content; they will
   be listened to on `window`.
 - `data-event-endpoint-property-name` (required if `data-endpoint-url` is not set): Name of the property 
 in the `event` payload (`detail` property of the event object) which contains the endpoint URL.

@@ -16,7 +16,10 @@ export default class extends HTMLElement {
         loaded: 'loaded',
     };
 
-    #teardownTriggerEventListener
+    /**
+     * @type {Array}
+     */
+    #teardownTriggerEventListeners
 
     #loadingStatus = this.#loadingStates.initial;
 
@@ -33,25 +36,23 @@ export default class extends HTMLElement {
         /**
          * @deprecated Use data-trigger-event-names instead
          */
-        this.triggerEventName = readAttribute(
+        const triggerEventName = readAttribute(
             this,
             'data-trigger-event-name',
         );
 
-        this.triggerEventNames = readAttribute(
+        const triggerEventNames = readAttribute(
             this,
             'data-trigger-event-names',
             {
-                transform: (value) => (value ? value.split(',') : []),
-                validate: (value) => value.length > 0 || this.triggerEventName,
+                transform: (value) => (value ? value.split(/\s*,\s*/) : []),
+                validate: (value) => value.length > 0 || triggerEventName,
                 expectation: 'a comma-separated list of event names',
             },
         );
 
         // Merge deprecated value with new value
-        if (this.triggerEventName) {
-            this.triggerEventNames.push(this.triggerEventName);
-        }
+        this.triggerEventNames = [triggerEventName, ...triggerEventNames];
 
         this.eventEndpointPropertyName = readAttribute(
             this,
@@ -83,14 +84,14 @@ export default class extends HTMLElement {
     }
 
     disconnectedCallback() {
-        this.#teardownTriggerEventListener.forEach((teardown) => teardown());
+        this.#teardownTriggerEventListeners.forEach((teardown) => teardown());
     }
 
     /**
      * Listen to event specified in data-trigger-event-names
      */
     #setupTriggerEventListener() {
-        this.#teardownTriggerEventListener = this.triggerEventNames.map(
+        this.#teardownTriggerEventListeners = this.triggerEventNames.map(
             (eventName) => createListener(
                 window,
                 eventName,

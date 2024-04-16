@@ -153,8 +153,8 @@ test('filters trigger event', async (t) => {
     t.is(errors.length, 0);
 });
 
-test('filters multiple trigger events', async(t) => {
-    const { document, window, errors } = await setup(true);
+test('listens to and filters multiple trigger events', async(t) => {
+    const { document, window, errors } = await setup(false);
     window.fetch = polyfillFetch(200, 'allGood');
     const loader = createElement(document,
         `<async-loader
@@ -178,7 +178,7 @@ test('filters multiple trigger events', async(t) => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     t.is(container.innerHTML, 'Original');
 
-    // Dispatch valid even tthat should fetch data
+    // Dispatch valid event that should fetch data
     loader.dispatchEvent(new window.CustomEvent('loadData1',
         { bubbles: true, detail: { isValid: true } }));
     await new Promise((resolve) => setTimeout(resolve, 0));
