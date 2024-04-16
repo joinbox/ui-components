@@ -30,14 +30,28 @@ export default class extends HTMLElement {
             'data-endpoint-url',
         );
 
+        /**
+         * @deprecated Use data-trigger-event-names instead
+         */
         this.triggerEventName = readAttribute(
             this,
             'data-trigger-event-name',
+        );
+
+        this.triggerEventNames = readAttribute(
+            this,
+            'data-trigger-event-names',
             {
-                validate: (value) => !!value,
-                expectation: 'a non-empty string',
+                transform: (value) => (value ? value.split(',') : []),
+                validate: (value) => value.length > 0 || this.triggerEventName,
+                expectation: 'a comma-separated list of event names',
             },
         );
+
+        // Merge deprecated value with new value
+        if (this.triggerEventName) {
+            this.triggerEventNames.push(this.triggerEventName);
+        }
 
         this.eventEndpointPropertyName = readAttribute(
             this,
@@ -69,24 +83,26 @@ export default class extends HTMLElement {
     }
 
     disconnectedCallback() {
-        this.#teardownTriggerEventListener();
+        this.#teardownTriggerEventListener.forEach((teardown) => teardown());
     }
 
     /**
-     * Listen to event specified in data-trigger-event-name
+     * Listen to event specified in data-trigger-event-names
      */
     #setupTriggerEventListener() {
-        this.#teardownTriggerEventListener = createListener(
-            window,
-            this.triggerEventName,
-            this.#handleTiggerEvent.bind(this),
+        this.#teardownTriggerEventListener = this.triggerEventNames.map(
+            (eventName) => createListener(
+                window,
+                eventName,
+                this.#handleTriggerEvent.bind(this),
+            ),
         );
     }
 
     /**
      * Tests if event dispatched passes filter in case trigger-event-filter was provided
      */
-    #handleTiggerEvent(event) {
+    #handleTriggerEvent(event) {
         if (this.triggerEventFilter) {
             // Do not use eval to limit scope of variables that can be accessed; still use JS in the
             // attribute to allow for maximum flexibility.
@@ -102,7 +118,7 @@ export default class extends HTMLElement {
         }
 
         const fetchURL = this.endpointURL || event.detail?.[this.eventEndpointPropertyName];
-        if (!fetchURL) throw new Error(`The property ${this.eventEndpointPropertyName} either has no value or was not found in the payload of the "${this.triggerEventName}" Event`);
+        if (!fetchURL) throw new Error(`The property ${this.eventEndpointPropertyName} either has no value or was not found in the payload of the "${event.type}" Event`);
 
         // If content should only be loaded once, return if fetch request was started or succeeded
         const requestIsLoadingOrLoaded = [this.#loadingStates.loading, this.#loadingStates.loaded]

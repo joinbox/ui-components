@@ -48,7 +48,7 @@ test('throws on missing parameters', async(t) => {
         </async-loader>`);
     document.body.appendChild(loader);
     t.is(errors.length, 1);
-    t.is(errors[0].message.includes('Expected attribute data-trigger-event-name'), true);
+    t.is(errors[0].message.includes('Expected attribute data-trigger-event-names'), true);
 });
 
 
@@ -56,7 +56,7 @@ test('displays successfully fetched content', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, '<h2>Test</h2>');
     const loader = createElement(document,
-        `<async-loader data-endpoint-url="testContent.html" data-trigger-event-name="loadData">
+        `<async-loader data-endpoint-url="testContent.html" data-trigger-event-names="loadData">
             <div data-content-container>Initial</div>
             <template data-loading-template>Loading ...</template>
             <template data-error-template>Error: {{message}}</template>
@@ -78,7 +78,7 @@ test('displays error if request fails', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(404);
     const loader = createElement(document,
-        `<async-loader data-endpoint-url="testContent.html" data-trigger-event-name="loadData">
+        `<async-loader data-endpoint-url="testContent.html" data-trigger-event-names="loadData">
             <div data-content-container>Initial</div>
             <template data-error-template>Error: {{message}}</template>
         </async-loader>`);
@@ -97,7 +97,7 @@ test('displays specific error for status code if request fails', async (t) => {
     const loader = createElement(document,
         `<async-loader
             data-endpoint-url="testContent.html"
-            data-trigger-event-name="loadData"
+            data-trigger-event-names="loadData"
         >
             <div data-content-container>Initial</div>
             <template data-error-template>Error: {{message}}</template>
@@ -115,7 +115,7 @@ test('displays error if request cannot be parsed', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, 'test', true);
     const loader = createElement(document,
-        `<async-loader data-endpoint-url="testContent.html" data-trigger-event-name="loadData">
+        `<async-loader data-endpoint-url="testContent.html" data-trigger-event-names="loadData">
             <div data-content-container>Initial</div>
             <template data-error-template>Error: {{message}}</template>
         </async-loader>`);
@@ -133,7 +133,7 @@ test('filters trigger event', async (t) => {
     const loader = createElement(document,
         `<async-loader
             data-endpoint-url="testContent.html"
-            data-trigger-event-name="loadData"
+            data-trigger-event-names="loadData"
             data-trigger-event-filter="event.detail.isValid === true"
         >
             <div data-content-container>Original</div>
@@ -153,13 +153,46 @@ test('filters trigger event', async (t) => {
     t.is(errors.length, 0);
 });
 
+test('filters multiple trigger events', async(t) => {
+    const { document, window, errors } = await setup(true);
+    window.fetch = polyfillFetch(200, 'allGood');
+    const loader = createElement(document,
+        `<async-loader
+            data-endpoint-url="testContent.html"
+            data-trigger-event-names="loadData1,loadData2"
+            data-trigger-event-filter="event.type == 'loadData1' && event.detail.isValid === true"
+        >
+            <div data-content-container>Original</div>
+        </async-loader>`);
+    document.body.appendChild(loader);
+    const container = loader.querySelector('[data-content-container]');
+    // Dispatch invalid event that should be filtered out
+    loader.dispatchEvent(new window.CustomEvent('loadData1',
+        { bubbles: true, detail: { isValid: false } }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(container.innerHTML, 'Original');
+
+    // Dispatch different event that should be filtered out
+    loader.dispatchEvent(new window.CustomEvent('loadData2',
+        { bubbles: true, detail: { isValid: true } }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(container.innerHTML, 'Original');
+
+    // Dispatch valid even tthat should fetch data
+    loader.dispatchEvent(new window.CustomEvent('loadData1',
+        { bubbles: true, detail: { isValid: true } }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.is(container.innerHTML, 'allGood');
+    t.is(errors.length, 0);
+});
+
 test('loads data only multiple times if once is not used', async (t) => {
     const { document, window, errors } = await setup(true);
     window.fetch = polyfillFetch(200, 'onceTest');
     const loader = createElement(document,
         `<async-loader
             data-endpoint-url="oncetest.html"
-            data-trigger-event-name="loadData"
+            data-trigger-event-names="loadData"
         >
             <div data-content-container>Original</div>
         </async-loader>`);
@@ -179,7 +212,7 @@ test('loads data only once if specified', async (t) => {
     const loader = createElement(document,
         `<async-loader
             data-endpoint-url="oncetest.html"
-            data-trigger-event-name="loadData"
+            data-trigger-event-names="loadData"
             data-load-once
         >
             <div data-content-container>Original</div>
@@ -200,7 +233,7 @@ test('dispatches success event if content was loaded successfully', async (t) =>
     const loader = createElement(document,
         `<async-loader
             data-endpoint-url="testContent.html"
-            data-trigger-event-name="loadData"
+            data-trigger-event-names="loadData"
         >
             <div data-content-container>Original</div>
         </async-loader>`);
@@ -223,7 +256,7 @@ test('dispatches fail event if loading content failed', async (t) => {
     const loader = createElement(document,
         `<async-loader
             data-endpoint-url="testContent.html"
-            data-trigger-event-name="loadData"
+            data-trigger-event-names="loadData"
         >
             <div data-content-container>Original</div>
             <template data-error-template>Error: {{message}}</template>
@@ -248,7 +281,7 @@ test('loads data from endpoint url passed in event payload', async (t) => {
     const loader = createElement(document,
         `<async-loader
             data-event-endpoint-property-name="endPointUrl"
-            data-trigger-event-name="loadData"
+            data-trigger-event-names="loadData"
         >
             <div data-content-container>Initial</div>
             <template data-error-template>Error: {{message}}</template>
@@ -273,7 +306,7 @@ test('Attribute data-endpoint-url overrides data-event-endpoint-property-name if
         `<async-loader
                 data-endpoint-url="testContent.html"
                 data-event-endpoint-property-name="endPointUrl"
-                data-trigger-event-name="loadData"
+            data-trigger-event-names="loadData"
             >
                 <div data-content-container>Initial</div>
                 <template data-error-template>Error: {{message}}</template>
