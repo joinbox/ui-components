@@ -145,7 +145,7 @@
         };
 
         /**
-         * @type {Array}
+         * @type {string[]}
          */
         #teardownTriggerEventListeners
 

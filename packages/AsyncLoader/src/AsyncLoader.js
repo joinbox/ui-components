@@ -17,7 +17,7 @@ export default class extends HTMLElement {
     };
 
     /**
-     * @type {Array}
+     * @type {string[]}
      */
     #teardownTriggerEventListeners
 
