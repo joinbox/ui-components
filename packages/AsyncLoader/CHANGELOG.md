@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.6.0...@joinbox/async-loader@1.7.0) (2024-04-16)
+
+
+### Features
+
+* **async-loader:** add possibility for multiple trigger events ([2f895e3](https://github.com/joinbox/ui-components/commit/2f895e361c3eee9659623d80afb790518e3c2fc8))
+* **async-loader:** changes after review ([0e8989b](https://github.com/joinbox/ui-components/commit/0e8989bcdc10f4ec29a40bfb30462841da5770a4))
+* **async-loader:** changes after review ([b3be4eb](https://github.com/joinbox/ui-components/commit/b3be4ebd724b1eb562bf2f3dbe3fe58f15c16808))
+
+
+
+
+
 # [1.6.0](https://github.com/joinbox/ui-components/compare/@joinbox/async-loader@1.5.1...@joinbox/async-loader@1.6.0) (2024-03-26)
 
 
