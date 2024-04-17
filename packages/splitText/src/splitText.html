@@ -19,12 +19,16 @@
             }
             .word {
                 outline: 4px solid lawngreen;
+                display: inline-block;
             }
             .letter {
                 outline: 1px solid orangered;
+                display: inline-block;
             }
-            .line {
-                background-color: lightcyan;
+            .line:after {
+                content: '¶';
+                position: absolute;
+                color: lightblue;
             }
         </style>
     </head>
@@ -44,15 +48,19 @@
         </div>
 
         <div class="container" data-split-lines>
-            This is a text – it splits lines. Not. Because letters are not split.
+            This is a text – it splits lines. Not correctly. Because words are not split.
         </div>
 
-        <div class="container" data-split-letters-lines>
-            This is a text – it splits lines. Because it splits letters!
+        <div class="container" data-split-words-lines>
+            This is a text – it splits lines. Because it splits words!
         </div>
 
         <div class="container" data-split-all-no-resize>
             This is a text – it splits words, letters and lines.
+        </div>
+
+        <div class="container" data-split-with-children>
+            This is a parent – it <a href="#">splits</a> words, letters and lines.
         </div>
 
         <script type="module">
@@ -76,12 +84,15 @@
                 wrapWord: false,
             });
             splitText({
-                element: document.querySelector('[data-split-letters-lines]'),
-                wrapWord: false,
+                element: document.querySelector('[data-split-words-lines]'),
+                wrapLetter: false,
             });
             splitText({
                 element: document.querySelector('[data-split-all-no-resize]'),
                 updateOnResize: false,
+            });
+            splitText({
+                element: document.querySelector('[data-split-with-children]'),
             });
         </script>
         

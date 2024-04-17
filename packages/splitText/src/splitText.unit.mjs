@@ -144,14 +144,17 @@ test('accepts updateOnResize property', async (t) => {
 test('works with nested HTML tags', async (t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');
-    div.innerHTML = 'Test <b>– <a href="n">link</a></b>letters';
+    // Make sure there are tags with and without adjacent spaces
+    div.innerHTML = 'a <b><a>test</a> c</b> d';
     window.splitText({
         element: div,
     });
+    // Make sure spaces are preserved around tags
+    t.is(div.textContent, 'a test c d');
     const letters = [...div.querySelectorAll('.letter')];
-    t.is(letters.length, 16);
+    t.is(letters.length, 10);
     // Check if indices count correctly (they might be reset at every nested tag that we encounter)
-    t.is(letters.at(-1).dataset.letterIndex, '15');
+    t.is(letters.at(-1).dataset.letterIndex, '9');
     const words = [...div.querySelectorAll('.word')];
     t.is(words.length, 4);
     t.is(words.at(-1).dataset.wordIndex, '3');
