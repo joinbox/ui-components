@@ -119,22 +119,22 @@ var splitTextContent = ({
         throw new Error(`SplitTextContent: argument wrapLine must be false or a functions, is ${wrapLine} instead.`);
     }
 
-    const parts = splitTags(element.innerHTML);
+    // In HTML, spaces may occur before and after a string, but they won't be displayed in the
+    // browser. Remove those as every single one would be wrapped in a letter span (if
+    // wrapLetter is set) and take their place.
+    // Trim at the very beginning and very end of innerHTML only; never trim between text/tags
+    // as this would lead to links that stick to their surrounding text.
+    const parts = splitTags(element.innerHTML.trim());
 
     /**
      * Wraps letters and/or words of a text node according to settings
      * @param {string} text - The text to be wrapped
      * @returns {string} The wrapped text, containing HTML elements for letters and/or words
      */
-    const processText = (text, indices) => {
-        // In HTML, spaces may occur before and after a string, but they won't be displayed in the
-        // browser. Remove those as every single one would be wrapped in a letter span (if
-        // wrapLetter is set) and take their place.
-        const trimmedText = text.trim();
-
+    const processText = (text, indices) => (
         // Wrap words first as we must split at word boundaries which are hard to detect
         // if we split at letters first.
-        return splitIntoWords(trimmedText)
+        splitIntoWords(text)
             // Variable is called part (and not word) because we won't split into words if
             // wrapWord is false
             .map((part) => {
@@ -143,6 +143,7 @@ var splitTextContent = ({
                 let wrappedInLetters = part;
                 if (wrapLetter) {
                     const { result, index } = wrapLetters(part, wrapLetter, indices.letter, '&nbsp;');
+                    // eslint-disable-next-line no-param-reassign
                     indices.letter = index;
                     wrappedInLetters = result;
                 }
@@ -156,14 +157,15 @@ var splitTextContent = ({
                         wrappedInLetters = wrappedInLetters.replace(/\s$/g, '&nbsp;');
                     }
                     wrapedInWords = wrapWord(wrappedInLetters, indices.word);
-                    indices.word++;
+                    // eslint-disable-next-line no-param-reassign
+                    indices.word += 1;
                 }
 
                 return wrapedInWords;
 
             })
-            .join('');
-    };
+            .join('')
+    );
 
     // Take track of the current indices for every type of wrapping; as they should be
     // continuous throughout the whole content, we must persist them across all parts.
