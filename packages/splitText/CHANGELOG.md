@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.3.1...@joinbox/splittext@1.3.2) (2024-04-19)
+
+
+### Bug Fixes
+
+* **splittext:** handle strings that do not contain words ([afc71c3](https://github.com/joinbox/ui-components/commit/afc71c3731e640032ef8c66525bd808c626a97b8))
+* **splittext:** use regular spaces between words ([2619fd0](https://github.com/joinbox/ui-components/commit/2619fd0cf4cb6bc68b08a5fde6d2a54bbd22f205))
+
+
+
+
+
 ## [1.3.1](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.3.0...@joinbox/splittext@1.3.1) (2024-04-18)
 
 
