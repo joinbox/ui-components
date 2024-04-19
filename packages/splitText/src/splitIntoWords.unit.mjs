@@ -15,3 +15,7 @@ test('splits text into words', (t) => {
     // Spaces at beginning/end
     t.deepEqual(splitIntoWords('  Hello World  '), ['  Hello ', 'World  ']);
 });
+
+test('no-match returns empty array', (t) => {
+    t.deepEqual(splitIntoWords('  '), ['  ']);
+});

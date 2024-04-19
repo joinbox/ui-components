@@ -1,5 +1,5 @@
 // Hypothesis: A word consists of non-space characters, followed by any number of space characters.
-var splitIntoWords = (text) => text.match(/\s*\S+\s*/g);
+var splitIntoWords = (text) => text.match(/\s*\S+\s*/g) || [text];
 
 /**
  * Wraps a single letter within the wrapLetter function provided.
@@ -25,7 +25,7 @@ var wrapLetters = (text, wrapLetter, startIndex = 0) => {
         // letters); filter them out as they're superfluous and would be wrapped as well.
         .filter((letter) => letter !== '')
         .map((letter) => {
-            // Never wrap spaces (see splitTextContent.js); and don't count ineex up on them
+            // Never wrap spaces (see splitTextContent.js); and don't count index up on them
             const isSpace = letter.match(/\s/);
             if (isSpace) return letter;
             else {
