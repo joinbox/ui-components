@@ -9,7 +9,7 @@ const setup = async (hideErrors) => {
 };
 
 // We must use a DOM as line breaks need to be measured in the element the content is in
-test('throws errors if arguments are not valid', async(t) => {
+test('throws errors if arguments are not valid', async (t) => {
     const { document, window } = await setup(true);
     const div = document.createElement('div');
     // Throws if element is missing
@@ -28,7 +28,7 @@ test('throws errors if arguments are not valid', async(t) => {
     }
 });
 
-test('splits letters', async(t) => {
+test('splits letters', async (t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');
     const content = 'Test – letters';
@@ -39,7 +39,7 @@ test('splits letters', async(t) => {
         wrapLine: false,
     });
     const { children } = div;
-    t.is(children.length, content.length);
+    t.is(children.length, content.replace(/\s/g, '').length);
     Array.from(children).forEach((child, index) => {
         t.is(child.getAttribute('data-letter-index'), `${index}`);
         t.is(child.tagName, 'SPAN');
@@ -48,7 +48,7 @@ test('splits letters', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('splits words', async(t) => {
+test('splits words', async (t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');
     const content = 'Test – words are! Words.';
@@ -59,8 +59,7 @@ test('splits words', async(t) => {
         wrapLine: false,
     });
     const { children } = div;
-    // All words ending with a space will get a &nbsp; appended
-    const words = ['Test&nbsp;', '–&nbsp;', 'words&nbsp;', 'are!&nbsp;', 'Words.'];
+    const words = ['Test', '–', 'words', 'are!', 'Words.'];
     t.is(children.length, words.length);
     Array.from(children).forEach((child, index) => {
         t.is(child.getAttribute('data-word-index'), `${index}`);
@@ -71,24 +70,25 @@ test('splits words', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('splits lines (and letters)', async(t) => {
+test('splits lines (and words)', async (t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');
     const content = 'Test – words are! Words.';
     div.textContent = content;
     let boundingClientIndex = 0;
     window.HTMLElement.prototype.getBoundingClientRect = function () {
-        // Increase top with every space (that has already been converted to &nbsp; at this stage)
-        if (this.innerHTML === '&nbsp;') boundingClientIndex++;
+        // Increase top with every call (i.e. every word)
+        boundingClientIndex++;
         return {
             top: boundingClientIndex,
         };
     };
     window.splitTextContent({
         element: div,
-        wrapWord: false,
+        wrapLetter: false,
     });
     const { children } = div;
+    // Children are lines.
     t.is(children.length, 5);
     Array.from(children).forEach((child, index) => {
         t.is(child.getAttribute('data-line-index'), `${index}`);
@@ -98,7 +98,7 @@ test('splits lines (and letters)', async(t) => {
     t.is(errors.length, 0);
 });
 
-test('uses custom functions passed in', async(t) => {
+test('uses custom functions passed in', async (t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');
     const text = 'Test – for Lines, Letters and Words.';
@@ -129,7 +129,7 @@ test('uses custom functions passed in', async(t) => {
     t.deepEqual(indices.line, [0]);
     t.deepEqual(
         indices.letter,
-        Array.from({ length: text.length }).map((value, index) => index),
+        Array.from({ length: text.replace(/\s/g, '').length }).map((value, index) => index),
     );
     t.deepEqual(
         indices.word,

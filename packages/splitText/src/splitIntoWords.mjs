@@ -1,3 +1,2 @@
-// Hypothesis: A word consists of non-space characters, followed by space characters.
-// Use a positive lookbehind to combine this logic with split().
-export default (text) => text.split(/(?<=\S+\s+)/);
+// Hypothesis: A word consists of non-space characters, followed by any number of space characters.
+export default (text) => text.match(/\s*\S+\s*/g) || [text];

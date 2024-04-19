@@ -8,6 +8,12 @@ import splitTags from './splitTags.mjs';
 /**
  * Splits content of a single HTML element into multiple sub-elements. Does all the 'footwork' for
  * splitText and implements its basic functionality.
+ *
+ * A word on spaces: We keep them as they are without wrapping them. Because:
+ * - If we wrap a regular space into a div with display:inline-block, it will be removed
+ *   during rendering
+ * - If we replace that space with a &nbsp;, the spaces are not collapsed
+ * - If we use another fancy solution, <pre> or whitespace:pre-wrap won't work
 */
 export default ({
     element,
@@ -33,7 +39,7 @@ export default ({
     // wrapLetter is set) and take their place.
     // Trim at the very beginning and very end of innerHTML only; never trim between text/tags
     // as this would lead to links that stick to their surrounding text.
-    const parts = splitTags(element.innerHTML.trim());
+    const parts = splitTags(element.innerHTML);
 
     /**
      * Wraps letters and/or words of a text node according to settings
@@ -47,30 +53,32 @@ export default ({
             // Variable is called part (and not word) because we won't split into words if
             // wrapWord is false
             .map((part) => {
-
                 // Wrap single part into letters if wrapLetter is set
                 let wrappedInLetters = part;
                 if (wrapLetter) {
-                    const { result, index } = wrapLetters(part, wrapLetter, indices.letter, '&nbsp;');
+                    const { result, index } = wrapLetters(part, wrapLetter, indices.letter);
                     // eslint-disable-next-line no-param-reassign
                     indices.letter = index;
                     wrappedInLetters = result;
                 }
 
-                let wrapedInWords = wrappedInLetters;
+                let wrappedInWords = wrappedInLetters;
                 if (wrapWord) {
-                    // If content was not wrapped into letters, spaces won't be converted to &nbsp;
-                    // therefore, this has to be done here or spaces will disappear (when they
-                    // are the last character in an element).
-                    if (!wrapLetter) {
-                        wrappedInLetters = wrappedInLetters.replace(/\s$/g, '&nbsp;');
-                    }
-                    wrapedInWords = wrapWord(wrappedInLetters, indices.word);
+                    // Make sure to not wrap spaces into a word; they should stay outside of the
+                    // word element (see introductory comment)
+                    wrappedInWords = wrappedInWords.replace(
+                        // Use non-greedy matcher for content (middle) part; if we use a regular
+                        // matcher, it will also match the spaces at the end
+                        /^(\s*)(.*?)(\s*)$/,
+                        (matches, introSpaces, content, outroSpaces) => (
+                            `${introSpaces}${wrapWord(content, indices.word)}${outroSpaces}`
+                        ),
+                    );
                     // eslint-disable-next-line no-param-reassign
                     indices.word += 1;
                 }
 
-                return wrapedInWords;
+                return wrappedInWords;
 
             })
             .join('')
