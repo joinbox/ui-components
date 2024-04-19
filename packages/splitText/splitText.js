@@ -1,6 +1,5 @@
-// Hypothesis: A word consists of non-space characters, followed by space characters.
-// Use a positive lookbehind to combine this logic with split().
-var splitIntoWords = (text) => text.split(/(?<=\S+\s+)/);
+// Hypothesis: A word consists of non-space characters, followed by any number of space characters.
+var splitIntoWords = (text) => text.match(/\s*\S+\s*/g);
 
 /**
  * Wraps a single letter within the wrapLetter function provided.
@@ -12,16 +11,13 @@ var splitIntoWords = (text) => text.split(/(?<=\S+\s+)/);
  *                                      wrapLetter = (letter, index) => `
  *                                      <span data-index="${index}">${letter}</span>`.
  * @param {int=0} startIndex            The index to start with when calling wrapLetter
- * @param {string=false} replaceSpaces  The string to replace spaces (regex \s) with; needed as
- *                                      to preserve spaces in a text, we must use &nbsp; within
- *                                      elements.
  */
-var wrapLetters = (text, wrapLetter, startIndex = 0, replaceSpaces = false) => {
+var wrapLetters = (text, wrapLetter, startIndex = 0) => {
 
     let index = startIndex;
 
     // Wrap every single letter within the current part
-    const wrapped = text
+    const wrappedLetters = text
         // Split at every letter, but keep HTML entities as one pseudo-character together
         .split(/(&[^;]+;|)/)
         // The split RegEx above returns the dividers as well (as we need to keep the HTML
@@ -29,14 +25,18 @@ var wrapLetters = (text, wrapLetter, startIndex = 0, replaceSpaces = false) => {
         // letters); filter them out as they're superfluous and would be wrapped as well.
         .filter((letter) => letter !== '')
         .map((letter) => {
-            const adjustedLetter = replaceSpaces && letter.match(/\s/) ? replaceSpaces : letter;
-            const lettered = wrapLetter(adjustedLetter, index);
-            index++;
-            return lettered;
+            // Never wrap spaces (see splitTextContent.js); and don't count ineex up on them
+            const isSpace = letter.match(/\s/);
+            if (isSpace) return letter;
+            else {
+                const wrappedLetter = wrapLetter(letter, index);
+                index++;
+                return wrappedLetter;
+            }
         })
         .join('');
 
-    return { index, result: wrapped };
+    return { index, result: wrappedLetters };
 };
 
 /**
@@ -46,33 +46,60 @@ var wrapLetters = (text, wrapLetter, startIndex = 0, replaceSpaces = false) => {
  */
 var wrapLines = (element, wrapLine) => {
 
-    const elementOffsets = new Map();
-
     // If there are no children (because the content is not wrapped in letters nor words), just
     // return one line: We cannot measure the y position of children that don't exist
-    const { children } = element;
+    const { childNodes } = element;
 
-    if (!children.length) {
+    const childElements = [...childNodes].filter((node) => node.nodeType === 1);
+    if (!childElements.length) {
         console.warn('In order for wrapLine to work, you must also apply wrapWord.');
         return wrapLine(element.innerHTML, 0);
     }
 
-    // If wrapLetters is set, every childNode will be a child (HTMLElement) – there's no need
-    // to wrap them in an additional HTMLElement as they will not be raw text nodes.
-    for (const child of children) {
-        const { top } = child.getBoundingClientRect();
-        if (!elementOffsets.has(top)) elementOffsets.set(top, []);
-        elementOffsets.get(top).push(child);
-    }
+    // Get top of all child elements; use null for text
+    const childrenWithTop = [...childNodes].map((child) => ({
+        content: child,
+        top: child.nodeType === 1 ? child.getBoundingClientRect().top : null,
+    }));
 
-    const wrappedInLines = Array.from(elementOffsets.values())
-        .map((content, index) => {
-            const lineAsHTML = content.map((html) => html.outerHTML).join('');
-            return wrapLine(lineAsHTML, index);
-        })
-        .join('');
+    // If a *text* node lies between two *elements* with the same top, add them to the same line
+    // (by adjusting its top); if not, keep top of null. Elements with top of null will not be
+    // wrapped with wrapLine function.
+    const adjustedTops = childrenWithTop.map((child, index) => {
+        if (
+            child.content.nodeType === 3
+            && (childrenWithTop[index - 1]?.top === childrenWithTop[index + 1]?.top)
+        ) {
+            return { ...child, top: childrenWithTop[index - 1].top };
+        } else return child;
+    });
 
-    return wrappedInLines;
+    // Group children by top; use a funny data structure here: An array of arrays, where the first
+    // item is the top and all following elements are the children with that top; this allows
+    // us to easily access the latest element (which is harder with Maps or objects)
+    const lines = adjustedTops.reduce((previous, child) => {
+        if (child.top === previous.at(-1)?.at(0)) previous.at(-1).push(child.content);
+        else previous.push([child.top, child.content]);
+        return previous;
+    }, []);
+
+    // Wrap all elements on the same line (except for spaces at their beginning or end) with
+    // wrapLine function
+    let lineIndex = 0;
+    const wrapped = lines.map(([top, ...content]) => {
+        // A child is a text element if there's only one of them and the top is 0
+        if (content.length === 1 && top === null) return content[0].textContent;
+        else {
+            const contents = content.map((contentItem) => (
+                contentItem.nodeType === 3 ? contentItem.textContent : contentItem.outerHTML
+            ));
+            const result = wrapLine(contents.join(''), lineIndex);
+            lineIndex += 1;
+            return result;
+        }
+    });
+
+    return wrapped.join('');
 
 };
 
@@ -99,6 +126,12 @@ var splitTags = (htmlString) => (
 /**
  * Splits content of a single HTML element into multiple sub-elements. Does all the 'footwork' for
  * splitText and implements its basic functionality.
+ *
+ * A word on spaces: We keep them as they are without wrapping them. Because:
+ * - If we wrap a regular space into a div with display:inline-block, it will be removed
+ *   during rendering
+ * - If we replace that space with a &nbsp;, the spaces are not collapsed
+ * - If we use another fancy solution, <pre> or whitespace:pre-wrap won't work
 */
 var splitTextContent = ({
     element,
@@ -124,7 +157,7 @@ var splitTextContent = ({
     // wrapLetter is set) and take their place.
     // Trim at the very beginning and very end of innerHTML only; never trim between text/tags
     // as this would lead to links that stick to their surrounding text.
-    const parts = splitTags(element.innerHTML.trim());
+    const parts = splitTags(element.innerHTML);
 
     /**
      * Wraps letters and/or words of a text node according to settings
@@ -138,30 +171,32 @@ var splitTextContent = ({
             // Variable is called part (and not word) because we won't split into words if
             // wrapWord is false
             .map((part) => {
-
                 // Wrap single part into letters if wrapLetter is set
                 let wrappedInLetters = part;
                 if (wrapLetter) {
-                    const { result, index } = wrapLetters(part, wrapLetter, indices.letter, '&nbsp;');
+                    const { result, index } = wrapLetters(part, wrapLetter, indices.letter);
                     // eslint-disable-next-line no-param-reassign
                     indices.letter = index;
                     wrappedInLetters = result;
                 }
 
-                let wrapedInWords = wrappedInLetters;
+                let wrappedInWords = wrappedInLetters;
                 if (wrapWord) {
-                    // If content was not wrapped into letters, spaces won't be converted to &nbsp;
-                    // therefore, this has to be done here or spaces will disappear (when they
-                    // are the last character in an element).
-                    if (!wrapLetter) {
-                        wrappedInLetters = wrappedInLetters.replace(/\s$/g, '&nbsp;');
-                    }
-                    wrapedInWords = wrapWord(wrappedInLetters, indices.word);
+                    // Make sure to not wrap spaces into a word; they should stay outside of the
+                    // word element (see introductory comment)
+                    wrappedInWords = wrappedInWords.replace(
+                        // Use non-greedy matcher for content (middle) part; if we use a regular
+                        // matcher, it will also match the spaces at the end
+                        /^(\s*)(.*?)(\s*)$/,
+                        (matches, introSpaces, content, outroSpaces) => (
+                            `${introSpaces}${wrapWord(content, indices.word)}${outroSpaces}`
+                        ),
+                    );
                     // eslint-disable-next-line no-param-reassign
                     indices.word += 1;
                 }
 
-                return wrapedInWords;
+                return wrappedInWords;
 
             })
             .join('')

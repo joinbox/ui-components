@@ -10,4 +10,8 @@ test('splits text into words', (t) => {
     t.deepEqual(splitIntoWords(' Hello World!'), [' Hello ', 'World!']);
     // Weird spaces
     t.deepEqual(splitIntoWords('Hello\tWorld\n!'), ['Hello\t', 'World\n', '!']);
+    // Multiple spaces
+    t.deepEqual(splitIntoWords('Hello   World'), ['Hello   ', 'World']);
+    // Spaces at beginning/end
+    t.deepEqual(splitIntoWords('  Hello World  '), ['  Hello ', 'World  ']);
 });

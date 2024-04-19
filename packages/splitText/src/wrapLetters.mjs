@@ -8,16 +8,13 @@
  *                                      wrapLetter = (letter, index) => `
  *                                      <span data-index="${index}">${letter}</span>`.
  * @param {int=0} startIndex            The index to start with when calling wrapLetter
- * @param {string=false} replaceSpaces  The string to replace spaces (regex \s) with; needed as
- *                                      to preserve spaces in a text, we must use &nbsp; within
- *                                      elements.
  */
-export default (text, wrapLetter, startIndex = 0, replaceSpaces = false) => {
+export default (text, wrapLetter, startIndex = 0) => {
 
     let index = startIndex;
 
     // Wrap every single letter within the current part
-    const wrapped = text
+    const wrappedLetters = text
         // Split at every letter, but keep HTML entities as one pseudo-character together
         .split(/(&[^;]+;|)/)
         // The split RegEx above returns the dividers as well (as we need to keep the HTML
@@ -25,13 +22,17 @@ export default (text, wrapLetter, startIndex = 0, replaceSpaces = false) => {
         // letters); filter them out as they're superfluous and would be wrapped as well.
         .filter((letter) => letter !== '')
         .map((letter) => {
-            const adjustedLetter = replaceSpaces && letter.match(/\s/) ? replaceSpaces : letter;
-            const lettered = wrapLetter(adjustedLetter, index);
-            index++;
-            return lettered;
+            // Never wrap spaces (see splitTextContent.js); and don't count index up on them
+            const isSpace = letter.match(/\s/);
+            if (isSpace) return letter;
+            else {
+                const wrappedLetter = wrapLetter(letter, index);
+                index++;
+                return wrappedLetter;
+            }
         })
         .join('');
 
-    return { index, result: wrapped };
+    return { index, result: wrappedLetters };
 };
 
