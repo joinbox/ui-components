@@ -1,6 +1,6 @@
 {
   "name": "@joinbox/splittext",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "Splits textContent of an HTML element into multiple parts",
   "main": "splitText.js",
   "scripts": {

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.3.2...@joinbox/splittext@1.4.0) (2024-04-29)
+
+
+### Features
+
+* **splitText:** add option to only update itself on x or y axis window resize ([92b718e](https://github.com/joinbox/ui-components/commit/92b718ef86fb6955033dc46e8300b9e22b7a7f2b))
+
+
+
+
+
 ## [1.3.2](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.3.1...@joinbox/splittext@1.3.2) (2024-04-19)
 
 
