@@ -2,6 +2,8 @@
 
 import splitTextContent from './splitTextContent.mjs';
 import debounce from '../../tools/src/debounce.mjs';
+import watchResize from './watchResize.mjs';
+import normalizeScrollAxes from './normalizeScrollAxes.mjs';
 
 /**
  * Provides a simple interface to split the textContent of a HTML element into single blocks where
@@ -39,10 +41,12 @@ export default ({
     };
 
     if (updateOnResize) {
-        const debouncedUpdate = debounce(split, 500);
-        window.addEventListener('resize', () => {
-            if (wasSplit) restore();
-            debouncedUpdate();
+        watchResize({
+            axes: normalizeScrollAxes(updateOnResize),
+            callback: () => {
+                if (wasSplit) restore();
+                setTimeout(split, 500);
+            },
         });
     }
 

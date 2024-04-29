@@ -59,7 +59,10 @@ Pass arguments as an object. The following properties are supported:
     - either `false` if parts should not be wrapped at this level
     - or a function that takes two arguments `content` and `index` and is expected to return a
     string. Defaults to a function (see above).
-- updateOnResize: `boolean`, defaults to true.
+- updateOnResize: `boolean` (`true` updates on x and y axis changes, false does never update) or
+  the axis or axes that should trigger the update, i.e. `['x']`, `['y']` or `['x', 'y']`. Why?
+  Because mobile browsers often change the viewport height when scrolling (because the show or
+  hide the address bar) which causes splitText to update unnecessarily.
 
 ### Return Value
 
