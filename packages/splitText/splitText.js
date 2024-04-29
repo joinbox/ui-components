@@ -245,6 +245,56 @@ var debounce = (callback, offset) => {
     };
 };
 
+/* global window */
+
+/**
+ * Calls callback with a debounce of 500ms if the window size for one of the axes provided has
+ * changed.
+ * @param {Object} options
+ * @param {string[]} options.axes - ['x'], ['y'], ['x', 'y'] or []
+ */
+var watchResize = ({ axes, callback } = {}) => {
+    const getWindowSize = () => ({
+        x: window.innerWidth,
+        y: window.innerHeight,
+    });
+    let previousWindowSize = getWindowSize();
+    const handleResize = () => {
+        const { x, y } = getWindowSize();
+        const xChanged = previousWindowSize.x !== x;
+        const yChanged = previousWindowSize.y !== y;
+        previousWindowSize = { x, y };
+        const relevantChange = (xChanged && axes.includes('x')) || (yChanged && axes.includes('y'));
+        if (relevantChange) callback();
+    };
+    const debouncedHandleResize = debounce(handleResize, 500);
+    window.addEventListener('resize', debouncedHandleResize);
+};
+
+/**
+ * Valid arguments for resize axes are ['x'], ['y'] or true, false or ['x', 'y']. Convert those
+ * to an array of axes ['x', 'y'].
+ * @param {boolean|string[]} axes
+ * @returns {string[]}
+ */
+var normalizeScrollAxes = (axes) => {
+    const allAxes = ['x', 'y'];
+    const resizeAxes = [];
+    if (axes === true) resizeAxes.push(...allAxes);
+    else if (Array.isArray(axes)) {
+        axes.forEach((axis) => {
+            if (!allAxes.includes(axis)) {
+                console.warn('Axis %o is not supported; use one of \'x\' or \'y\'.', axes);
+            } else {
+                resizeAxes.push(axis);
+            }
+        });
+    } else if (axes !== false) {
+        throw new Error(`Invalid argument for axes; use true, false or an array of axes ('x'/'y'); you passed ${JSON.stringify(axes)} instead.`);
+    }
+    return resizeAxes;
+};
+
 /* global HTMLElement, window */
 
 
@@ -284,10 +334,12 @@ var splitText = ({
     };
 
     if (updateOnResize) {
-        const debouncedUpdate = debounce(split, 500);
-        window.addEventListener('resize', () => {
-            if (wasSplit) restore();
-            debouncedUpdate();
+        watchResize({
+            axes: normalizeScrollAxes(updateOnResize),
+            callback: () => {
+                if (wasSplit) restore();
+                setTimeout(split, 500);
+            },
         });
     }
 
