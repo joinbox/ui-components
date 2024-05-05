@@ -1,5 +1,4 @@
 /* global window */
-import debounce from '../../tools/src/debounce.mjs';
 
 /**
  * Calls callback with a debounce of 500ms if the window size for one of the axes provided has
@@ -21,6 +20,5 @@ export default ({ axes, callback } = {}) => {
         const relevantChange = (xChanged && axes.includes('x')) || (yChanged && axes.includes('y'));
         if (relevantChange) callback();
     };
-    const debouncedHandleResize = debounce(handleResize, 500);
-    window.addEventListener('resize', debouncedHandleResize);
+    window.addEventListener('resize', handleResize);
 };

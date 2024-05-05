@@ -8,7 +8,7 @@ const setup = async (hideErrors) => {
     return getDOM({ basePath, scripts: ['watchResize.window.js'], hideErrors });
 };
 
-test('calls callback after debounce', async (t) => {
+test('calls callback after resize', async (t) => {
     const { window, document, errors } = await setup(true);
     const script = document.createElement('script');
     script.innerHTML = `
@@ -20,19 +20,14 @@ test('calls callback after debounce', async (t) => {
         });
     `;
     document.body.appendChild(script);
-    // Await debounce
-    await new Promise((resolve) => setTimeout(resolve, 600));
     t.is(window.callbackCalled, undefined);
     // Resize window on y while we watch x
     window.innerHeight = 1000;
     window.dispatchEvent(new window.Event('resize'));
-    await new Promise((resolve) => setTimeout(resolve, 600));
     t.is(window.callbackCalled, undefined);
     // Finally resize window on x
     window.innerWidth = 1000;
     window.dispatchEvent(new window.Event('resize'));
-    t.is(window.callbackCalled, undefined);
-    await new Promise((resolve) => setTimeout(resolve, 600));
     t.is(window.callbackCalled, true);
     t.is(errors.length, 0);
 });

@@ -2,6 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import test from 'ava';
 import getDOM from '../../../src/testHelpers/getDOM.mjs';
+import awaitRAF from './awaitRAF.mjs';
 
 const setup = async (hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
@@ -38,6 +39,7 @@ test('splits letters', async (t) => {
         wrapWord: false,
         wrapLine: false,
     });
+    await awaitRAF(window);
     const { children } = div;
     t.is(children.length, content.replace(/\s/g, '').length);
     Array.from(children).forEach((child, index) => {
@@ -58,6 +60,7 @@ test('splits words', async (t) => {
         wrapLetter: false,
         wrapLine: false,
     });
+    await awaitRAF(window);
     const { children } = div;
     const words = ['Test', '–', 'words', 'are!', 'Words.'];
     t.is(children.length, words.length);
@@ -87,6 +90,7 @@ test('splits lines (and words)', async (t) => {
         element: div,
         wrapLetter: false,
     });
+    await awaitRAF(window);
     const { children } = div;
     // Children are lines.
     t.is(children.length, 5);
@@ -123,6 +127,7 @@ test('uses custom functions passed in', async (t) => {
             return `<span class='my-line'>${content}</span>`;
         },
     });
+    await awaitRAF(window);
     t.is(div.querySelectorAll('.my-word').length > 0, true);
     t.is(div.querySelectorAll('.my-letter').length > 0, true);
     t.is(div.querySelectorAll('.my-line').length > 0, true);
@@ -138,15 +143,18 @@ test('uses custom functions passed in', async (t) => {
     t.is(errors.length, 0);
 });
 
-test('trims spaces', async (t) => {
+test('trims spaces at beginning/end of content', async (t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');
-    const text = '   Test with spaces.   ';
+    const text = '   Test   with spaces.   ';
     div.textContent = text;
     window.splitTextContent({ element: div });
+    await awaitRAF(window);
     const letters = [...div.querySelectorAll('.letter')];
     t.is(letters.at(0).innerHTML, 'T');
     t.is(letters.at(-1).innerHTML, '.');
+    // Does not trim content in-between elements
+    t.is(div.innerHTML.includes('   <span data-word-index="1"'), true);
     t.is(errors.length, 0);
 });
 
