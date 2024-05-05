@@ -14,6 +14,9 @@ test('splits text into words', (t) => {
     t.deepEqual(splitIntoWords('Hello   World'), ['Hello   ', 'World']);
     // Spaces at beginning/end
     t.deepEqual(splitIntoWords('  Hello World  '), ['  Hello ', 'World  ']);
+    // Dashes
+    t.deepEqual(splitIntoWords('Hello-World'), ['Hello-', 'World']);
+    t.deepEqual(splitIntoWords('-Hello- World -'), ['-Hello- ', 'World -']);
 });
 
 test('no-match returns empty array', (t) => {

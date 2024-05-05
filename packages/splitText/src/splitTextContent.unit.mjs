@@ -102,6 +102,20 @@ test('splits lines (and words)', async (t) => {
     t.is(errors.length, 0);
 });
 
+test('handles dash as word boundary', async (t) => {
+    const { document, errors, window } = await setup(true);
+    const div = document.createElement('div');
+    const content = 'Word-Break';
+    div.textContent = content;
+    window.splitTextContent({
+        element: div,
+    });
+    await awaitRAF(window);
+    const words = div.querySelectorAll('.word');
+    t.is(words.length, 2);
+    t.is(errors.length, 0);
+});
+
 test('uses custom functions passed in', async (t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');

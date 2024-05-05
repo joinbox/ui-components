@@ -43,8 +43,10 @@ export default ({
 
     /**
      * Wraps letters and/or words of a text node according to settings
-     * @param {string} text - The text to be wrapped
-     * @returns {string} The wrapped text, containing HTML elements for letters and/or words
+     * @param {string} text - The text to be wrapped.
+     * @param {{letter: number, word: number, line: number}} indices - Current index for the
+     * different levels of parts that we might process.
+     * @returns {string} The wrapped text, containing HTML elements for letters and/or words.
      */
     const processText = (text, indices) => (
         // Wrap words first as we must split at word boundaries which are hard to detect
