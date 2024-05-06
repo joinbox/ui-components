@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.4.0...@joinbox/splittext@1.5.0) (2024-05-06)
+
+
+### Bug Fixes
+
+* **splittext:** add rAF, execute and fix tests (hidden by .only) ([f4685d4](https://github.com/joinbox/ui-components/commit/f4685d4838a6b84bc52606ab6de381623e400aba))
+* **splitText:** incorporate feedback vom PR ([a5d5d43](https://github.com/joinbox/ui-components/commit/a5d5d43f40a479b24c25bea2898e96f3eaada315))
+
+
+### Features
+
+* **splitText:** split words a dashes ([853a89d](https://github.com/joinbox/ui-components/commit/853a89d96c53a788c964e1a1e4eefdacd2cde845))
+
+
+
+
+
 # [1.4.0](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.3.2...@joinbox/splittext@1.4.0) (2024-04-29)
 
 
