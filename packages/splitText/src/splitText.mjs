@@ -1,4 +1,4 @@
-/* global HTMLElement, window */
+/* global HTMLElement */
 
 import splitTextContent from './splitTextContent.mjs';
 import debounce from '../../tools/src/debounce.mjs';
@@ -40,12 +40,13 @@ export default ({
         wasSplit = false;
     };
 
+    const debouncedSplit = debounce(split, 500);
     if (updateOnResize) {
         watchResize({
             axes: normalizeScrollAxes(updateOnResize),
             callback: () => {
                 if (wasSplit) restore();
-                setTimeout(split, 500);
+                debouncedSplit();
             },
         });
     }

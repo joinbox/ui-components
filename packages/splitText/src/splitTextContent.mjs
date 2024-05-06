@@ -1,4 +1,4 @@
-/* global HTMLElement */
+/* global HTMLElement, window */
 
 import splitIntoWords from './splitIntoWords.mjs';
 import wrapLetters from './wrapLetters.mjs';
@@ -43,8 +43,10 @@ export default ({
 
     /**
      * Wraps letters and/or words of a text node according to settings
-     * @param {string} text - The text to be wrapped
-     * @returns {string} The wrapped text, containing HTML elements for letters and/or words
+     * @param {string} text - The text to be wrapped.
+     * @param {{letter: number, word: number, line: number}} indices - Current index for the
+     * different levels of parts that we might process.
+     * @returns {string} The wrapped text, containing HTML elements for letters and/or words.
      */
     const processText = (text, indices) => (
         // Wrap words first as we must split at word boundaries which are hard to detect
@@ -105,13 +107,19 @@ export default ({
     // In order to wrap lines, we must update the original element in order to measure the y
     // positions of its children.
 
-    // eslint-disable-next-line no-param-reassign
-    element.innerHTML = wrappedInLettersAndWords;
+    window.requestAnimationFrame(() => {
+        // eslint-disable-next-line no-param-reassign
+        element.innerHTML = wrappedInLettersAndWords;
 
-    // Wrap lines
-    const wrappedInLines = wrapLine ? wrapLines(element, wrapLine) : wrappedInLettersAndWords;
+        // Wrap lines
+        const wrappedInLines = wrapLine ? wrapLines(element, wrapLine) : wrappedInLettersAndWords;
 
-    // eslint-disable-next-line no-param-reassign
-    element.innerHTML = wrappedInLines;
+        window.requestAnimationFrame(() => {
+            // eslint-disable-next-line no-param-reassign
+            element.innerHTML = wrappedInLines;
+        });
+
+    });
+
 
 };

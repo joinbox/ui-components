@@ -2,6 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import test from 'ava';
 import getDOM from '../../../src/testHelpers/getDOM.mjs';
+import awaitRAF from './awaitRAF.mjs';
 
 const setup = async (hideErrors) => {
     const basePath = dirname(fileURLToPath(new URL(import.meta.url)));
@@ -27,6 +28,7 @@ test('splits letters, words and lines', async (t) => {
     window.splitText({
         element: div,
     });
+    await awaitRAF(window);
     t.is(div.querySelectorAll('.letter').length, 12);
     t.is(div.querySelectorAll('.word').length, 3);
     t.is(div.querySelectorAll('.line').length, 1);
@@ -43,6 +45,7 @@ test('accepts custom functions', async (t) => {
         wrapWord: (content) => `<div class='my-word'>${content}</div>`,
         wrapLine: (content) => `<div class='my-line'>${content}</div>`,
     });
+    await awaitRAF(window);
     t.is(div.querySelectorAll('.my-letter').length, 12);
     t.is(div.querySelectorAll('.my-word').length, 3);
     // Accepts/passes custom wrapper functions
@@ -59,6 +62,7 @@ test('splits letters', async (t) => {
         wrapWord: false,
         wrapLine: false,
     });
+    await awaitRAF(window);
     t.is(div.querySelectorAll('.letter').length, 12);
     t.is(div.querySelector('.word'), null);
     t.is(div.querySelector('.line'), null);
@@ -74,6 +78,7 @@ test('splits words', async (t) => {
         wrapLetter: false,
         wrapLine: false,
     });
+    await awaitRAF(window);
     t.is(div.querySelectorAll('.word').length, 3);
     t.is(div.querySelector('.letter'), null);
     t.is(div.querySelector('.line'), null);
@@ -89,6 +94,7 @@ test('splits lines', async (t) => {
         wrapWord: false,
         wrapLetter: false,
     });
+    await awaitRAF(window);
     t.is(div.querySelectorAll('.line').length, 1);
     t.is(div.querySelector('.word'), null);
     t.is(div.querySelector('.letter'), null);
@@ -102,6 +108,7 @@ test('returns function that restores original state', async (t) => {
     const restore = window.splitText({
         element: div,
     });
+    await awaitRAF(window);
     t.is(div.querySelectorAll('.line').length > 0, true);
     t.is(typeof restore, 'function');
     restore();
@@ -116,11 +123,18 @@ test('updates on resize', async (t) => {
     window.splitText({
         element: div,
     });
+    await awaitRAF(window);
     const firstChild = div.querySelector('span');
+    // splitText was executed
     t.is(div.querySelectorAll('span').length > 0, true);
+    // Window size must change in order for resize handler to be executed
+    window.innerWidth = 50;
     window.dispatchEvent(new window.CustomEvent('resize'));
+    // Before the debounce is over, splitText is not applied
     t.is(div.querySelectorAll('span').length, 0);
+    // After the debounce, splitText is applied
     await new Promise((resolve) => setTimeout(resolve, 500));
+    await awaitRAF(window);
     t.is(div.querySelectorAll('span').length > 0, true);
     // First span is a different one than before
     t.not(div.querySelector('span'), firstChild);
@@ -135,6 +149,7 @@ test('accepts updateOnResize property', async (t) => {
         element: div,
         updateOnResize: false,
     });
+    await awaitRAF(window);
     const amountOfSpans = div.querySelectorAll('span').length;
     window.dispatchEvent(new window.CustomEvent('resize'));
     t.is(div.querySelectorAll('span').length, amountOfSpans);
@@ -149,6 +164,7 @@ test('works with nested HTML tags', async (t) => {
     window.splitText({
         element: div,
     });
+    await awaitRAF(window);
     // Make sure spaces are preserved around tags
     t.is(div.textContent, 'a test c d');
     const letters = [...div.querySelectorAll('.letter')];
@@ -163,7 +179,7 @@ test('works with nested HTML tags', async (t) => {
     t.is(errors.length, 0);
 });
 
-test.only('handles spaces at start and end correctly', async (t) => {
+test('handles spaces at start and end correctly', async (t) => {
     const { document, errors, window } = await setup(true);
     const div = document.createElement('div');
     // Make sure there are tags with and without adjacent spaces
@@ -171,6 +187,7 @@ test.only('handles spaces at start and end correctly', async (t) => {
     window.splitText({
         element: div,
     });
+    await awaitRAF(window);
     t.is(div.querySelectorAll('.word').length, 2);
     t.is(div.querySelectorAll('.letter').length, 4);
     t.is(div.innerHTML.substring(0, 2), '  ');
