@@ -4,8 +4,13 @@
 export default (text) => {
     // This splits text into words and whatever's inbetween; 'hello-world there' becomes
     // ['hello', '-', 'world', ' ', 'there']
-    // Parens are necessary to include the boundaries in the result
-    const boundaryRegex = /([\s-]+)/g;
+    // Without the parens, the parts of the string that match the regex would be excluded from
+    // the result; use the parens to include them (i.e. all spaces and dashes).
+    // Table with dashes: see https://www.compart.com/en/unicode/category/Pd
+    // Don't use en-/em-dashes as boundary because they might be on the upper or lower line when
+    // they're at the end of a line break (and they're usually set with a space between the
+    // surrounding words)
+    const boundaryRegex = /([\s-‐‒﹣－]+)/g;
     // Remove all empty parts that might be added by using split
     const textSplitAtBoundaries = text.split(boundaryRegex).filter((part) => part !== '');
     const words = [];
