@@ -5,8 +5,6 @@
  */
 export default (element, wrapLine) => {
 
-    const elementOffsets = new Map();
-
     // If there are no children (because the content is not wrapped in letters nor words), just
     // return one line: We cannot measure the y position of children that don't exist
     const { childNodes } = element;
@@ -23,9 +21,11 @@ export default (element, wrapLine) => {
         top: child.nodeType === 1 ? child.getBoundingClientRect().top : null,
     }));
 
-    // If a *text* node lies between two *elements* with the same top, add them to the same line
-    // (by adjusting its top); if not, keep top of null. Elements with top of null will not be
-    // wrapped with wrapLine function.
+    // If a *text* node (those are especially spaces between words/letters) lies between two
+    // *elements* with the same top, add them to the same line (by adjusting its top; as 
+    // they cannot be measured and return a top of null).
+    // If not, keep top of null.
+    // Elements with top of null will not be wrapped with wrapLine function.
     const adjustedTops = childrenWithTop.map((child, index) => {
         if (
             child.content.nodeType === 3
