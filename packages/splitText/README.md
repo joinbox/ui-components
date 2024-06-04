@@ -95,11 +95,18 @@ as possible again.
 
 
 ## Background
-- Splitting into lines fails when a (child) element stretches over more than **one** line: We
-would have to split that (child) element into multiple elements, one per line that the child
-element occupies which would get (very) messy.
+- Splitting into lines fails when a (child) element stretches over more than **one** line (e.g.
+a long `<a>` element): We would have to split that (child) element into multiple elements,
+one per line that the child element occupies which would get (very) messy.
 - Why do we have to use `wrapWord` in order for `wrapLine` to work? When wrapping lines, we 
 go through all child elements and compare their vertical position
 in the rendered document; once the vertical position changes, a new line is assumed. If there
 are no children within the element, we can't go through them; and if you wrap only letters, a
 line break may happen after every letter.
+- Why must we remove all hyphenation from texts that are split? If the browser hyphenates a
+multiline text, it does not add the hyphens to the DOM; they can therefore not be read by
+JavaScript – because they're just not there. If `<div>reference</div>` is split, the content of the
+div will always be `reference` (and not `ref-erence` or `refer-ence`) – no matter how we read it.
+The div will stretch over two lines, but as its top is on the upper line, the whole word will
+be attributted to the upper line. The line will therefore become too long and in the worst case
+mess up your layout.
