@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/joinbox/ui-components/compare/@joinbox/dynamicpageloader@0.3.4...@joinbox/dynamicpageloader@0.4.0) (2024-07-01)
+
+
+### Features
+
+* **build:** add minified export files ([3379802](https://github.com/joinbox/ui-components/commit/33798026fda27a8fae77ae9703f0b39e5906a0ec))
+
+
+
+
+
 ## [0.3.4](https://github.com/joinbox/ui-components/compare/@joinbox/dynamicpageloader@0.3.3...@joinbox/dynamicpageloader@0.3.4) (2023-12-21)
 
 

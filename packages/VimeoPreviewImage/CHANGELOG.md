@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/vimeopreviewimage@1.1.7...@joinbox/vimeopreviewimage@1.2.0) (2024-07-01)
+
+
+### Features
+
+* **build:** add minified export files ([3379802](https://github.com/joinbox/ui-components/commit/33798026fda27a8fae77ae9703f0b39e5906a0ec))
+
+
+
+
+
 ## [1.1.7](https://github.com/joinbox/ui-components/compare/@joinbox/vimeopreviewimage@1.1.6...@joinbox/vimeopreviewimage@1.1.7) (2024-01-29)
 
 **Note:** Version bump only for package @joinbox/vimeopreviewimage

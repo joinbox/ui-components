@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.8...@joinbox/tableofcontents@1.2.0) (2024-07-01)
+
+
+### Features
+
+* **build:** add minified export files ([3379802](https://github.com/joinbox/ui-components/commit/33798026fda27a8fae77ae9703f0b39e5906a0ec))
+
+
+
+
+
 ## [1.1.8](https://github.com/joinbox/ui-components/compare/@joinbox/tableofcontents@1.1.7...@joinbox/tableofcontents@1.1.8) (2023-07-18)
 
 

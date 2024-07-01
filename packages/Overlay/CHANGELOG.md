@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@2.1.0...@joinbox/overlay@2.2.0) (2024-07-01)
+
+
+### Features
+
+* **build:** add minified export files ([3379802](https://github.com/joinbox/ui-components/commit/33798026fda27a8fae77ae9703f0b39e5906a0ec))
+
+
+
+
+
 # [2.1.0](https://github.com/joinbox/ui-components/compare/@joinbox/overlay@2.0.1...@joinbox/overlay@2.1.0) (2024-03-26)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.3.0...@joinbox/youtubeplayer@1.4.0) (2024-07-01)
+
+
+### Features
+
+* **build:** add minified export files ([3379802](https://github.com/joinbox/ui-components/commit/33798026fda27a8fae77ae9703f0b39e5906a0ec))
+
+
+
+
+
 # [1.3.0](https://github.com/joinbox/ui-components/compare/@joinbox/youtubeplayer@1.2.2...@joinbox/youtubeplayer@1.3.0) (2024-03-13)
 
 
