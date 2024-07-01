@@ -20,6 +20,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@joinbox/eslint-config-joinbox": "^1.0.10",
+    "@rollup/plugin-terser": "^0.4.4",
     "ava": "^4.2.0",
     "jsdom": "^19.0.0",
     "lerna": "^4.0.0",
