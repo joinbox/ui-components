@@ -172,3 +172,14 @@ test('trims spaces at beginning/end of content', async (t) => {
     t.is(errors.length, 0);
 });
 
+test('does not wrap spaces or newlines', async (t) => {
+    const { document, errors, window } = await setup(true);
+    const div = document.createElement('div');
+    const text = '\n ';
+    div.textContent = text;
+    window.splitTextContent({ element: div });
+    await awaitRAF(window);
+    t.is(div.querySelectorAll('.word').length, 0);
+    t.is(div.querySelectorAll('.letter').length, 0);
+    t.is(errors.length, 0);
+});

@@ -55,6 +55,10 @@ export default ({
             // Variable is called part (and not word) because we won't split into words if
             // wrapWord is false
             .map((part) => {
+                // If part is a space or newline, don't wrap it at all; this happens if a space
+                // or newline stands e.g. between two tags: <br> <br>
+                if (part.match(/^\s+$/)) return part;
+
                 // Wrap single part into letters if wrapLetter is set
                 let wrappedInLetters = part;
                 if (wrapLetter) {
@@ -66,8 +70,8 @@ export default ({
 
                 let wrappedInWords = wrappedInLetters;
                 if (wrapWord) {
-                    // Make sure to not wrap spaces into a word; they should stay outside of the
-                    // word element (see introductory comment)
+                    // Make sure to not wrap spaces or newlines into a word; they should stay
+                    // outside of the word element (see introductory comment)
                     wrappedInWords = wrappedInWords.replace(
                         // Use non-greedy matcher for content (middle) part; if we use a regular
                         // matcher, it will also match the spaces at the end

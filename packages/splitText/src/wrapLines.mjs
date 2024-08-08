@@ -22,7 +22,7 @@ export default (element, wrapLine) => {
     }));
 
     // If a *text* node (those are especially spaces between words/letters) lies between two
-    // *elements* with the same top, add them to the same line (by adjusting its top; as 
+    // *elements* with the same top, add them to the same line (by adjusting its top; as
     // they cannot be measured and return a top of null).
     // If not, keep top of null.
     // Elements with top of null will not be wrapped with wrapLine function.
@@ -48,8 +48,12 @@ export default (element, wrapLine) => {
     // wrapLine function
     let lineIndex = 0;
     const wrapped = lines.map(([top, ...content]) => {
-        // A child is a text element if there's only one of them and the top is 0
+        // A child is a text element if there's only one of them and the top is null
         if (content.length === 1 && top === null) return content[0].textContent;
+        // A child that is a <br> shall never be wrapped. Why? Within an element, it won't break
+        // the line correcly any more: <br/><br/> is not equal to
+        // <span><br/></span><span><br/></span> (which will swallow breaks).
+        else if (content.length === 1 && content[0].tagName === 'BR') return content[0].outerHTML;
         else {
             const contents = content.map((contentItem) => (
                 contentItem.nodeType === 3 ? contentItem.textContent : contentItem.outerHTML
