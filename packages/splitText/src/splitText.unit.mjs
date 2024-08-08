@@ -195,3 +195,25 @@ test('handles spaces at start and end correctly', async (t) => {
     t.is(errors.length, 0);
 });
 
+
+test('does never wrap newlines, <br> or spaces, even if they\'re on their own line', async (t) => {
+    const { document, errors, window } = await setup(true);
+    const div = document.createElement('div');
+
+    // Fake getBoundingClientRect: Return a growing number every time to make things look like
+    // they're on a new line every time
+    let previousTop = 0;
+    // eslint-disable-next-line no-return-assign
+    window.HTMLElement.prototype.getBoundingClientRect = () => ({ top: previousTop += 10 });
+
+    div.innerHTML = 'te<br/>\n <br/>';
+    window.splitText({
+        element: div,
+    });
+    await awaitRAF(window);
+    t.is(div.querySelectorAll('.word').length, 1);
+    t.is(div.querySelectorAll('.line').length, 1);
+    // <br/> will be replaced with <br> when it's inserted into the DOM
+    t.is(div.innerHTML.includes('<br>\n <br>'), true);
+    t.is(errors.length, 0);
+});
