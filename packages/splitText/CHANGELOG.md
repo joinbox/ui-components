@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.2](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.6.1...@joinbox/splittext@1.6.2) (2024-08-12)
+
+
+### Bug Fixes
+
+* **splitText:** handle brs correctly in firefox ([5fce7cc](https://github.com/joinbox/ui-components/commit/5fce7cc82aa9790abae683b421d685e1982bb431))
+
+
+
+
+
 ## [1.6.1](https://github.com/joinbox/ui-components/compare/@joinbox/splittext@1.6.0...@joinbox/splittext@1.6.1) (2024-08-08)
 
 
