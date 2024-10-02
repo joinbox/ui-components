@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/joinbox/ui-components/compare/@joinbox/slide@1.2.0...@joinbox/slide@1.2.1) (2024-10-02)
+
+
+### Bug Fixes
+
+* **slide:** don't test for identity of offset and scroll height when setting dimension to 'auto' ([1d93567](https://github.com/joinbox/ui-components/commit/1d9356718b7914d7b72765152612e04940105589))
+
+
+
+
+
 # [1.2.0](https://github.com/joinbox/ui-components/compare/@joinbox/slide@1.1.0...@joinbox/slide@1.2.0) (2024-07-01)
 
 
