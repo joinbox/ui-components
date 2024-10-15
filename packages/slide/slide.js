@@ -42,10 +42,12 @@ var slide = ({
         // the element did not adjust its size on window resize or when elements were added.
         // We now always reset the height to 'auto' at the end of the animation if no targetSize
         // was provided.
-        requestAnimationFrame(() => {
-            // eslint-disable-next-line no-param-reassign
-            element.style[dimensionName.toLowerCase()] = 'auto';
-        });
+        if (targetSize === undefined) {
+            requestAnimationFrame(() => {
+                // eslint-disable-next-line no-param-reassign
+                element.style[dimensionName.toLowerCase()] = 'auto';
+            });
+        }
         onEnd();
     };
     element.addEventListener('transitionend', handleTransitionEnd);
