@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/joinbox/ui-components/compare/@joinbox/slide@1.2.1...@joinbox/slide@1.2.2) (2024-10-15)
+
+
+### Bug Fixes
+
+* **slide:** do not reset height to auto after transitionend if a targetSize was provided ([84d4d72](https://github.com/joinbox/ui-components/commit/84d4d72bc1ced23a33e7de65034e7291450e5d8a))
+
+
+
+
+
 ## [1.2.1](https://github.com/joinbox/ui-components/compare/@joinbox/slide@1.2.0...@joinbox/slide@1.2.1) (2024-10-02)
 
 
