@@ -84,6 +84,11 @@ test('adjusts dimensions', async (t) => {
     t.is(widthDiv.style.width, '0px');
     t.is(heightDiv.style.height, '0px');
 
+    // Make sure height is not set to 'auto' when the function was called with a targetSize
+    heightDiv.dispatchEvent(heightTransitionEndEvent);
+    await new Promise((resolve) => setTimeout(resolve));
+    t.is(heightDiv.style.height, '0px');
+
     t.is(errors.length, 0);
 });
 
