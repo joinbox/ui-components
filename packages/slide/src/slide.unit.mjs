@@ -41,10 +41,38 @@ test('adjusts dimensions', async (t) => {
     heightDiv.textContent = 'test';
     document.body.appendChild(heightDiv);
 
-    Object.defineProperty(window.HTMLElement.prototype, 'scrollWidth', { value: 40 });
-    Object.defineProperty(window.HTMLElement.prototype, 'scrollHeight', { value: 50 });
+    // See here: https://github.com/jsdom/jsdom/issues/1013
+    Object.defineProperty(
+        window.HTMLElement.prototype,
+        'scrollHeight',
+        {
+            configurable: true,
+            get() {
+                return this._scrollHeight || 0;
+            },
+            set(val) {
+                this._scrollHeight = val;
+            },
+        },
+    );
+    Object.defineProperty(
+        window.HTMLElement.prototype,
+        'scrollWidth',
+        {
+            configurable: true,
+            get() {
+                return this._scrollWidth || 0;
+            },
+            set(val) {
+                this._scrollWidth = val;
+            },
+        },
+    );
+    heightDiv.scrollHeight = 50;
+    widthDiv.scrollWidth = 40;
     window.requestAnimationFrame = (cb) => cb();
 
+    // Test sliding to their intrinisc height and width
     const script = document.createElement('script');
     script.textContent = `
         slide({ element: document.querySelector('.widthDiv'), dimension: 'x' });
@@ -57,9 +85,6 @@ test('adjusts dimensions', async (t) => {
     t.is(heightDiv.style.height, '50px');
     t.is(widthDiv.style.width, '40px');
 
-    Object.defineProperty(window.HTMLElement.prototype, 'offsetWidth', { value: 40 });
-    Object.defineProperty(window.HTMLElement.prototype, 'offsetHeight', { value: 50 });
-
     const heightTransitionEndEvent = new window.CustomEvent('transitionend');
     // Add property propertyName directly to event
     heightTransitionEndEvent.propertyName = 'height';
@@ -68,12 +93,33 @@ test('adjusts dimensions', async (t) => {
     const widthTransitionEndEvent = new window.CustomEvent('transitionend');
     widthTransitionEndEvent.propertyName = 'width';
     widthDiv.dispatchEvent(widthTransitionEndEvent);
-
     await new Promise((resolve) => setTimeout(resolve));
+    t.is(heightDiv.style.height, 'auto');
+    t.is(widthDiv.style.width, 'auto');
 
+    // Test sliding to a smaller value (where we must set height to 0 first to measure the
+    // scrollHeight correctly)
+    heightDiv.scrollHeight = 20;
+    widthDiv.scrollWidth = 30;
+    // Object.defineProperty(window.HTMLElement.prototype, 'scrollHeight', { value: 30 });
+
+    const reduceScript = document.createElement('script');
+    reduceScript.textContent = `
+        slide({ element: document.querySelector('.widthDiv'), dimension: 'x' });
+        slide({ element: document.querySelector('.heightDiv') });
+    `;
+    document.body.appendChild(reduceScript);
+
+    t.is(heightDiv.style.height, '20px');
+    t.is(widthDiv.style.width, '30px');
+
+    widthDiv.dispatchEvent(widthTransitionEndEvent);
+    heightDiv.dispatchEvent(heightTransitionEndEvent);
+    await new Promise((resolve) => setTimeout(resolve));
     t.is(widthDiv.style.width, 'auto');
     t.is(heightDiv.style.height, 'auto');
 
+    // Test sliding without a targetSize
     const closeScript = document.createElement('script');
     closeScript.textContent = `
         slide({ element: document.querySelector('.widthDiv'), dimension: 'x', targetSize: 0 });
