@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/joinbox/ui-components/compare/@joinbox/slide@1.2.2...@joinbox/slide@1.2.3) (2024-10-16)
+
+
+### Bug Fixes
+
+* **slide:** set height to 0 before measuring scrollHeight ([649c865](https://github.com/joinbox/ui-components/commit/649c865b12b65e42e0aea2ce338ce093b1e8aa85))
+
+
+
+
+
 ## [1.2.2](https://github.com/joinbox/ui-components/compare/@joinbox/slide@1.2.1...@joinbox/slide@1.2.2) (2024-10-15)
 
 
