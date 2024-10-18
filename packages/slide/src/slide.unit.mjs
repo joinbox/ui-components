@@ -80,7 +80,7 @@ test('adjusts dimensions', async (t) => {
     `;
     document.body.appendChild(script);
 
-    await new Promise((resolve) => setTimeout(resolve));
+    await new Promise((resolve) => window.requestAnimationFrame(resolve));
 
     t.is(heightDiv.style.height, '50px');
     t.is(widthDiv.style.width, '40px');

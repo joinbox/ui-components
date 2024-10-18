@@ -4,7 +4,7 @@ import debounce from './debounce.mjs';
 
 /**
  * Measures an element's dimensions initially, on resize and visibility change; stores values
- * in an object so that dimensions can be accessed anywhere the object is used and are always 
+ * in an object so that dimensions can be accessed anywhere the object is used and are always
  * up to date (because we only update the referenced values within the object once they change)
  * @param {Object} options
  * @param {HTMLElement} options.element
