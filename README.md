@@ -2,6 +2,11 @@
 
 ## Develop
 
+### Caution
+- Do not use lerna 8, it's freakin' buggy.
+- Instead migrate to separate repos for each package and use
+[workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) (or use PNPM or whatev)
+
 ### Intro
 - This is a monorepo that uses lerna to publish the components as individual packages
 
@@ -22,6 +27,9 @@ most recent Git tag, therefore this step is essential.
 1. Push tags to server `git push origin <tag-name>`
 1. Run `npm run release` to publish packages
 
+### Update All Packages
+- `npx lerna exec -- npx npm-check-updates -u`
+- `npx lerna exec -- npm i`
 
 ## Use
 - All components are [custom elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements). 
